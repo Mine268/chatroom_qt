@@ -26,7 +26,7 @@ private:
     // 单例设计模式
     static TcpServer *me;
     // 服务器地址
-    QHostAddress ip;
+    QHostAddress addr;
     // 监听端口
     quint16 port;
 
@@ -45,6 +45,8 @@ private:
 private slots:
     // 槽函数，用于接受来信，并按照类别调用不同的函数处理
     void _recvMsg();
+    // 客户端断开连接的时候触发这个槽函数，处理客户端异常下线的情况
+    void _disconnected();
 };
 
 #endif // TCPSERVER_H

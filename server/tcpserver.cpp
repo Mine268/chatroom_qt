@@ -39,4 +39,5 @@ void TcpServer::incomingConnection(qintptr handle)
     unconnList.append(_socket);
 
     connect(_socket, &QTcpSocket::readyRead, this, &TcpServer::_recvMsg);
+    connect(_socket, &QTcpSocket::disconnected, this, &TcpServer::_disconnected);
 }
