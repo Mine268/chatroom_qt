@@ -9,6 +9,12 @@ class TcpServer : public QTcpServer
     Q_OBJECT
 public:
     ~TcpServer();
+
+    // 设置服务器监听
+    void initiate(QHostAddress, quint16);
+    // 服务器开始监听
+    void start();
+
     void sendLoginConfirm(QTcpSocket*, QString);
     void sendRegConfirm(QTcpSocket*, QString);
     void sendFriendList(QTcpSocket*, QString);
@@ -19,6 +25,11 @@ public:
 private:
     // 单例设计模式
     static TcpServer *me;
+    // 服务器地址
+    QHostAddress ip;
+    // 监听端口
+    quint16 port;
+
     // 连接但是没有登陆的socket
     QList<QTcpSocket*> unconnList;
     // 登录的用户的socket

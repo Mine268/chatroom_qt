@@ -4,7 +4,17 @@ TcpServer *TcpServer::me = nullptr;
 
 TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
 {
-    this->listen(QHostAddress::Any, 11451);
+}
+
+void TcpServer::initiate(QHostAddress _addr, quint16 _port)
+{
+    this->addr = _addr;
+    this->port = _port;
+}
+
+void TcpServer::start()
+{
+    this->listen(this->addr, this->port);
 }
 
 TcpServer::~TcpServer()
@@ -13,6 +23,7 @@ TcpServer::~TcpServer()
         (*iter)->close();
     for (auto iter = connList.begin(); iter != connList.end(); ++iter)
         (*iter)->close();
+    close();
 }
 
 TcpServer *TcpServer::getInstance()
