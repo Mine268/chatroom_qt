@@ -14,17 +14,17 @@ public:
     void sendFriendList(QTcpSocket*, QString);
     void sendChatMsg(QTcpSocket*, QString);
 
-    Server *getInstance();
+    static Server *getInstance();
 
 private:
     // 单例设计模式
-    Server *me;
+    static Server *me;
     // 已经连接但是没有登录的用户socket
     QList<QTcpSocket*> unconnList;
     // 已经登录的用户socket
     QMap<int, QTcpSocket*> connList;
 
-    Server();
+    Server(QObject *parent = nullptr);
     virtual void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;
 
     void recvLogin(QString);
