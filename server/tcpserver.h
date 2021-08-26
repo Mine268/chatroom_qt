@@ -17,11 +17,11 @@ public:
     static TcpServer *getInstance();
 
 private:
-    // 鍗曚緥璁捐妯″紡
+    // 单例设计模式
     static TcpServer *me;
-    // 宸茬粡杩炴帴浣嗘槸娌℃湁鐧诲綍鐨勭敤鎴穝ocket
+    // 连接但是没有登陆的socket
     QList<QTcpSocket*> unconnList;
-    // 宸茬粡鐧诲綍鐨勭敤鎴穝ocket
+    // 登录的用户的socket
     QMap<int, QTcpSocket*> connList;
 
     TcpServer(QObject *parent = nullptr);
@@ -32,7 +32,8 @@ private:
     void recvMessage(QString);
 
 private slots:
-    // 鏀跺埌鏉ヨ嚜瀹㈡埛绔殑娑堟伅锛屾湰鏂规硶浼氶鍏堝垎鏋愭秷鎭睘浜庡摢涓€绫伙紝鐒跺悗璋冪敤涓嶅悓鐨勬柟娉曞鐞    void _recvMsg();
+    // 槽函数，用于接受来信，并按照类别调用不同的函数处理
+    void _recvMsg();
 };
 
 #endif // TCPSERVER_H
