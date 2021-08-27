@@ -58,6 +58,10 @@ private slots:
     void _recvMsg();
     // 客户端断开连接的时候触发这个槽函数，处理客户端异常下线的情况
     void _disconnected();
+
+signals:
+    //用于和mainwindow通信的信号函数，仅用作调试
+    void debug_displayMsg();
 };
 
 #endif // TCPSERVER_H

@@ -144,3 +144,53 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
     _doc.setObject(_json);
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
+
+
+void TcpServer::_recvMsg()
+{
+    QTcpSocket *client_socket = (QTcpSocket*)this->sender();
+    QString msg = client_socket->readAll();
+    //QMessageBox::warning(nullptr,"warning",buf);
+
+    QString type = msg.mid(0,3);
+    msg = msg.mid(4);
+    qDebug()<<msg;
+    if(type == "log"){
+        int fen_ge = msg.indexOf(':');
+        QString username = msg.mid(0,fen_ge);
+        QString pwd = msg.mid(fen_ge+1);
+
+        //bool verified = db->verifyUser(username, pwd);
+//        if(verified){
+//            //connList.insert(username,client_socket);
+//            client_socket->write("successfully log in!");
+//        }else{
+//            client_socket->write("wrong username or password!");
+//        }
+
+
+//    }else if(type == "reg"){
+//        int fen_ge = msg.indexOf(':');
+//        QString username = msg.mid(0,fen_ge);
+//        QString pwd = msg.mid(fen_ge+1);
+//        //struct UserInfo userinfo{username,pwd};
+//        //db->insertUser(userinfo);
+
+
+//    }else if(type == "msg"){
+//        int fen_ge = msg.indexOf(':');
+//        QString reciever = msg.mid(0,fen_ge);
+//        QString client_msg = msg.mid(fen_ge+1);
+//        //ClientList.value(reciever)->write(client_msg.toUtf8());
+
+
+    }
+
+}
+
+
+void TcpServer::_disconnected()
+{
+
+}
+
