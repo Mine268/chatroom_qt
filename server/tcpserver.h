@@ -49,9 +49,13 @@ private:
     */
     inline QJsonObject prepareSendJson(const QString&);
 
-    void recvLogin(QString);
-    void recvRegister(QString);
-    void recvMessage(QString);
+signals:
+    // 这两个需要QTcoSocket*参数是因为未登录/注册的时候不能通过id查找socket
+    void recvLogin(QTcpSocket*, const QString&, const QString&);
+    void recvRegister(QTcpSocket*, const QString&, const QString&);
+    void recvMessage(const QString&, const QString&, const QString&, const QString&);
+    void recvFriendAddQuest(const QString&, const QString&);
+    void recvFriendDelQuest(const QString&, const QString&);
 
 private slots:
     // 槽函数，用于接受来信，并按照类别调用不同的函数处理
