@@ -102,11 +102,16 @@ QString DataDB:: insertUser(struct User user)
 }
 
 //成为好友操作
-bool DataDB::insertFriend(QString name_1, QString name_2)
+bool DataDB::insertFriend(QString id_1, QString id_2)
 {
     QSqlQuery query;
+    QString name_1,name_2;
 
-    query.prepare("insert into friend(name_1,name_2)values(:name_1,:name_2)");
+    name_1 = selectNameByID(id_1);
+    name_2 = selectNameByID(id_2);
+    query.prepare("insert into friend(id_1,id_2,name_1,name_2)values(:id_1,:id_2,name_1,name_2)");
+    query.bindValue(":id_1",QVariant(id_1));
+    query.bindValue(":id_2",QVariant(id_2));
     query.bindValue(":name_1",QVariant(name_1));
     query.bindValue(":name_2",QVariant(name_2));
 
@@ -123,31 +128,47 @@ bool DataDB::insertFriend(QString name_1, QString name_2)
 }
 
 //好友查询操作
-QList <QString> DataDB:: selectFriend(QString name)
+QList <QString> DataDB:: selectFriend(QString id)
 {
     QSqlQuery query;
-    query.prepare("select * from friend where name_1 =:name");
-    query.bindValue(":name",QVariant(name));
+    query.prepare("select * from friend where id_1 =:id");
+    query.bindValue(":id",QVariant(id));
     query.exec();
 
-    QList <QString> namelist;
+    QList <QString> id_namelist;
     while(query.next())
     {
-        namelist << query.value("name_2").toString();
+        id_namelist << (query.value("id_2").toString() + "/" + query.value("name_2").toString());
     }
 
-    query.prepare("select * from friend where name_2 =:name");
-    query.bindValue(":name",QVariant(name));
+    query.prepare("select * from friend where id_2 =:id");
+    query.bindValue(":id",QVariant(id));
     query.exec();
 
     while(query.next())
     {
-        namelist << query.value("name_1").toString();
+        id_namelist << (query.value("id_1").toString() + "/" + query.value("name_1").toString());
     }
-    for(int i=0;i<namelist.size();i++){
-            qDebug()<<namelist.at(i);
+    for(int i=0;i<id_namelist.size();i++){
+            qDebug()<<id_namelist.at(i);
         }
-    return namelist;
+    return id_namelist;
+}
+
+QString DataDB::selectNameByID(QString id)
+{
+    QSqlQuery query;
+    query.prepare("select * from user where id =:id");
+    query.bindValue(":id",QVariant(id));
+
+    QString name = "false";
+    if(query.next()){
+        name = query.value("name").toString();
+    }
+    else{
+        qDebug() << "不存在该用户";
+    }
+    return name;
 }
 
 

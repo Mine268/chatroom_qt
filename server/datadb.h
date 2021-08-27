@@ -24,9 +24,11 @@ public:
     //注册的插入操作
     QString insertUser(struct User user);
     //成为好友操作
-    bool insertFriend(QString name_1, QString name_2);
+    bool insertFriend(QString id_1, QString id_2);
     //好友查询操作
-    QList <QString> selectFriend(QString name);
+    QList <QString> selectFriend(QString id);
+    //查找id对应的用户名
+    QString selectNameByID(QString id);
 
     //    //查询用户名是否重复
     //    bool fingByName(QString name);
