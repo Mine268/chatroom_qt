@@ -8,6 +8,12 @@
 #include <QTcpSocket>
 #include <QtDebug>
 #include <qgraphicseffect.h>
+
+/*
+ * 注册窗口的实现
+ *
+ * */
+
 namespace Ui {
 class signinDialog;
 }
@@ -19,7 +25,12 @@ public:
     explicit signinDialog(QWidget* parent = nullptr);
     ~signinDialog();
 
-    void setSocket();
+    void setSocket(QTcpSocket*); //设置socket
+    void init_ui(); //初始化ui界面
+
+signals:
+    void okToRegister(QString); //当注册成功时会发送此信号，QString包含ID
+    void closeDialog();
 
 private:
     Ui::signinDialog* ui;
@@ -31,8 +42,11 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+
 private slots:
     void on_cancel_clicked();
+    void on_sure_clicked();
+    void receiveRgMsg(QString);
 };
 
 #endif // SIGNINDIALOG_H

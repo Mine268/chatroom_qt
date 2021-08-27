@@ -1,6 +1,7 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
+#include "signindialog.h"
 #include <QDialog>
 #include <QEvent>
 #include <QLineEdit>
@@ -8,6 +9,7 @@
 #include <QMouseEvent>
 #include <QTcpServer>
 #include <QTcpSocket>
+
 namespace Ui {
 class loginDialog;
 }
@@ -20,12 +22,10 @@ public:
     ~loginDialog();
 
     void init_ui();
-    void setSocket();
-    void ClientRecvData();
+    void setSocket(QTcpSocket*);
 
-private:
-    //一些flag
-    bool ok;
+signals:
+    void OkToLogin();
 
 protected:
     QPoint old_pos;
@@ -36,11 +36,18 @@ protected:
 
 private slots:
     void on_login_clicked();
+    void on_regestor_clicked();
+    void on_cancel_clicked();
+
+    void receive_login_message(QString);
+    void receive_register_message(QString);
+    void showDialog();
 
 private:
     Ui::loginDialog* ui;
     QLineEdit* usernumberinput;
     QTcpSocket* clientSocket;
+    signinDialog* signindialog;
 };
 
 #endif // LOGINDIALOG_H

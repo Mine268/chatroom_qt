@@ -10,30 +10,37 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    clientallwidget.cpp \
     logindialog.cpp \
     main.cpp \
-    mydialog.cpp \
-    myqtcpsever.cpp \
-    signindialog.cpp \
-    testdialog.cpp \
-    widget.cpp
+	signindialog.cpp\
+	addfriend.cpp\
+	chat.cpp\
+	friendlist.cpp\
+	setting.cpp\
 
 HEADERS += \
+    clientallwidget.h \
     logindialog.h \
-    mydialog.h \
-    myqtcpsever.h \
-    signindialog.h \
-    testdialog.h \
-    widget.h
+	signindialog.h\
+	addfriend.h\
+	chat.h\
+	friendlist.h\
+	setting.h\
+
 
 FORMS += \
     logindialog.ui \
-    mydialog.ui \
-    signindialog.ui \
-    testdialog.ui \
-    widget.ui
+	signindialog.ui\
+	addfriend.ui\
+	chat.ui\
+	friendlist.ui\
+	setting.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    icos.qrc

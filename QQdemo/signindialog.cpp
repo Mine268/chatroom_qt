@@ -7,6 +7,11 @@ signinDialog::signinDialog(QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::signinDialog)
 {
+    init_ui();
+}
+
+void signinDialog::init_ui()
+{
     ui->setupUi(this);
     setWindowTitle("注册");
     setWindowIcon(QIcon("C:\\Users\\God\\Desktop\\新建文件夹\\注册.png"));
@@ -25,10 +30,17 @@ signinDialog::signinDialog(QWidget* parent)
     ui->passward->setPlaceholderText("密码");
     ui->passward_r->setPlaceholderText("重复密码");
 }
-
 signinDialog::~signinDialog()
 {
     delete ui;
+}
+
+void signinDialog::setSocket(QTcpSocket* _socket)
+{
+    ClientSocket = _socket;
+    //ToDo
+    //connect() 注册是否成功的消息
+    //connect()
 }
 
 void signinDialog::mouseMoveEvent(QMouseEvent* event)
@@ -56,12 +68,35 @@ void signinDialog::mouseReleaseEvent(QMouseEvent* event)
 
 void signinDialog::on_cancel_clicked()
 {
-    QPropertyAnimation* animation = new QPropertyAnimation(ui->frame, "pos");
-    animation->setDuration(1000);
-    animation->setStartValue(QPoint());
-    //    animation->setDirection(QAbstractAnimation::Direction::Forward);
-    animation->setEndValue(QPoint(ui->frame->width(), 0));
-    animation->start();
-    qDebug() << pos();
+    //发送信号给登录窗口
+    //关闭注册框后会显示登录框
+    emit closeDialog();
     this->close();
+}
+
+void signinDialog::on_sure_clicked()
+{
+    //发送注册消息
+    QString username = ui->username->text();
+    QString passward = ui->passward->text();
+    QString passward_re = ui->passward_r->text();
+    if (passward.compare(passward_re) == 0 && !username.isEmpty()) {
+        //        ClientSocket->write("注册");
+
+        //Test code
+        qDebug() << "注册成功";
+        emit okToRegister(username);
+        this->close();
+    } else {
+        //提示密码重复错误
+        //ToDo
+    }
+}
+
+void signinDialog::receiveRgMsg(QString)
+{
+    //处理接受到的注册内容
+    //如果注册成功，发送信号给登录窗口： emit okToRegister(QString)
+    //如果注册失败，提示错误消息： QMessage::information / 直接在框中提示
+    //ToDo
 }

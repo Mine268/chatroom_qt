@@ -17,7 +17,24 @@
    <double>1.000000000000000</double>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QPushButton{
+	border:2px groove rgb(231,234,237);
+	border-radius:10px;
+	padding:2px 4px;
+	border-style: outset;
+}
+QPushButton:hover{
+	background-color:rgb(229, 241, 251); color: black;
+}
+QPushButton:pressed{
+	background-color:rgb(204, 228, 247);
+	border-style: inset;
+}
+QLabel{
+	border-radius: 65px;
+	border:1px solid black;
+	background: green; 
+}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_5">
    <item>
@@ -54,18 +71,21 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="pciture">
+         <widget class="QLabel" name="picture">
           <property name="minimumSize">
            <size>
-            <width>131</width>
-            <height>111</height>
+            <width>130</width>
+            <height>130</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>131</width>
-            <height>111</height>
+            <width>130</width>
+            <height>130</height>
            </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="text">
            <string/>
@@ -150,6 +170,18 @@
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QPushButton" name="login">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
             <property name="text">
              <string>登录</string>
             </property>
@@ -157,13 +189,37 @@
           </item>
           <item>
            <widget class="QPushButton" name="regestor">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
             <property name="text">
              <string>注册</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="cancel">
+            <property name="minimumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>93</width>
+              <height>28</height>
+             </size>
+            </property>
             <property name="text">
              <string>取消</string>
             </property>
@@ -192,22 +248,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>loginDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>292</x>
-     <y>272</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>192</x>
-     <y>167</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

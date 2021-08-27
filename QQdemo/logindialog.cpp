@@ -1,5 +1,6 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
+#include <QBitmap>
 #include <QGraphicsDropShadowEffect>
 #include <QPainter>
 #include <QPropertyAnimation>
@@ -17,13 +18,30 @@ void loginDialog::init_ui()
     setWindowTitle("登录");
     setWindowIcon(QIcon("C:\\Users\\God\\Desktop\\新建文件夹\\聊天.png"));
 
-    ui->pciture->setPixmap(QPixmap::fromImage(
-        QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"))
-                               .scaled(131, 111));
     //    this->setWindowFlags(Qt::SplashScreen);
     setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    QString style = "border-radius: 65px;border:0px white;background: green";
+    ui->picture->setStyleSheet(style);
+    //    ui->picture->setPixmap(QPixmap::fromImage(
+    //        QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"))
+    //                               .scaled(130, 130));
+
+    QPixmap src = QPixmap::fromImage(
+        QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"));
+    QSize size(130, 130);
+    QBitmap mask(size);
+    QPainter painter(&mask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.fillRect(0, 0, 130, 130, Qt::white);
+    painter.setBrush(QColor(0, 0, 0));
+    painter.drawRoundedRect(0, 0, 130, 130, 99, 99);
+    QPixmap image = src.scaled(size);
+    image.setMask(mask);
+    ui->picture->setPixmap(image);
 
     QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 0); //设置阴影距离
@@ -37,37 +55,19 @@ void loginDialog::init_ui()
     ui->userpassward->setPlaceholderText("密码");
 
     QPropertyAnimation* animation = new QPropertyAnimation(this, "windowOpacity");
-    animation->setDuration(1000);
+    animation->setDuration(100);
     animation->setStartValue(0);
     animation->setEndValue(1);
     animation->start();
 }
 
-void loginDialog::setSocket()
+void loginDialog::setSocket(QTcpSocket* _socket)
 {
-    clientSocket = new QTcpSocket();
-    clientSocket->connectToHost("127.0.0.1", 5530);
-    if (!clientSocket->waitForConnected(3000)) {
-        QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
-        return;
-    }
-    //    qDebug() << "Client: " << clientSocket->localAddress() << mp_clientSocket->localPort() << mp_clientSocket->socketDescriptor();
-    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(ClientRecvData()));
-    //接收服务器发送的信息
+    clientSocket = _socket;
+    //ToDo
+    //connect()
 }
 
-void loginDialog::ClientRecvData()
-{
-    //将接收内容存储到字符串中
-    QByteArray content = clientSocket->readAll();
-    QString content_ = content;
-    if (content.length() == 0) {
-        QMessageBox::information(this, "QT网络通信", "接收服务端数据失败！");
-        return;
-    }
-    if (content_ == "OK") {
-    }
-}
 loginDialog::~loginDialog()
 {
     delete ui;
@@ -98,4 +98,48 @@ void loginDialog::mouseReleaseEvent(QMouseEvent* event)
 void loginDialog::on_login_clicked()
 {
     //检测是否有此账号
+    //发送消息 : socket.write()
+    //连接信号与槽:  connect( , , , receive_login_message(QString))
+
+    //Test code
+    emit OkToLogin();
+    this->close();
+}
+
+void loginDialog::on_regestor_clicked()
+{
+    //注册账号
+    //新建注册框
+    this->hide();
+    signindialog = new signinDialog();
+    signindialog->setSocket(clientSocket);
+    signindialog->show();
+    connect(signindialog, &signinDialog::okToRegister, this, &loginDialog::receive_register_message);
+    connect(signindialog, &signinDialog::closeDialog, this, &loginDialog::showDialog);
+}
+
+void loginDialog::on_cancel_clicked()
+{
+    //取消，关闭窗口
+    this->close();
+}
+
+void loginDialog::receive_login_message(QString)
+{
+    //处理发送过来的登录信息，如果成功，发送信号给clientAllWidget :emit(okToLogin)
+    //如果失败，给出提示 :QMessage::Information;
+    //ToDo
+}
+
+void loginDialog::receive_register_message(QString _userId)
+{
+    //将注册成功得到的ID填充至输入框中
+    //ToDo
+    ui->usernumber->setCurrentText(_userId);
+    this->show();
+}
+
+void loginDialog::showDialog()
+{
+    this->show();
 }

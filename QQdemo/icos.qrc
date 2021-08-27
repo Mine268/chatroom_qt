@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>picture/magnifier.png</file>
+    </qresource>
+</RCC>
