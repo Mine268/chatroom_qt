@@ -53,7 +53,9 @@ void TcpServer::incomingConnection(qintptr _handle)
 
 void TcpServer::_sendMsg(QTcpSocket *_skt, const QString &msg)
 {
-    _skt->write(msg.toUtf8());
+    Q_UNUSED(_skt);
+    qDebug() << msg;
+//    _skt->write(msg.toUtf8());
 }
 
 QJsonObject TcpServer::prepareSendJson(const QString &_quest)
@@ -143,4 +145,14 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
 
     _doc.setObject(_json);
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
+
+void TcpServer::_recvMsg()
+{
+    ;
+}
+
+void TcpServer::_disconnected()
+{
+    ;
 }

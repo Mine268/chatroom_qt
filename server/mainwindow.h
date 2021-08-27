@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "tcpserver.h"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -17,5 +19,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    TcpServer *server;
 };
 #endif // MAINWINDOW_H
