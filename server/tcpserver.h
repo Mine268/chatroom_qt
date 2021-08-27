@@ -15,10 +15,13 @@ public:
     // 服务器开始监听
     void start();
 
-    void sendLoginConfirm(QTcpSocket*, QString);
-    void sendRegConfirm(QTcpSocket*, QString);
-    void sendFriendList(QTcpSocket*, QString);
-    void sendChatMsg(QTcpSocket*, QString);
+    void sendLoginConfirm(QTcpSocket*);
+    void sendLoginDeny(QTcpSocket*, const QString&);
+    void sendRegConfirm(QTcpSocket*, const QString&);
+    void sendRegDeny(QTcpSocket*, const QString&);
+    void sendFriendList(QTcpSocket*, const QList<QPair<QString, QString>>&);
+    void sendChatMsg(QTcpSocket*, const QString&, const QString&
+                     , const QString&, const QString&);
 
     static TcpServer *getInstance();
 
@@ -37,6 +40,14 @@ private:
 
     TcpServer(QObject *parent = nullptr);
     virtual void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;
+
+    // 统一发送格式化的信息
+    inline void _sendMsg(QTcpSocket*, const QString&);
+    // 把json格式准备好
+    /*
+    {"sender":"xxx","quest":"xxx"}
+    */
+    inline QJsonObject prepareSendJson(const QString&);
 
     void recvLogin(QString);
     void recvRegister(QString);
