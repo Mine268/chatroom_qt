@@ -53,7 +53,52 @@ void TcpServer::incomingConnection(qintptr _handle)
 
 void TcpServer::_recvMsg()
 {
-    ;
+    // 通过socket接受客户端发来的信息
+    auto _socket = (dynamic_cast<QTcpSocket*>(this->sender()));
+    auto _msg = _socket->readAll();
+
+    // 进行json解析
+    QJsonParseError _jerror;
+    QJsonDocument _jdoc = QJsonDocument::fromJson(_msg, &_jerror);
+
+    if (_jerror.error == QJsonParseError::NoError && _jdoc.isObject()) {
+        auto _jobj = _jdoc.object();
+        auto _sender = _jobj.value("sender").toString();
+        if (_sender == "client") {
+            auto _quest = _jobj.value("quest").toString();
+            // 因为在当前的设计中，所有的value必然是object，所以这里先一步转换
+            auto _value = _jobj.value("value").toObject();
+
+            if (_quest == "loginQuest") {
+                emit this->recvLogin(_socket, _value.value("usrname").toString()
+                                     , _value.value("password").toString());
+            } else if (_quest == "registerQuest") {
+                emit this->recvRegister(_socket, _value.value("usrname").toString()
+                                        , _value.value("password").toString());
+            } else if (_quest == "messageSend") {
+                emit this->recvMessage(_value.value("from").toString()
+                                       , _value.value("to").toString()
+                                       , _value.value("date").toString()
+                                       , _value.value("value").toString());
+            } else if (_quest == "friendAddQuest") {
+                emit this->recvFriendAddQuest(_value.value("me").toString(),
+                                              _value.value("you").toString());
+            } else if (_quest == "friendDelQuest") {
+                emit this->recvFriendDelQuest(_value.value("me").toString(),
+                                              _value.value("you").toString());
+            } else {
+                qDebug() << "[unknow request]:" << _quest;
+            }
+
+        } else {
+            qDebug() << "[wrong sender]:" << _sender;
+        }
+
+    } else if (_jdoc.isObject()) {
+        qDebug() << "[unmatched json type]:" << QString::fromUtf8(_msg);
+    } else {
+        qDebug() << "[json parse error]:" << QString::fromUtf8(_msg);
+    }
 }
 
 void TcpServer::_disconnected()
