@@ -109,7 +109,7 @@ bool DataDB::insertFriend(QString id_1, QString id_2)
 
     name_1 = selectNameByID(id_1);
     name_2 = selectNameByID(id_2);
-    query.prepare("insert into friend(id_1,id_2,name_1,name_2)values(:id_1,:id_2,name_1,name_2)");
+    query.prepare("insert into friend(id_1,id_2,name_1,name_2)values(:id_1,:id_2,:name_1,:name_2);");
     query.bindValue(":id_1",QVariant(id_1));
     query.bindValue(":id_2",QVariant(id_2));
     query.bindValue(":name_1",QVariant(name_1));
