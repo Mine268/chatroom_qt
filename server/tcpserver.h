@@ -52,6 +52,8 @@ private:
     void recvLogin(QString);
     void recvRegister(QString);
     void recvMessage(QString);
+    void recvFriendAddQuest(QString);
+    void recvFriendDelQuest(QString);
 
 private slots:
     // 槽函数，用于接受来信，并按照类别调用不同的函数处理

@@ -51,6 +51,16 @@ void TcpServer::incomingConnection(qintptr _handle)
     connect(_socket, &QTcpSocket::disconnected, this, &TcpServer::_disconnected);
 }
 
+void TcpServer::_recvMsg()
+{
+    ;
+}
+
+void TcpServer::_disconnected()
+{
+    ;
+}
+
 void TcpServer::_sendMsg(QTcpSocket *_skt, const QString &msg)
 {
     Q_UNUSED(_skt);
@@ -147,12 +157,4 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
 
-void TcpServer::_recvMsg()
-{
-    ;
-}
 
-void TcpServer::_disconnected()
-{
-    ;
-}
