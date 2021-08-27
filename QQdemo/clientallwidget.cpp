@@ -3,7 +3,7 @@
 clientAllWidget::clientAllWidget(QObject* parent)
     : QObject(parent)
 {
-    init_socket();
+    //    init_socket();
 }
 
 void clientAllWidget::start()
@@ -32,6 +32,6 @@ void clientAllWidget::okToLogin()
     //登录成功，需要将登录框关闭，跳转到主界面
     //ToDo
     mainWidget = new FriendList(nullptr);
-
     mainWidget->show();
+    //    mainWidget->setSocket(clientSocket);
 }

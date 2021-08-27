@@ -247,6 +247,13 @@ QLabel{
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>usernumber</tabstop>
+  <tabstop>userpassward</tabstop>
+  <tabstop>login</tabstop>
+  <tabstop>regestor</tabstop>
+  <tabstop>cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

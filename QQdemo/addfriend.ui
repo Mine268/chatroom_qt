@@ -10,6 +10,12 @@
     <height>550</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>650</width>
+    <height>550</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -39,8 +45,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Adobe Devanagari</family>
-      <pointsize>7</pointsize>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
@@ -78,7 +84,7 @@
       </font>
      </property>
      <property name="text">
-      <string>请输入Name/Id</string>
+      <string/>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton">

@@ -225,6 +225,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>username</tabstop>
+  <tabstop>passward</tabstop>
+  <tabstop>passward_r</tabstop>
+  <tabstop>sure</tabstop>
+  <tabstop>cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

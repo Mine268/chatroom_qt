@@ -81,7 +81,7 @@ void signinDialog::on_sure_clicked()
     QString passward = ui->passward->text();
     QString passward_re = ui->passward_r->text();
     if (passward.compare(passward_re) == 0 && !username.isEmpty()) {
-        //        ClientSocket->write("注册");
+        //socket.send
 
         //Test code
         qDebug() << "注册成功";

@@ -6,285 +6,318 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>900</height>
+    <width>357</width>
+    <height>716</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QFrame" name="frame">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>900</height>
-    </rect>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
+   <property name="leftMargin">
+    <number>0</number>
    </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+   <property name="topMargin">
+    <number>0</number>
    </property>
-   <widget class="QFrame" name="list">
-    <property name="geometry">
-     <rect>
-      <x>5</x>
-      <y>130</y>
-      <width>390</width>
-      <height>715</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QTreeWidget" name="treeWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>390</width>
-       <height>705</height>
-      </rect>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="columnCount">
-      <number>2</number>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <column>
-      <property name="text">
-       <string notr="true">1</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">2</string>
-      </property>
-     </column>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>0</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="tool">
-     <property name="spacing">
-      <number>5</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="minimize">
-       <property name="minimumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="maximmize">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>口</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="close">
-       <property name="minimumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>X</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QFrame" name="info">
-    <property name="geometry">
-     <rect>
-      <x>5</x>
-      <y>30</y>
-      <width>390</width>
-      <height>100</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QWidget" name="verticalLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>160</width>
-       <height>87</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="font">
-         <font>
-          <family>Adobe Devanagari</family>
-          <pointsize>24</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background:transparent;
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="tool">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="minimize">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="icos.qrc">
+              <normaloff>:/tool/minimize.png</normaloff>:/tool/minimize.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="maximize">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="icos.qrc">
+              <normaloff>:/tool/maximize.png</normaloff>:/tool/maximize.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="close">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="icos.qrc">
+              <normaloff>:/tool/close.png</normaloff>:/tool/close.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QPushButton" name="picture">
+          <property name="minimumSize">
+           <size>
+            <width>91</width>
+            <height>81</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>头像</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="name">
+          <property name="font">
+           <font>
+            <family>Adobe Devanagari</family>
+            <pointsize>24</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background:transparent;
 border-width:0;
 border-style:outset</string>
-        </property>
-        <property name="text">
-         <string>Name</string>
-        </property>
+          </property>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="id">
+          <property name="styleSheet">
+           <string notr="true">background:transparent;
+border-width:0;
+border-style:outset</string>
+          </property>
+          <property name="text">
+           <string>Id</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTreeWidget" name="treeWidget">
+        <column>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </column>
+        <item>
+         <property name="text">
+          <string>God</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="styleSheet">
-         <string notr="true">background:transparent;
-border-width:0;
-border-style:outset</string>
-        </property>
-        <property name="text">
-         <string>Id</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="tool_2">
+        <item>
+         <widget class="QToolButton" name="setting">
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>设置</string>
+          </property>
+          <property name="icon">
+           <iconset resource="icos.qrc">
+            <normaloff>:/friendlist/setting.png</normaloff>:/friendlist/setting.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="add">
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>添加</string>
+          </property>
+          <property name="icon">
+           <iconset resource="icos.qrc">
+            <normaloff>:/friendlist/add.png</normaloff>:/friendlist/add.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="search">
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>搜索</string>
+          </property>
+          <property name="icon">
+           <iconset resource="icos.qrc">
+            <normaloff>:/friendlist/search.png</normaloff>:/friendlist/search.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="picture">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>15</y>
-       <width>70</width>
-       <height>70</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border:0.5px outset</string>
-     </property>
-     <property name="text">
-      <string>头像</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>850</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="tool_2">
-     <item>
-      <widget class="QPushButton" name="setting">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>设置</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="add">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>添加</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="search">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>搜索</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icos.qrc"/>
+ </resources>
  <connections/>
 </ui>

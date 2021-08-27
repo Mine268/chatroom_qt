@@ -120,7 +120,7 @@ void loginDialog::on_regestor_clicked()
 
 void loginDialog::on_cancel_clicked()
 {
-    //取消，关闭窗口
+    //取消，直接关闭窗口
     this->close();
 }
 

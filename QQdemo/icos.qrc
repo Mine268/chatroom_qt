@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>picture/magnifier.png</file>
+        <file>friendlist/add.png</file>
+        <file>friendlist/search.png</file>
+        <file>friendlist/setting.png</file>
+        <file>tool/close.png</file>
+        <file>tool/maximize.png</file>
+        <file>tool/minimize.png</file>
     </qresource>
 </RCC>
