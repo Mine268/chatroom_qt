@@ -15,17 +15,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_pushButton_start_server_clicked()
 {
-    int port =0;
+    int port = 0;
     port = ui->lineEdit_port->text().toInt();
     QHostAddress ip(ui->lineEdit_ip->text());
     if(port == 0 || ip.isNull()){
         QMessageBox::warning(NULL,"warning","ip and port cannot be empty!");
     }else{
-        server->initiate(ip,port);
+        server->initiate(ip, port);
         server->start();
+
+        // 连接信号函数和槽函数
+        connect(server, &TcpServer::recvLogin, this, &MainWindow::getLogin);
+        connect(server, &TcpServer::recvRegister, this, &MainWindow::getRegister);
+        connect(server, &TcpServer::recvMessage, this, &MainWindow::getMessage);
+        connect(server, &TcpServer::recvFriendAddQuest, this, &MainWindow::getFriendAddQuest);
+        connect(server, &TcpServer::recvFriendDelQuest, this, &MainWindow::getFriendDelQuest);
     }
 
+}
+
+void MainWindow::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
+{
+    qDebug() << "[login msg]:" << _skt << ',' << _usr << ',' << _pwd;
+}
+
+void MainWindow::getRegister(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
+{
+    qDebug() << "[register msg]:" << _skt << ',' << _usr << ',' << _pwd;
+}
+void MainWindow::getMessage(const QString &_from, const QString &_to
+                            , const QString &_date, const QString &_msg)
+{
+    qDebug() << "[send message]:" << _from << _to << _date << _msg;
+}
+void MainWindow::getFriendAddQuest(const QString &_master, const QString &_guest)
+{
+    qDebug() << "[add friend]:" << _master << _guest;
+}
+void MainWindow::getFriendDelQuest(const QString &_master, const QString &_guest)
+{
+    qDebug() << "[del friend]:" << _master << _guest;
 }

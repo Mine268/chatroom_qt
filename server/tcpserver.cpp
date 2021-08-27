@@ -173,7 +173,7 @@ void TcpServer::_recvMsg()
             } else if (_quest == "messageSend") {
                 emit this->recvMessage(_value.value("from").toString()
                                        , _value.value("to").toString()
-                                       , _value.value("date").toString()
+                                       , _value.value("time").toString()
                                        , _value.value("value").toString());
             } else if (_quest == "friendAddQuest") {
                 emit this->recvFriendAddQuest(_value.value("me").toString(),

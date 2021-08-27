@@ -19,6 +19,13 @@ public:
 private slots:
     void on_pushButton_start_server_clicked();
 
+    // 分别对应TcpServer中的signals
+    void getLogin(QTcpSocket*, const QString&, const QString&);
+    void getRegister(QTcpSocket*, const QString&, const QString&);
+    void getMessage(const QString&, const QString&, const QString&, const QString&);
+    void getFriendAddQuest(const QString&, const QString&);
+    void getFriendDelQuest(const QString&, const QString&);
+
 private:
     Ui::MainWindow *ui;
     TcpServer *server;
