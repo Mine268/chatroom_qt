@@ -7,6 +7,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QWidget>
+#include <QStandardItemModel>
 
 namespace Ui {
 class AddFriend;

@@ -7,5 +7,7 @@
         <file>tool/close.png</file>
         <file>tool/maximize.png</file>
         <file>tool/minimize.png</file>
+        <file>eye/closeeye.png</file>
+        <file>eye/openeye.png</file>
     </qresource>
 </RCC>

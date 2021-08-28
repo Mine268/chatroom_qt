@@ -218,12 +218,70 @@ border-style:outset</string>
           <string>1</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>新建列</string>
+         </property>
+        </column>
         <item>
          <property name="text">
           <string>God</string>
          </property>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>745</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>45</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>3</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>111</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>567</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>123</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
         </item>
        </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="searchline"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="tool_2">

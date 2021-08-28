@@ -31,6 +31,8 @@ public:
 
 signals:
     void closeMainWidget();
+    void sign_re();
+
 private slots:
     void on_add_clicked();
 
@@ -46,6 +48,8 @@ private slots:
 
     void on_maximize_clicked();
 
+    void restore();
+
 protected:
     QPoint old_pos;
     bool mouse_is_press; //鼠标被按下
@@ -56,6 +60,10 @@ protected:
 private:
     Ui::FriendList* ui;
     QTcpSocket* clientSocket;
+
+    QBrush m_itemBrush;
+    void searchChild(QTreeWidgetItem *cItem, const QString &txt);
+    void parentExpand(QTreeWidgetItem *item);
 };
 
 #endif // FRIENDLIST_H

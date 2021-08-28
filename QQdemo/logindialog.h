@@ -43,6 +43,8 @@ private slots:
     void receive_register_message(QString);
     void showDialog();
 
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::loginDialog* ui;
     QLineEdit* usernumberinput;

@@ -7,6 +7,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QtDebug>
+#include <QMessageBox>
 #include <qgraphicseffect.h>
 
 /*
@@ -35,6 +36,22 @@ signals:
 private:
     Ui::signinDialog* ui;
     QTcpSocket* ClientSocket;
+    QString warning_background_1 = "border:2px red;"
+                                   "border-radius:10px;"
+                                   "padding:5px 2px;"
+                                   "font: 6pt ;"
+                                   "background-color: qlineargradient"
+                                   "(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+                                   "stop:0 rgba(255, 0, 0, 60), "
+                                   "stop:1 rgba(255, 255, 255, 0));";
+    QString warning_background_2 = "border:4px red;"
+                                   "border-radius:10px;"
+                                   "padding:5px 2px;"
+                                   "font: 6pt ;"
+                                   "background-color: qlineargradient"
+                                   "(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+                                   "stop:0 rgba(255, 0, 0, 120), "
+                                   "stop:1 rgba(255, 255, 255, 0));";
 
 protected:
     QPoint old_pos;
@@ -47,6 +64,9 @@ private slots:
     void on_cancel_clicked();
     void on_sure_clicked();
     void receiveRgMsg(QString);
+    void on_username_textEdited(const QString &arg1);
+    void on_passward_r_textEdited(const QString &arg1);
+    void on_checkBox_stateChanged(int arg1);
 };
 
 #endif // SIGNINDIALOG_H

@@ -143,3 +143,17 @@ void loginDialog::showDialog()
 {
     this->show();
 }
+
+void loginDialog::on_checkBox_stateChanged(int arg1)
+{
+    if(arg1 == 2)
+    {
+        qDebug()<<"被选中";
+        ui->userpassward->setEchoMode(QLineEdit::Normal);
+    }
+    else if(arg1 == 0)
+    {
+        qDebug()<<"未被选中";
+        ui->userpassward->setEchoMode(QLineEdit::Password);
+    }
+}

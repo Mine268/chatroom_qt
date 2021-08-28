@@ -116,6 +116,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -151,6 +154,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -173,6 +179,9 @@
                <width>25</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -200,7 +209,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="picture">
           <property name="enabled">
            <bool>true</bool>
           </property>
