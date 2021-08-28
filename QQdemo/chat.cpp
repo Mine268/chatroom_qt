@@ -59,3 +59,14 @@ void Chat::on_minimize_clicked()
     //最小化窗口
     this->showMinimized();
 }
+
+void Chat::on_send_clicked()
+{
+    //发送内容到用户中
+}
+
+void Chat::on_empty_clicked()
+{
+    //清空输入框中的内容
+    ui->MyMsg->clear();
+}

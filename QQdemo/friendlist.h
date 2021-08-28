@@ -27,7 +27,12 @@ class FriendList : public QWidget {
 public:
     explicit FriendList(QWidget* parent = nullptr);
     ~FriendList();
+
     void setSocket(QTcpSocket*);
+
+    //设置界面相关控件
+    void setUserpicture(QPixmap);
+    void setUsernameAndId(QString);
 
 signals:
     void closeMainWidget();

@@ -26,6 +26,10 @@ private slots:
 
     void on_minimize_clicked();
 
+    void on_send_clicked();
+
+    void on_empty_clicked();
+
 protected:
     QPoint old_pos;
     bool mouse_is_press; //鼠标被按下
