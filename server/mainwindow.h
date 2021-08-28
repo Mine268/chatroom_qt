@@ -26,6 +26,8 @@ private slots:
     void getFriendAddQuest(const QString&, const QString&);
     void getFriendDelQuest(const QString&, const QString&);
 
+    void on_pushButton_shutdown_server_clicked();
+
 private:
     Ui::MainWindow *ui;
     TcpServer *server;
