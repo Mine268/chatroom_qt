@@ -181,6 +181,8 @@ void TcpServer::_recvMsg()
             } else if (_quest == "friendDelQuest") {
                 emit this->recvFriendDelQuest(_value.value("me").toString(),
                                               _value.value("you").toString());
+            } else if (_quest == "friendList") {
+                emit this->recvFriendListQuest(_value.value("id").toString());
             } else {
                 qDebug() << "[unknow request]:" << _quest;
             }

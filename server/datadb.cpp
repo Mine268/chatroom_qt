@@ -6,7 +6,7 @@
 #include <QTime>
 
 //静态成员变量的类外初始化
-DataDB* DataDB::db = NULL;
+DataDB* DataDB::db = nullptr;
 
 DataDB::DataDB()
 {
@@ -30,7 +30,6 @@ DataDB::DataDB()
                              "open db error!",
                              QMessageBox::Yes);
     }
-
 }
 
 //
@@ -191,10 +190,7 @@ QString DataDB::selectNameByID(QString id)
 
 DataDB* DataDB::getInstance()
 {
-    if(db == NULL){
-        db = new DataDB;
-    }
-    return db;
+    return (db == nullptr) ? (db = new DataDB) : db;
 }
 
 
