@@ -9,5 +9,6 @@
         <file>tool/minimize.png</file>
         <file>eye/closeeye.png</file>
         <file>eye/openeye.png</file>
+        <file>tool/maxmin.png</file>
     </qresource>
 </RCC>

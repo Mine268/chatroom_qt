@@ -11,24 +11,30 @@ CONFIG += c++11
 
 SOURCES += \
     clientallwidget.cpp \
+    fatherwidget.cpp \
     logindialog.cpp \
     main.cpp \
+    mydelegate.cpp \
 	signindialog.cpp\
 	addfriend.cpp\
 	chat.cpp\
 	friendlist.cpp\
 	setting.cpp\
+    testform.cpp \
 	toolbutton.cpp\
 	clienttcpsocket.cpp
 
 HEADERS += \
     clientallwidget.h \
+    fatherwidget.h \
     logindialog.h \
+    mydelegate.h \
 	signindialog.h\
 	addfriend.h\
 	chat.h\
 	friendlist.h\
 	setting.h\
+    testform.h \
 	toolbutton.h\
 	clienttcpsocket.h
 
@@ -38,7 +44,8 @@ FORMS += \
 	addfriend.ui\
 	chat.ui\
 	friendlist.ui\
-	setting.ui
+	setting.ui \
+    testform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

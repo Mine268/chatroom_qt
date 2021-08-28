@@ -1,17 +1,15 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include <QEvent>
-#include <QMouseEvent>
+#include "fatherwidget.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QWidget>
-
 namespace Ui {
 class Setting;
 }
 
-class Setting : public QWidget {
+class Setting : public FatherWidget {
     Q_OBJECT
 
 public:
@@ -23,12 +21,6 @@ public slots:
     void close_for_mainWidget();
 
 protected:
-    QPoint old_pos;
-    bool mouse_is_press; //鼠标被按下
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-
 private slots:
     void on_minimize_clicked();
 
@@ -43,6 +35,8 @@ private slots:
 private:
     Ui::Setting* ui;
     QTcpSocket* clientSocket;
+    QSize oldSize;
+    QRect oldGeometry;
 };
 
 #endif // SETTING_H

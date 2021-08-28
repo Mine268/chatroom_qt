@@ -1,17 +1,15 @@
 #ifndef FRIENDLIST_H
 #define FRIENDLIST_H
 
-#include <QEvent>
-#include <QMouseEvent>
+#include "addfriend.h"
+#include "chat.h"
+#include "fatherwidget.h"
+#include "setting.h"
+#include <QLineEdit>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QTreeWidget>
 #include <QWidget>
-
-#include "addfriend.h"
-#include "chat.h"
-#include "setting.h"
-#include <QLineEdit>
 
 /*
  *  FriendList主界面
@@ -23,7 +21,7 @@ namespace Ui {
 class FriendList;
 }
 
-class FriendList : public QWidget {
+class FriendList : public FatherWidget {
     Q_OBJECT
 
 public:
@@ -58,12 +56,6 @@ private slots:
     void restore();
 
 protected:
-    QPoint old_pos;
-    bool mouse_is_press; //鼠标被按下
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-
 private:
     Ui::FriendList* ui;
     QTcpSocket* clientSocket;
@@ -71,6 +63,9 @@ private:
     QBrush m_itemBrush;
     void searchChild(QTreeWidgetItem* cItem, const QString& txt);
     void parentExpand(QTreeWidgetItem* item);
+
+    QSize oldSize;
+    QRect oldGeometry;
 };
 
 #endif // FRIENDLIST_H

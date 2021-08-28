@@ -1,13 +1,12 @@
 #ifndef ADDFRIEND_H
 #define ADDFRIEND_H
 
-#include <QEvent>
+#include "fatherwidget.h"
 #include <QList>
-#include <QMouseEvent>
+#include <QStandardItemModel>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QWidget>
-#include <QStandardItemModel>
 
 namespace Ui {
 class AddFriend;
@@ -17,7 +16,7 @@ struct People {
     QString name;
     int state;
 };
-class AddFriend : public QWidget {
+class AddFriend : public FatherWidget {
     Q_OBJECT
 
 public:
@@ -26,12 +25,6 @@ public:
     void setSocket(QTcpSocket*);
 
 protected:
-    QPoint old_pos;
-    bool mouse_is_press; //鼠标被按下
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-
 private slots:
     void on_close_clicked();
 
@@ -51,6 +44,8 @@ public slots:
 private:
     Ui::AddFriend* ui;
     QTcpSocket* clientSocket;
+    QSize oldSize;
+    QRect oldGeometry;
 };
 
 #endif // ADDFRIEND_H

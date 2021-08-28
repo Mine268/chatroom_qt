@@ -134,8 +134,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="flat">
@@ -166,8 +166,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="flat">
@@ -323,6 +323,16 @@
             </item>
            </widget>
           </item>
+          <item>
+           <widget class="QWidget" name="widget_2" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="">
@@ -352,7 +362,17 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QTextEdit" name="MyMsg"/>
+              <widget class="QTextEdit" name="MyMsg">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>400</height>
+                </size>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>

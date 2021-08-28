@@ -5,7 +5,7 @@
 #include <QColor>
 
 FriendList::FriendList(QWidget* parent)
-    : QWidget(parent)
+    : FatherWidget(parent)
     , ui(new Ui::FriendList)
 {
     ui->setupUi(this);
@@ -49,28 +49,6 @@ void FriendList::on_close_clicked()
     //关闭主界面,关闭整个主线程
     emit closeMainWidget();
     this->close();
-}
-void FriendList::mouseMoveEvent(QMouseEvent* event)
-{
-    //未开启鼠标奥追踪的情况下，当鼠标按下时才能触发
-    if (mouse_is_press) {
-        this->move(event->globalPos() - old_pos);
-    }
-}
-
-void FriendList::mousePressEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton) {
-        mouse_is_press = true;
-        old_pos = event->pos();
-        return QWidget::mousePressEvent(event);
-    }
-}
-
-void FriendList::mouseReleaseEvent(QMouseEvent* event)
-{
-    Q_UNUSED(event);
-    mouse_is_press = false;
 }
 
 void FriendList::on_minimize_clicked()

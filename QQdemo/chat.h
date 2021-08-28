@@ -1,8 +1,7 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include <QEvent>
-#include <QMouseEvent>
+#include "fatherwidget.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QWidget>
@@ -10,7 +9,7 @@ namespace Ui {
 class Chat;
 }
 
-class Chat : public QWidget {
+class Chat : public FatherWidget {
     Q_OBJECT
 
 public:
@@ -30,16 +29,14 @@ private slots:
 
     void on_empty_clicked();
 
-protected:
-    QPoint old_pos;
-    bool mouse_is_press; //鼠标被按下
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void on_maximize_clicked();
 
+protected:
 private:
     Ui::Chat* ui;
     QTcpSocket* clientSocket;
+    QSize oldSize;
+    QRect oldGeometry;
 };
 
 #endif // CHAT_H
