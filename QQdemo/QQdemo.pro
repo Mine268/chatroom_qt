@@ -18,7 +18,8 @@ SOURCES += \
 	chat.cpp\
 	friendlist.cpp\
 	setting.cpp\
-	toolbutton.cpp
+	toolbutton.cpp\
+	clienttcpsocket.cpp
 
 HEADERS += \
     clientallwidget.h \
@@ -28,7 +29,8 @@ HEADERS += \
 	chat.h\
 	friendlist.h\
 	setting.h\
-	toolbutton.h
+	toolbutton.h\
+	clienttcpsocket.h
 
 FORMS += \
     logindialog.ui \

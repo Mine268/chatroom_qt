@@ -127,6 +127,7 @@ void FriendList::on_search_clicked()
 
 void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column)
 {
+    Q_UNUSED(column);
     //有修改
     if (item->parent()) {
         //列表颜色复原
