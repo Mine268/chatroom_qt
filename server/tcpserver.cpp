@@ -108,7 +108,7 @@ void TcpServer::sendRegDeny(QTcpSocket *_skt, const QString &_msg)
 }
 
 void TcpServer::sendFriendList(QTcpSocket *_skt
-                               , const QList<QPair<QString, QString>> &_list)
+                               , const QList<std::tuple<QString, QString, bool>> &_list)
 {
     QJsonObject _json = this->prepareSendJson("friendList");
     QJsonDocument _doc;
@@ -117,8 +117,9 @@ void TcpServer::sendFriendList(QTcpSocket *_skt
     auto _size = _list.size();
     for (int i = 0; i < _size; ++i) {
         QJsonObject _tmp;
-        _tmp.insert("id", _list[i].first);
-        _tmp.insert("name", _list[i].second);
+        _tmp.insert("id", std::get<0>(_list[i]));
+        _tmp.insert("name", std::get<1>(_list[i]));
+        _tmp.insert("online", std::get<2>(_list[i]));
         _array.append(_tmp);
     }
 

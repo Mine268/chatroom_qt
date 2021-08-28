@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <iostream>
 
 class TcpServer : public QTcpServer
 {
@@ -19,7 +20,7 @@ public:
     void sendLoginDeny(QTcpSocket*, const QString&);
     void sendRegConfirm(QTcpSocket*, const QString&);
     void sendRegDeny(QTcpSocket*, const QString&);
-    void sendFriendList(QTcpSocket*, const QList<QPair<QString, QString>>&);
+    void sendFriendList(QTcpSocket*, const QList<std::tuple<QString, QString, bool>>&);
     void sendChatMsg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
 
@@ -56,6 +57,7 @@ signals:
     void recvMessage(const QString&, const QString&, const QString&, const QString&);
     void recvFriendAddQuest(const QString&, const QString&);
     void recvFriendDelQuest(const QString&, const QString&);
+    void recvFriendListQuest(const QString&);
 
 private slots:
     // 槽函数，用于接受来信，并按照类别调用不同的函数处理

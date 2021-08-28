@@ -63,7 +63,7 @@ public:
 private:
     static DataDB	*getInstance();
     // 释放单例（断开连接等等）
-    static DataDB *releaseInstance();
+    static DataDB   *releaseInstance();
     static DataDB	*db;
 
     QSqlDatabase sqldb;
