@@ -13,11 +13,10 @@ FriendList::FriendList(QWidget* parent)
     setWindowFlags(Qt::FramelessWindowHint);
 
     //新添加
-    m_itemBrush =  ui->treeWidget->topLevelItem(0)->background(0);
+    m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
     //好友搜索栏
     ui->searchline->setPlaceholderText("输入好友id，点击下方搜索按钮");
     connect(this, SIGNAL(sign_re()), this, SLOT(restore()));
-
 }
 
 FriendList::~FriendList()
@@ -80,7 +79,6 @@ void FriendList::on_minimize_clicked()
     this->showMinimized();
 }
 
-
 void FriendList::on_search_clicked()
 {
     //搜索好友
@@ -91,43 +89,34 @@ void FriendList::on_search_clicked()
     bool isEmptyTxt = txt.isEmpty();
 
     //复原
-    if (isEmptyTxt)
-    {
+    if (isEmptyTxt) {
         emit sign_re();
         return;
     }
 
     bool isEmptyTree = ui->treeWidget->topLevelItemCount();
-    if ( ! isEmptyTree)
-    {
+    if (!isEmptyTree) {
         qDebug() << "tree empty";
         return;
     }
 
     QTreeWidgetItemIterator it(ui->treeWidget);
-    while (*it)
-    {
-        for(int i = 0; i < (*it)->columnCount(); i++)
-        {
-            if((*it)->text(i).contains(txt))
-            {
+    while (*it) {
+        for (int i = 0; i < (*it)->columnCount(); i++) {
+            if ((*it)->text(i).contains(txt)) {
                 qDebug() << "find!";
                 (*it)->setBackground(i, QBrush(QColor(0, 0, 255, 60)));
                 (*it)->setHidden(false);
-                QTreeWidgetItem *item = *it;
+                QTreeWidgetItem* item = *it;
                 //显示父节点
-                while (item->parent())
-                {
+                while (item->parent()) {
                     item->parent()->setHidden(false);
                     item->parent()->setExpanded(true);
                     item = item->parent();
                 }
-            }
-            else
-            {
-                 //不满足满足条件的子结点隐藏
-                if((*it)->parent())
-                {
+            } else {
+                //不满足满足条件的子结点隐藏
+                if ((*it)->parent()) {
                     (*it)->setHidden(true);
                 }
             }
@@ -139,8 +128,7 @@ void FriendList::on_search_clicked()
 void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column)
 {
     //有修改
-    if(item->parent())
-    {
+    if (item->parent()) {
         //列表颜色复原
         item->parent()->setSelected(true);
         qDebug() << item->isSelected();
@@ -165,12 +153,11 @@ void FriendList::restore()
 {
     qDebug() << "txt empty";
     QTreeWidgetItemIterator it(ui->treeWidget);
-    while(*it) {
+    while (*it) {
         (*it)->setBackground(0, m_itemBrush);
-        if(!(*it)->isSelected())
-        {
+        if (!(*it)->isSelected()) {
             (*it)->setExpanded(false);
-//            (*it)->setHidden(false);
+            //            (*it)->setHidden(false);
         }
 
         (*it)->setSelected(false);

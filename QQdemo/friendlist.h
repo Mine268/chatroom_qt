@@ -11,6 +11,8 @@
 #include "addfriend.h"
 #include "chat.h"
 #include "setting.h"
+#include <QLineEdit>
+
 /*
  *  FriendList主界面
  *  需要管理添加好友页面，搜索页面，聊天页面等
@@ -67,8 +69,8 @@ private:
     QTcpSocket* clientSocket;
 
     QBrush m_itemBrush;
-    void searchChild(QTreeWidgetItem *cItem, const QString &txt);
-    void parentExpand(QTreeWidgetItem *item);
+    void searchChild(QTreeWidgetItem* cItem, const QString& txt);
+    void parentExpand(QTreeWidgetItem* item);
 };
 
 #endif // FRIENDLIST_H
