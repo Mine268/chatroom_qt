@@ -1,6 +1,6 @@
 # 通信格式
 
-format 1.2
+format 1.3
 
 ```
 相对于 format 1.0 添加了属于client发送的friend[Add|Del]Quest的quest和对应的value含义
