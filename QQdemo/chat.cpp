@@ -68,8 +68,11 @@ void Chat::on_empty_clicked()
 
 void Chat::chat_msg_display(struct chat_msg chatmsg)
 {
+    QListWidgetItem *aItem;
     QString send_msg = chatmsg.from_id + chatmsg.time + "\n" + chatmsg.value + "\n";
-    ui-> contents ->addItem(send_msg);
+    aItem = new QListWidgetItem();
+    aItem->setText(send_msg);
+    ui-> contents ->addItem(aItem);
 }
 
 void Chat::on_maximize_clicked()
