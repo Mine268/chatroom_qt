@@ -97,7 +97,7 @@ format 1.3
 
 ```json
 {
-    "usrname":"114514", // 登录用户id
+    "id":"114514", // 登录用户id
     "password":"dkasjfosiajfoipajfiorjgingjsihgfiuor" // 密码
 }
 ```
@@ -106,7 +106,7 @@ format 1.3
 
 ```json
 {
-    "usrname":"114514", // 注册用户id
+    "id":"114514", // 注册用户id
     "password":"dkasjfosiajfoipajfiorjgingjsihgfiuor" // 密码
 }
 ```
