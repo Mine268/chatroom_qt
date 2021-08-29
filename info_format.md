@@ -42,11 +42,14 @@ format 1.3
     	- registerDeny 注册否认，如果用户注册失败则返回这个
     	- friendList 发送好友列表
     	- messageTransmit 转发的聊天信息
+    	- returnUserInfo
     //  - friendAccept 同意添加好友
+    	- 
     如果发送方为client，那么quest分别由
     	- loginQuest 登录请求
     	- registerQuest 注册请求
     	- messageSend 发送消息请求
+    	- searchUserByID 发送搜索好友
     	- friendAddQuest 添加好友请求
     	- friendDelQuest 删除好友请求
     	- friendList 好友列表请求
@@ -61,6 +64,8 @@ format 1.3
 
 当 `quest` 为 `registerConfirm` 时，`value` 为 `json` 对象
 
+
+
 ```json
 {
     "id":"114514";
@@ -68,6 +73,16 @@ format 1.3
 ```
 
 当 `quest` 为 `registerDeny` 时，`value` 为字符串，包含注册失败的原因。
+
+当 `quest` 为 `returnUserInfo` 时，`value` 为字符串，
+
+```json
+{
+    "name":"sdasd",
+    "email":""
+}
+
+```
 
 当 `quest` 为 `friendList` 时，`value` 为数组
 
@@ -144,5 +159,12 @@ format 1.3
 }
 ```
 
+当`quest`为``searchUserByID`，`value`为	`json`对象
 
+```json
+{
+    "query_id":"222222",
+    "sender_id":"2222"
+}
+```
 
