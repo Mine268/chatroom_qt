@@ -91,24 +91,18 @@ QString DataDB::registerQuest(const QString &_user, const QString &_pwd)
     QSqlQuery query;
 
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-    int id = qrand() % (99999 - 10000) + 10000;
-    QString id_1 = QString::number(id);
 
-    query.prepare("insert into users(name,password,id) values(:name,:password,:id)");
+    query.prepare("insert into users(`name`,`password`) values(:name,:password)");
     query.bindValue(":name",QVariant(_user));
     query.bindValue(":password",QVariant(_pwd));
-    query.bindValue(":id",QVariant(id_1.toInt()));
 
     bool flag = query.exec();
     if(!flag)
-    {
         qDebug()<<QObject::tr ("注册失败\n");
-    }
     else
-    {
         qDebug()<<QObject::tr ("注册成功\n");
-    }
-    return id_1;
+
+    return query.lastInsertId().toString();
 }
 
 // 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
@@ -230,7 +224,7 @@ QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
     while(query.next())
     {
         qDebug() << "查到好友";
-        idlist << query.value("partner2").toInt();
+        idlist << query.value("partner2").toString().toLongLong();
     }
 
     query.prepare("select * from `friend-relation` where partner2 =:id");
@@ -240,7 +234,7 @@ QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
     while(query.next())
     {
         qDebug() << "查到好友";
-        idlist << query.value("partner1").toInt();
+        idlist << query.value("partner1").toString().toLongLong();
     }
 
     for(int i=0;i<idlist.size();i++){
