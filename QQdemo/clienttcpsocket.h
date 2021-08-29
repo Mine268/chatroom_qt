@@ -34,7 +34,10 @@ public:
         const QString& msg);
     void sendFriendAdd(const QString& me_id, const QString& you_id);
     void sendFriendDel(const QString& me_id, const QString& you_id);
-    void searchUser(const QString &me_id, const QString& you_id);
+    void searchUser(const QString& me_id, const QString& you_id);
+    void sendFriendList(const QString& id);
+//    void sendImage();
+    void pullMessage(const QString& id);
     QJsonObject client_prepareSendJson(const QString& quest);
 
 signals:
@@ -45,6 +48,7 @@ signals:
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
     void recvUserInfo(struct user userinfo);
+//    void recvFriendAccept();
 
 private slots:
     void _recvMsg();

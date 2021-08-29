@@ -65,7 +65,6 @@ void ClientTcpSocket::sendMsgTo(const QString& from_id, const QString& to_id,
 //   ;
 //}
 
-
 void ClientTcpSocket::sendFriendAdd(const QString& me_id, const QString& you_id)
 {
     QJsonObject _json = this->client_prepareSendJson("friendAddQuest");
@@ -96,6 +95,28 @@ void ClientTcpSocket::sendFriendDel(const QString& me_id, const QString& you_id)
      QJsonDocument _doc;
      _value.insert("query_id", me_id);
      _value.insert("sender_id", you_id);
+     _json.insert("value", _value);
+     _doc.setObject(_json);
+     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
+ }
+
+ void ClientTcpSocket::sendFriendList(const QString &id)
+ {
+     QJsonObject _json = this->client_prepareSendJson("friendList");
+     QJsonObject _value;
+     QJsonDocument _doc;
+     _value.insert("id", id);
+     _json.insert("value", _value);
+     _doc.setObject(_json);
+     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
+ }
+
+ void ClientTcpSocket::pullMessage(const QString &id)
+ {
+     QJsonObject _json = this->client_prepareSendJson("pullHangedMessage");
+     QJsonObject _value;
+     QJsonDocument _doc;
+     _value.insert("id", id);
      _json.insert("value", _value);
      _doc.setObject(_json);
      clientSocket->write(_doc.toJson(QJsonDocument::Compact));
