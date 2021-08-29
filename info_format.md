@@ -1,6 +1,6 @@
 # 通信格式
 
-format 1.4
+format 1.4.1
 
 ```
 相对于 format 1.0 添加了属于client发送的friend[Add|Del]Quest的quest和对应的value含义
@@ -45,7 +45,6 @@ format 1.4
     	- friendList 发送好友列表
     	- messageTransmit 转发的聊天信息
     	- returnUserInfo 返回用户信息
-    //  - friendAccept 同意添加好友
     如果发送方为client，那么quest分别由
     	- loginQuest 登录请求
     	- registerQuest 注册请求
@@ -91,7 +90,7 @@ format 1.4
 
 ```json
 {
-    "id":"114514";
+    "id":"114514"
 }
 ```
 
