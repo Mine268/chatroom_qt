@@ -7,10 +7,10 @@
 #include "fatherwidget.h"
 #include "setting.h"
 #include <QLineEdit>
-#include <QTreeWidget>
-#include <QWidget>
 #include <QPixmap>
-
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QWidget>
 /*
  *  FriendList主界面
  *  需要管理添加好友页面，搜索页面，聊天页面等

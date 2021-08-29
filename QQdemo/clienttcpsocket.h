@@ -14,6 +14,8 @@ struct user {
     QString id;
     QString name;
 };
+Q_DECLARE_METATYPE(user);
+Q_DECLARE_METATYPE(user*);
 
 struct chat_msg {
     QString from_id;
@@ -21,9 +23,11 @@ struct chat_msg {
     QString time;
     QString value; //消息内容
 };
+Q_DECLARE_METATYPE(chat_msg);
 
 class ClientTcpSocket : public QObject {
     Q_OBJECT
+
 public:
     ClientTcpSocket(QObject* parent = nullptr);
     void sendloginMsg(const QString& username, const QString& pwd);

@@ -105,6 +105,7 @@ void loginDialog::on_login_clicked()
     clientSocket->sendloginMsg(userId, userPwd);
 
     //TestCode
+    qDebug() << "登录";
     emit OkToLogin(userId, userPwd);
 }
 

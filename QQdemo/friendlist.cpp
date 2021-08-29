@@ -12,8 +12,7 @@ FriendList::FriendList(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    //显示好友列表
-    connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
+
 
     //新添加
     m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
@@ -29,6 +28,8 @@ FriendList::~FriendList()
 void FriendList::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
+    //显示好友列表
+    connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
 }
 
 void FriendList::on_add_clicked()
@@ -119,7 +120,6 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
 
 
         //获取好友信息
-        //随便写写
         struct user u = item->data(0, Qt::UserRole + 1).value<struct user>();
         QString name = u.name;
         QString to_id = u.id;
