@@ -1,9 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "tcpserver.h"
-
 #include <QMainWindow>
+#include "tcpserver.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,6 +15,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void on_pushButton_start_server_clicked();
+
+    // 分别对应TcpServer中的signals
+    void getLogin(QTcpSocket*, const QString&, const QString&);
+    void getRegister(QTcpSocket*, const QString&, const QString&);
+    void getMessage(const QString&, const QString&, const QString&, const QString&);
+    void getFriendAddQuest(const QString&, const QString&);
+    void getFriendDelQuest(const QString&, const QString&);
+
+    void on_pushButton_shutdown_server_clicked();
 
 private:
     Ui::MainWindow *ui;

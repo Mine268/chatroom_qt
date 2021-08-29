@@ -3,15 +3,14 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <iostream>
 
 class TcpServer : public QTcpServer
 {
     Q_OBJECT
 public:
-    ~TcpServer();
-
     // 设置服务器监听
-    void initiate(QHostAddress, quint16);
+    void configure(QHostAddress, quint16);
     // 服务器开始监听
     void start();
 
@@ -19,11 +18,12 @@ public:
     void sendLoginDeny(QTcpSocket*, const QString&);
     void sendRegConfirm(QTcpSocket*, const QString&);
     void sendRegDeny(QTcpSocket*, const QString&);
-    void sendFriendList(QTcpSocket*, const QList<QPair<QString, QString>>&);
+    void sendFriendList(QTcpSocket*, const QList<std::tuple<QString, QString, bool>>&);
     void sendChatMsg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
 
     static TcpServer *getInstance();
+    static void releaseInstance();
 
 private:
     // 单例设计模式
@@ -39,6 +39,7 @@ private:
     QMap<int, QTcpSocket*> connList;
 
     TcpServer(QObject *parent = nullptr);
+    ~TcpServer();
     virtual void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;
 
     // 统一发送格式化的信息
@@ -56,12 +57,20 @@ signals:
     void recvMessage(const QString&, const QString&, const QString&, const QString&);
     void recvFriendAddQuest(const QString&, const QString&);
     void recvFriendDelQuest(const QString&, const QString&);
+    void recvFriendListQuest(const QString&);
+    // 客户端异常下线
+    void usrDisconnectedEx(QTcpSocket*);
 
 private slots:
     // 槽函数，用于接受来信，并按照类别调用不同的函数处理
     void _recvMsg();
     // 客户端断开连接的时候触发这个槽函数，处理客户端异常下线的情况
+    // 现在好像没法做qaq
     void _disconnected();
+
+signals:
+    //用于和mainwindow通信的信号函数，仅用作调试
+    void debug_displayMsg();
 };
 
 #endif // TCPSERVER_H

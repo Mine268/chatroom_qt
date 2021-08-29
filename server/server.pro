@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    servermanager.cpp \
     tcpserver.cpp \
     datadb.cpp
 
 HEADERS += \
     mainwindow.h \
+    servermanager.h \
     tcpserver.h \
     datadb.h
 

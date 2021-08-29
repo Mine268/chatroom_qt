@@ -9,7 +9,18 @@
 DataDB* DataDB::db = nullptr;
 
 DataDB::DataDB()
+{}
+
+// 数据库配置
+void DataDB::configure(const QString &_driver	  // 数据库驱动
+             , const QString &_dbName             // 数据库名称
+             , const QString &_host		          // 设置数据库主机地址
+             , const short 	 &_port               // 设置数据库主机端口
+             , const QString &_name               // 设置数据库登录名称
+             , const QString &_pwd                // 设置数据库登录密码
+             )
 {
+<<<<<<< HEAD
     configure();
     bool flag = connectToDB();
     if(flag){
@@ -29,6 +40,8 @@ void DataDB::configure(const QString &_driver	  // 数据库驱动
              , const QString &_pwd                // 设置数据库登录密码
              )
 {
+=======
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
     //设置数据库的驱动
     sqldb = QSqlDatabase::addDatabase(_driver);
     //配置数据库的基本信息
@@ -46,7 +59,11 @@ void DataDB::configure(const QString &_driver	  // 数据库驱动
 // 连接到数据库，返回值指示是否连接成功
 bool DataDB::connectToDB()
 {
+<<<<<<< HEAD
     if(sqldb.open()){
+=======
+    if(!sqldb.open()){
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
         return true;
     }
     else{
@@ -122,10 +139,17 @@ bool DataDB::messageSave(const qint64 _from, const qint64 _to
                 , const QString &_time, const QString &_msg)
 {
     QSqlQuery query;
+<<<<<<< HEAD
     query.prepare("insert into `unread-message`(src,dest,time,msg) values(:from,:to,:time,:msg)");
     query.bindValue(":from",QVariant(_from));
     query.bindValue(":to",QVariant(_to));
     query.bindValue(":time",QVariant(_time));
+    query.bindValue(":msg",QVariant(_msg));
+=======
+    query.prepare("insert into unread-message(src,dest,time,msg) values(:id,:from,:to,:time,:msg)");
+    query.bindValue(":from",QVariant(_from));
+    query.bindValue(":to",QVariant(_to));
+    query.bindValue(":msg",QVariant(_time));
     query.bindValue(":msg",QVariant(_msg));
 
     bool flag = query.exec();
@@ -140,6 +164,36 @@ bool DataDB::messageSave(const qint64 _from, const qint64 _to
     return flag;
 }
 
+// 添加好友，返回值指示是否添加成功
+bool DataDB::friendAdd(qint64 id1, qint64 id2)
+{
+    QSqlQuery query;
+    query.prepare("insert into friend-relation(partner1,partner2)values(:id1,:id2)");
+    query.bindValue(":id_1",QVariant(id1));
+    query.bindValue(":id_2",QVariant(id2));
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
+
+    bool flag = query.exec();
+    if(!flag)
+    {
+<<<<<<< HEAD
+        qDebug()<<QObject::tr ("存储消息失败\n");
+    }
+    else
+    {
+        qDebug()<<QObject::tr ("存储消息成功\n");
+=======
+        qDebug()<<QObject::tr ("添加好友失败\n");
+    }
+    else
+    {
+        qDebug()<<QObject::tr ("添加好友成功\n");
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
+    }
+    return flag;
+}
+
+<<<<<<< HEAD
 // 添加好友，返回值指示是否添加成功
 bool DataDB::friendAdd(qint64 id1, qint64 id2)
 {
@@ -193,6 +247,19 @@ bool DataDB::friendDel(qint64 id1, qint64 id2)
     flag = query.exec();
     if(!flag)
     {
+=======
+// 删除好友，返回值指示是否删除成功
+bool DataDB::friendDel(qint64 id1, qint64 id2)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM friend-relation WHERE partner1 = :id1 and partner2 = :id2");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+
+    bool flag = query.exec();
+    if(!flag)
+    {
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
         qDebug()<<QObject::tr ("删除好友失败\n");
     }
     else
@@ -206,7 +273,11 @@ bool DataDB::friendDel(qint64 id1, qint64 id2)
 QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
 {
     QSqlQuery query;
+<<<<<<< HEAD
     query.prepare("select * from `friend-relation` where partner1 =:id");
+=======
+    query.prepare("select * from friend-relation where partner1 =:id");
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
     query.bindValue(":id",QVariant(id));
     query.exec();
 
@@ -216,17 +287,27 @@ QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
 
     while(query.next())
     {
+<<<<<<< HEAD
         qDebug() << "查到好友";
         idlist << query.value("partner2").toInt();
     }
 
     query.prepare("select * from `friend-relation` where partner2 =:id");
+=======
+        idlist << query.value("partner2").toInt();
+    }
+
+    query.prepare("select * from friend-relation where partner2 =:id");
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
     query.bindValue(":id",QVariant(id));
     query.exec();
 
     while(query.next())
     {
+<<<<<<< HEAD
         qDebug() << "查到好友";
+=======
+>>>>>>> e1aaf877de101827a82ade415b061c768c3a4cf1
         idlist << query.value("partner1").toInt();
     }
 
