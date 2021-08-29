@@ -119,7 +119,6 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
 
 
         //获取好友信息
-        //随便写写
         struct user u = item->data(0, Qt::UserRole + 1).value<struct user>();
         QString name = u.name;
         QString to_id = u.id;

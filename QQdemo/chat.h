@@ -5,6 +5,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QWidget>
+#include <QPixmap>
+
 namespace Ui {
 class Chat;
 }
@@ -16,6 +18,7 @@ public:
     explicit Chat(QWidget* parent = nullptr);
     ~Chat();
     void setSocket(QTcpSocket*);
+    void setInfo(QString me_id, QString your_id, QString name);
 
 public slots:
     void close_for_mainWidget();
