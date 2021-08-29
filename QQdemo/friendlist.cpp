@@ -12,11 +12,14 @@ FriendList::FriendList(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
+    //显示好友列表
+    connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
+
     //新添加
     m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
     //好友搜索栏
     ui->searchline->setPlaceholderText("输入好友id，点击下方搜索按钮");
-    connect(this, SIGNAL(sign_re()), this, SLOT(restore()));
+    connect(this, SIGNAL(sign_re()), this, SLOT(restore()));//清空好友搜索
 }
 
 FriendList::~FriendList()
@@ -114,8 +117,16 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
         qDebug() << item->text(0);
         emit sign_re();
 
+
+        //获取好友信息
+        //随便写写
+        struct user u = item->data(0, Qt::UserRole + 1).value<struct user>();
+        QString name = u.name;
+        QString to_id = u.id;
+
         //双击好友，打开聊天框
         Chat* chat = new Chat();
+        chat->setInfo(userId, to_id, name);
         chat->show();
         connect(this, &FriendList::closeMainWidget, chat, &Chat::close_for_mainWidget);
     }
@@ -128,6 +139,7 @@ void FriendList::on_maximize_clicked()
 }
 
 //新添加
+//清空搜索
 void FriendList::restore()
 {
     qDebug() << "txt empty";
@@ -136,11 +148,44 @@ void FriendList::restore()
         (*it)->setBackground(0, m_itemBrush);
         if (!(*it)->isSelected()) {
             (*it)->setExpanded(false);
-            //            (*it)->setHidden(false);
         }
 
         (*it)->setSelected(false);
         it++;
     }
     return;
+}
+
+//获取、显示个人信息
+void FriendList::getinfo(QString id, QString pwd)
+{
+    userId = id;
+    userPwd = pwd;
+    userName = "unknow";
+    ui->name->setText(userName);
+    ui->id->setText(userId);
+}
+
+//显示好友列表
+void FriendList::showlist(QList<struct user> list)
+{
+    QTreeWidgetItem *root = new QTreeWidgetItem;
+    ui->treeWidget->addTopLevelItem(root);
+    root->setText(0, "new");
+    for (int i = 0; i < list.size(); ++i)
+    {
+        QTreeWidgetItem *it = new QTreeWidgetItem;
+        struct user u = list[i];
+        it->setData(1, Qt::UserRole + 1, QVariant::fromValue(u));
+        it->setText(0, u.name);
+        root->addChild(it);
+   }
+   //test code
+    QTreeWidgetItem *it = new QTreeWidgetItem;
+    struct user *uu = new struct user;
+    uu->id = "123456";
+    uu->name = "myname";
+    it->setData(1, Qt::UserRole + 1, QVariant::fromValue(uu));
+    it->setText(0, uu->name);
+    root->addChild(it);
 }

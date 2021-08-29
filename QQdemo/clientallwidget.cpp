@@ -26,6 +26,7 @@ void clientAllWidget::okToLogin(QString _userID, QString _userPwd)
     userId = _userID;
     userPwd = _userPwd;
     mainWidget = new FriendList(nullptr);
+    mainWidget->getinfo(userId, userPwd);
     mainWidget->show();
     mainWidget->setSocket(clientSocket);
 }

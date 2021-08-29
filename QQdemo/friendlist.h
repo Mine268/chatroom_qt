@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QTreeWidget>
 #include <QWidget>
+#include <QPixmap>
 
 /*
  *  FriendList主界面
@@ -26,6 +27,8 @@ class FriendList : public FatherWidget {
 public:
     explicit FriendList(QWidget* parent = nullptr);
     ~FriendList();
+
+    void getinfo(QString id, QString pwd);
 
     void setSocket(ClientTcpSocket*);
 
@@ -54,6 +57,8 @@ private slots:
 
     void restore();
 
+    void showlist(QList<struct user> list);
+
 protected:
 private:
     Ui::FriendList* ui;
@@ -65,6 +70,10 @@ private:
 
     QSize oldSize;
     QRect oldGeometry;
+
+    QString userName;
+    QString userId;
+    QString userPwd;
 };
 
 #endif // FRIENDLIST_H
