@@ -48,8 +48,10 @@ public:
     // 分别指代注册的用户名和密码，返回id
     QString registerQuest(const QString &_user, const QString &_pwd);
     // 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
-    bool messageSave(const qint64 _from, const qint64 _to
+    bool saveMessage(const qint64 _from, const qint64 _to
                     , const QString &_time, const QString &_msg);
+    // 读取某人的未读消息
+    QList<msgInfo> readMessage(const qint64 _to);
     // 添加好友，返回值指示是否添加成功
     bool friendAdd(qint64 id1, qint64 id2);
     // 删除好友，返回值指示是否删除成功
@@ -60,7 +62,7 @@ public:
     // 析构函数用于释放空间等等操作
     //~DataDB();
 
-    static DataDB	*getInstance();
+    static DataDB *getInstance();
     static DataDB *releaseInstance();
 private:
 

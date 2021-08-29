@@ -63,6 +63,7 @@ signals:
     void recvFriendListQuest(const QString&);
     void recvImage(const QString&, const QString&, const QString&, const QString&);
     void recvUserQuery(const qint64,const qint64);
+    void recvPullHangedMsg(const qint64);
     // 客户端异常下线
     void usrDisconnectedEx(QTcpSocket*);
 

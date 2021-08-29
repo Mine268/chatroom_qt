@@ -112,7 +112,7 @@ QString DataDB::registerQuest(const QString &_user, const QString &_pwd)
 }
 
 // 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
-bool DataDB::messageSave(const qint64 _from, const qint64 _to
+bool DataDB::saveMessage(const qint64 _from, const qint64 _to
                 , const QString &_time, const QString &_msg)
 {
     QSqlQuery query;
@@ -132,6 +132,25 @@ bool DataDB::messageSave(const qint64 _from, const qint64 _to
         qDebug()<<QObject::tr ("存储消息成功\n");
     }
     return flag;
+}
+
+QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
+{
+    QSqlQuery query;
+
+    query.prepare("select * from `unread-message` where dest =:_to");
+    query.bindValue(":to", _to);
+    query.exec();
+
+    QList<DataDB::msgInfo> list;
+    while (query.next()) {
+        list.append({query.value(1).toLongLong()
+                    , query.value(2).toLongLong()
+                    , query.value(3).toString()
+                    , query.value(4).toString()});
+    }
+
+    return list;
 }
 
 // 添加好友，返回值指示是否添加成功

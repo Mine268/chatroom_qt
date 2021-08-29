@@ -227,10 +227,12 @@ void TcpServer::_recvMsg()
                                      , _value.value("to").toString()
                                      , _value.value("time").toString()
                                      , _value.value("value").toString());
-            } else if(_quest == "searchUserByID") {
-                emit this->recvUserQuery(_value.value("query_id").toInt()
-                                         ,_value.value("sender_id").toInt());
-            }else {
+            } else if (_quest == "searchUserByID") {
+                emit this->recvUserQuery(_value.value("query_id").toString().toLongLong()
+                                         ,_value.value("sender_id").toString().toLongLong());
+            } else if (_quest == "pullHangedMessage" ) {
+                emit this->recvPullHangedMsg(_jobj.value("value").toString().toLongLong());
+            } else {
                 qDebug() << "[unknow request]:" << _quest;
             }
 

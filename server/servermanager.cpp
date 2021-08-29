@@ -53,6 +53,7 @@ void ServerManager::start()
     connect(tcpserver, &TcpServer::usrDisconnectedEx, this, &ServerManager::getUserDropEx);
     connect(tcpserver, &TcpServer::recvImage, this, &ServerManager::getImage);
     connect(tcpserver, &TcpServer::recvUserQuery, this, &ServerManager::getUserQueryQuest);
+    connect(tcpserver, &TcpServer::recvPullHangedMsg, this, &ServerManager::getPullHangedMsg);
 }
 
 void ServerManager::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
@@ -90,7 +91,7 @@ void ServerManager::getMessage(const QString &_from, const QString &_to
 {
     if (loginUsers.find(_to.toLongLong()) == loginUsers.end()) {
         // 此人不在线
-        db->messageSave(_from.toLongLong(), _to.toLongLong(), _date, _msg);
+        db->saveMessage(_from.toLongLong(), _to.toLongLong(), _date, _msg);
     } else {
         // 此人在线
         tcpserver->sendChatMsg(loginUsers[_from.toLongLong()]
@@ -165,6 +166,17 @@ void ServerManager::getFriendListQuest(const QString &_id)
 
     // id, name, online
     tcpserver->sendFriendList(loginUsers[id], res);
+}
+
+void ServerManager::getPullHangedMsg(const qint64 _id)
+{
+    auto list = db->readMessage(_id);
+    for (auto iter = list.begin(); iter != list.end(); ++iter)
+        tcpserver->sendChatMsg(loginUsers[_id]
+                               , QString::number(iter->from)
+                               , QString::number(iter->to)
+                               , iter->date
+                               , iter->msg);
 }
 
 void ServerManager::getUserDropEx(QTcpSocket *_skt)

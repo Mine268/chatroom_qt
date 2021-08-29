@@ -60,6 +60,8 @@ private slots:
     void getFriendDelQuest(const QString&, const QString&);
     // 收到好友列表的请求
     void getFriendListQuest(const QString&);
+    // 收到发送未读消息的请求
+    void getPullHangedMsg(const qint64);
     // 有人异常掉线了，需要从表中删除那个人
     void getUserDropEx(QTcpSocket*);
 
