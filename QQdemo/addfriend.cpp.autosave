@@ -164,6 +164,4 @@ void AddFriend::send_add_friend(int row, int col)
         //调用socket
         emit add_friend(id);
     }
-
-
 }
