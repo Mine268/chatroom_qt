@@ -61,7 +61,7 @@ void loginDialog::init_ui()
     animation->start();
 }
 
-void loginDialog::setSocket(QTcpSocket* _socket)
+void loginDialog::setSocket(ClientTcpSocket* _socket)
 {
     clientSocket = _socket;
     //ToDo
@@ -76,7 +76,7 @@ void loginDialog::mouseMoveEvent(QMouseEvent* event)
 {
     //未开启鼠标奥追踪的情况下，当鼠标按下时才能触发
     if (mouse_is_press) {
-        this->move(event->globalPos() - old_pos);
+        this->move(event->pos() + pos() - old_pos);
     }
 }
 
@@ -98,20 +98,21 @@ void loginDialog::mouseReleaseEvent(QMouseEvent* event)
 void loginDialog::on_login_clicked()
 {
     //检测是否有此账号
-    //发送消息 : socket.write()
+    //发送消息 : socket.send*()
     //连接信号与槽:  connect( , , , receive_login_message(QString))
-
-    //Test code
-    emit OkToLogin();
-    this->close();
+    QString userId = usernumberinput->text();
+    QString userPwd = ui->userpassward->text();
+    clientSocket->sendloginMsg(userId, userPwd);
+    connect(clientSocket, &ClientTcpSocket::recvLoginConMsg, this, &loginDialog::receive_loginOk_message); //登录成功消息
+    connect(clientSocket, &ClientTcpSocket::recvLoginDeMsg, this, &loginDialog::receive_loginFail_message); //登录失败消息
 }
 
 void loginDialog::on_regestor_clicked()
 {
     //注册账号
     //新建注册框
-    this->hide();
-    signindialog = new signinDialog();
+    this->showMinimized();
+    signindialog = new signinDialog(this);
     signindialog->setSocket(clientSocket);
     signindialog->show();
     connect(signindialog, &signinDialog::okToRegister, this, &loginDialog::receive_register_message);
@@ -124,11 +125,11 @@ void loginDialog::on_cancel_clicked()
     this->close();
 }
 
-void loginDialog::receive_login_message(QString)
+void loginDialog::receive_loginOk_message(QString)
 {
     //处理发送过来的登录信息，如果成功，发送信号给clientAllWidget :emit(okToLogin)
-    //如果失败，给出提示 :QMessage::Information;
     //ToDo
+    emit OkToLogin()
 }
 
 void loginDialog::receive_register_message(QString _userId)
@@ -139,6 +140,13 @@ void loginDialog::receive_register_message(QString _userId)
     this->show();
 }
 
+void loginDialog::receive_loginFail_message(QString)
+{
+    //登录失败，给出提示消息
+    //ToDo
+    //可能是密码错误/连接错误
+}
+
 void loginDialog::showDialog()
 {
     this->show();
@@ -146,14 +154,11 @@ void loginDialog::showDialog()
 
 void loginDialog::on_checkBox_stateChanged(int arg1)
 {
-    if(arg1 == 2)
-    {
-        qDebug()<<"被选中";
+    if (arg1 == 2) {
+        qDebug() << "被选中";
         ui->userpassward->setEchoMode(QLineEdit::Normal);
-    }
-    else if(arg1 == 0)
-    {
-        qDebug()<<"未被选中";
+    } else if (arg1 == 0) {
+        qDebug() << "未被选中";
         ui->userpassward->setEchoMode(QLineEdit::Password);
     }
 }

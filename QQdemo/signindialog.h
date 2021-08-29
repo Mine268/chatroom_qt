@@ -1,13 +1,14 @@
 #ifndef SIGNINDIALOG_H
 #define SIGNINDIALOG_H
 
+#include "clienttcpsocket.h"
 #include <QDialog>
 #include <QEvent>
+#include <QMessageBox>
 #include <QMouseEvent>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QtDebug>
-#include <QMessageBox>
 #include <qgraphicseffect.h>
 
 /*
@@ -26,7 +27,7 @@ public:
     explicit signinDialog(QWidget* parent = nullptr);
     ~signinDialog();
 
-    void setSocket(QTcpSocket*); //设置socket
+    void setSocket(ClientTcpSocket*); //设置socket
     void init_ui(); //初始化ui界面
 
 signals:
@@ -35,7 +36,7 @@ signals:
 
 private:
     Ui::signinDialog* ui;
-    QTcpSocket* ClientSocket;
+    ClientTcpSocket* ClientSocket;
     QString warning_background_1 = "border:2px red;"
                                    "border-radius:10px;"
                                    "padding:5px 2px;"
@@ -64,8 +65,8 @@ private slots:
     void on_cancel_clicked();
     void on_sure_clicked();
     void receiveRgMsg(QString);
-    void on_username_textEdited(const QString &arg1);
-    void on_passward_r_textEdited(const QString &arg1);
+    void on_username_textEdited(const QString& arg1);
+    void on_passward_r_textEdited(const QString& arg1);
     void on_checkBox_stateChanged(int arg1);
 };
 

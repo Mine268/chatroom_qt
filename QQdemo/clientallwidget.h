@@ -23,13 +23,17 @@ private:
     void init_socket();
 
 public slots:
-    void okToLogin();
+    void okToLogin(QString _userID, QString _userPwd);
 
 private:
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
     loginDialog* logindialog;
     signinDialog* signindialog;
     FriendList* mainWidget;
+
+    QString userId;
+    QString userName;
+    QString userPwd;
 };
 
 #endif // CLIENTALLWIDGET_H

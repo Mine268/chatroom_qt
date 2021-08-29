@@ -23,7 +23,7 @@ FriendList::~FriendList()
 {
     delete ui;
 }
-void FriendList::setSocket(QTcpSocket* _clientSocket)
+void FriendList::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
 }

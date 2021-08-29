@@ -1,14 +1,13 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
+#include "clienttcpsocket.h"
 #include "signindialog.h"
 #include <QDialog>
 #include <QEvent>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMouseEvent>
-#include <QTcpServer>
-#include <QTcpSocket>
 
 namespace Ui {
 class loginDialog;
@@ -22,10 +21,10 @@ public:
     ~loginDialog();
 
     void init_ui();
-    void setSocket(QTcpSocket*);
+    void setSocket(ClientTcpSocket*);
 
 signals:
-    void OkToLogin();
+    void OkToLogin(QString _userId, QString _userPwd);
 
 protected:
     QPoint old_pos;
@@ -39,8 +38,9 @@ private slots:
     void on_regestor_clicked();
     void on_cancel_clicked();
 
-    void receive_login_message(QString);
+    void receive_loginOk_message(QString);
     void receive_register_message(QString);
+    void receive_loginFail_message(QString);
     void showDialog();
 
     void on_checkBox_stateChanged(int arg1);
@@ -48,7 +48,7 @@ private slots:
 private:
     Ui::loginDialog* ui;
     QLineEdit* usernumberinput;
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
     signinDialog* signindialog;
 };
 

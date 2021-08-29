@@ -3,11 +3,10 @@
 
 #include "addfriend.h"
 #include "chat.h"
+#include "clienttcpsocket.h"
 #include "fatherwidget.h"
 #include "setting.h"
 #include <QLineEdit>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QTreeWidget>
 #include <QWidget>
 
@@ -28,7 +27,7 @@ public:
     explicit FriendList(QWidget* parent = nullptr);
     ~FriendList();
 
-    void setSocket(QTcpSocket*);
+    void setSocket(ClientTcpSocket*);
 
     //设置界面相关控件
     void setUserpicture(QPixmap);
@@ -58,7 +57,7 @@ private slots:
 protected:
 private:
     Ui::FriendList* ui;
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
 
     QBrush m_itemBrush;
     void searchChild(QTreeWidgetItem* cItem, const QString& txt);

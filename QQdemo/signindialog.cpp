@@ -37,7 +37,7 @@ signinDialog::~signinDialog()
     delete ui;
 }
 
-void signinDialog::setSocket(QTcpSocket* _socket)
+void signinDialog::setSocket(ClientTcpSocket* _socket)
 {
     ClientSocket = _socket;
     //ToDo
