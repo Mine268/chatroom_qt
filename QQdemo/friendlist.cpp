@@ -12,14 +12,11 @@ FriendList::FriendList(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    //显示好友列表
-    connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
-
     //新添加
     m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
     //好友搜索栏
     ui->searchline->setPlaceholderText("输入好友id，点击下方搜索按钮");
-    connect(this, SIGNAL(sign_re()), this, SLOT(restore()));//清空好友搜索
+    connect(this, SIGNAL(sign_re()), this, SLOT(restore())); //清空好友搜索
 }
 
 FriendList::~FriendList()
@@ -29,6 +26,8 @@ FriendList::~FriendList()
 void FriendList::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
+    //显示好友列表
+    connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
 }
 
 void FriendList::on_add_clicked()
@@ -117,7 +116,6 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
         qDebug() << item->text(0);
         emit sign_re();
 
-
         //获取好友信息
         //随便写写
         struct user u = item->data(0, Qt::UserRole + 1).value<struct user>();
@@ -169,20 +167,19 @@ void FriendList::getinfo(QString id, QString pwd)
 //显示好友列表
 void FriendList::showlist(QList<struct user> list)
 {
-    QTreeWidgetItem *root = new QTreeWidgetItem;
+    QTreeWidgetItem* root = new QTreeWidgetItem;
     ui->treeWidget->addTopLevelItem(root);
     root->setText(0, "new");
-    for (int i = 0; i < list.size(); ++i)
-    {
-        QTreeWidgetItem *it = new QTreeWidgetItem;
+    for (int i = 0; i < list.size(); ++i) {
+        QTreeWidgetItem* it = new QTreeWidgetItem;
         struct user u = list[i];
         it->setData(1, Qt::UserRole + 1, QVariant::fromValue(u));
         it->setText(0, u.name);
         root->addChild(it);
-   }
-   //test code
-    QTreeWidgetItem *it = new QTreeWidgetItem;
-    struct user *uu = new struct user;
+    }
+    //test code
+    QTreeWidgetItem* it = new QTreeWidgetItem;
+    struct user* uu = new struct user;
     uu->id = "123456";
     uu->name = "myname";
     it->setData(1, Qt::UserRole + 1, QVariant::fromValue(uu));

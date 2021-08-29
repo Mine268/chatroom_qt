@@ -1,10 +1,10 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include "fatherwidget.h"
 #include "clienttcpsocket.h"
-#include <QWidget>
+#include "fatherwidget.h"
 #include <QTime>
+#include <QWidget>
 
 namespace Ui {
 class Chat;
@@ -33,9 +33,9 @@ private slots:
 
     void on_maximize_clicked();
 
-//    void on_send_2_clicked();
+    //    void on_send_2_clicked();
 
-    void on_send_2_clicked();
+    //    void on_send_2_clicked();
 
 protected:
 private:
@@ -46,7 +46,6 @@ private:
     QString from_id;
     QString to_id;
     QString username;
-
 };
 
 #endif // CHAT_H
