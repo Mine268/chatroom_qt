@@ -44,13 +44,8 @@ format 1.3
     	- registerDeny 注册否认，如果用户注册失败则返回这个
     	- friendList 发送好友列表
     	- messageTransmit 转发的聊天信息
-<<<<<<< HEAD
-        - imageTransmit 转发的图片消息
-=======
     	- returnUserInfo
->>>>>>> 1c653027d8d2f8f30886b8e2250283d3c5dcdb7b
     //  - friendAccept 同意添加好友
-    	- 
     如果发送方为client，那么quest分别由
     	- loginQuest 登录请求
     	- registerQuest 注册请求
@@ -166,20 +161,7 @@ format 1.3
 }
 ```
 
-<<<<<<< HEAD
-当`quest`为`image`时， `value`为`json`对象
-```json
-{
-    "from":"114515", // 谁发的消息
-    "to":"7355608", // 谁接受消息
-    "time":"2021-10-1 14:44", // 消息的发送时间
-    "value":"DNDGJ0DKJFHDSKJFH65465465........" // QByteArray形式存储的base64格式的图片串  ***注意签名为QByteArray！
-} 
-```
-
-=======
 当`quest`为``searchUserByID`，`value`为	`json`对象
->>>>>>> 1c653027d8d2f8f30886b8e2250283d3c5dcdb7b
 
 ```json
 {
