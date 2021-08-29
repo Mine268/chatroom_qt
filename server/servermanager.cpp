@@ -95,19 +95,36 @@ void ServerManager::getMessage(const QString &_from, const QString &_to
     }
 }
 
-void ServerManager::getFriendAddQuest(const QString &, const QString &)
+void ServerManager::getFriendAddQuest(const QString &_me, const QString &_you)
 {
+    auto _id1 = _me.toLongLong();
+    auto _id2 = _you.toLongLong();
 
+    db->friendAdd(_id1, _id2);
 }
 
-void ServerManager::getFriendDelQuest(const QString &, const QString &)
+void ServerManager::getFriendDelQuest(const QString &_me, const QString &_you)
 {
+    auto _id1 = _me.toLongLong();
+    auto _id2 = _you.toLongLong();
 
+    db->friendDel(_id1, _id2);
 }
 
-void ServerManager::getFriendListQuest(const QString &)
+void ServerManager::getFriendListQuest(const QString &_id)
 {
+    auto id = _id.toLongLong();
+    auto list = db->friendList(id);
+    QList<std::tuple<QString, QString, bool>> res;
 
+    for (auto iter = list.begin(); iter < list.end(); ++iter) {
+        res.append(std::tuple<QString, QString, bool>
+                   (QString::number(iter->id), iter->name
+                    , loginUsers.find(iter->id) != loginUsers.end()));
+    }
+
+    // id, name, online
+    tcpserver->sendFriendList(loginUsers[id], res);
 }
 
 void ServerManager::getUserDropEx(QTcpSocket *_skt)
