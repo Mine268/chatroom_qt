@@ -44,6 +44,7 @@ format 1.3
     	- registerDeny 注册否认，如果用户注册失败则返回这个
     	- friendList 发送好友列表
     	- messageTransmit 转发的聊天信息
+        - imageTransmit 转发的图片消息
     //  - friendAccept 同意添加好友
     如果发送方为client，那么quest分别由
     	- loginQuest 登录请求
@@ -52,6 +53,7 @@ format 1.3
     	- friendAddQuest 添加好友请求
     	- friendDelQuest 删除好友请求
     	- friendList 好友列表请求
+        - imageSend 发送图片请求
     */
     "value":"" // 这里是每个quest的具体内容
 }
