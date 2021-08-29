@@ -25,9 +25,7 @@ void Mydelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const 
 {
     //将代理组件的数据保存到数据模型中
     QComboBox* comboBox = static_cast<QComboBox*>(editor);
-
     QString str = comboBox->currentText();
-
     model->setData(index, str, Qt::EditRole);
 }
 

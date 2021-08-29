@@ -1,13 +1,12 @@
 #ifndef CLIENTALLWIDGET_H
 #define CLIENTALLWIDGET_H
 
+#include "clienttcpsocket.h"
 #include "friendlist.h"
 #include "logindialog.h"
 #include "signindialog.h"
 #include <QMessageBox>
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 
 /*
  *  管理各个界面的跳转与socket的发送与设置
