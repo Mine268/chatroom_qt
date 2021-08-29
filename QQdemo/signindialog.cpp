@@ -1,8 +1,6 @@
 #include "signindialog.h"
 #include "ui_signindialog.h"
 
-#include <QPropertyAnimation>
-
 signinDialog::signinDialog(QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::signinDialog)
@@ -42,14 +40,15 @@ void signinDialog::setSocket(ClientTcpSocket* _socket)
     ClientSocket = _socket;
     //ToDo
     //connect() 注册是否成功的消息
-    //connect()
+    connect(ClientSocket, &ClientTcpSocket::recvLoginConMsg, this, &signinDialog::receiveRgOkMsg);
+    connect(ClientSocket, &ClientTcpSocket::recvRegDeMeg, this, &signinDialog::receiveReFailMsg);
 }
 
 void signinDialog::mouseMoveEvent(QMouseEvent* event)
 {
     //未开启鼠标奥追踪的情况下，当鼠标按下时才能触发
     if (mouse_is_press) {
-        this->move(event->globalPos() - old_pos);
+        this->move(event->pos() + pos() - old_pos);
     }
 }
 
@@ -79,22 +78,13 @@ void signinDialog::on_cancel_clicked()
 void signinDialog::on_sure_clicked()
 {
     //发送注册消息
-
     QString username = ui->username->text();
     QString passward = ui->passward->text();
     QString passward_re = ui->passward_r->text();
     if (passward.compare(passward_re) == 0 && !username.isEmpty()) {
-        //socket.send
-
-        //Test code
-        qDebug() << "注册成功";
-        emit okToRegister(username);
-        this->close();
+        ClientSocket->sendRegMsg(username, passward);
     } else {
         //提示密码重复错误
-        //ToDo
-        //未完成
-        qDebug() << "注册失败";
         if (username.isEmpty()) {
             ui->label->setVisible(true);
             ui->label->setStyleSheet(warning_background_2);
@@ -106,28 +96,35 @@ void signinDialog::on_sure_clicked()
     }
 }
 
-void signinDialog::receiveRgMsg(QString)
+void signinDialog::receiveRgOkMsg(QString _id)
 {
     //处理接受到的注册内容
     //如果注册成功，发送信号给登录窗口： emit okToRegister(QString)
-    //如果注册失败，提示错误消息： QMessage::information / 直接在框中提示
-    //ToDo
-    //未完成
-    QString txt;
-    if (true) {
-        txt = "注册成功<br>你的id是：<br>";
-        //        txt += userid;
-        QMessageBox::information(NULL, "Title", txt, QMessageBox::Ok, QMessageBox::Ok);
-    } else {
-        txt = "注册失败<br>请重新注册";
-        QMessageBox::information(NULL, "Title", txt, QMessageBox::Ok, QMessageBox::Ok);
-    }
+    //    QString txt;
+    //    if (true) {
+    //        txt = "注册成功<br>你的id是：<br>";
+    //        //        txt += userid;
+    //        QMessageBox::information(NULL, "Title", txt, QMessageBox::Ok, QMessageBox::Ok);
+    //    }
+
+    emit okToRegister(_id);
 }
 
-//新添加
+void signinDialog::receiveReFailMsg(QString failMessage)
+{
+    //注册失败
+    //如果注册失败，提示错误消息： QMessage::information / 直接在框中提示
+    QTimer showFailMessgae;
+    showFailMessgae.setInterval(1000);
+    showFailMessgae.start();
+    ui->username->setPlaceholderText(failMessage);
+    showFailMessgae.stop();
+    ui->username->setPlaceholderText("用户名");
+}
 
 void signinDialog::on_username_textEdited(const QString& arg1)
 {
+    Q_UNUSED(arg1);
     if (ui->username->text() == "") {
         ui->label->setVisible(true);
         ui->label->setStyleSheet(warning_background_1);
@@ -138,7 +135,7 @@ void signinDialog::on_username_textEdited(const QString& arg1)
 
 void signinDialog::on_passward_r_textEdited(const QString& arg1)
 {
-
+    Q_UNUSED(arg1);
     QString passward = ui->passward->text();
     QString passward_re = ui->passward_r->text();
     if (passward.compare(passward_re) != 0) {
@@ -152,11 +149,9 @@ void signinDialog::on_passward_r_textEdited(const QString& arg1)
 void signinDialog::on_checkBox_stateChanged(int arg1)
 {
     if (arg1 == 2) {
-        qDebug() << "被选中";
         ui->passward->setEchoMode(QLineEdit::Normal);
         ui->passward_r->setEchoMode(QLineEdit::Normal);
     } else if (arg1 == 0) {
-        qDebug() << "未被选中";
         ui->passward->setEchoMode(QLineEdit::Password);
         ui->passward_r->setEchoMode(QLineEdit::Password);
     }

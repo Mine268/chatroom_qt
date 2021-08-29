@@ -1,11 +1,10 @@
 #ifndef ADDFRIEND_H
 #define ADDFRIEND_H
 
+#include "clienttcpsocket.h"
 #include "fatherwidget.h"
 #include <QList>
 #include <QStandardItemModel>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QWidget>
 
 namespace Ui {
@@ -22,7 +21,7 @@ class AddFriend : public FatherWidget {
 public:
     explicit AddFriend(QWidget* parent = nullptr);
     ~AddFriend();
-    void setSocket(QTcpSocket*);
+    void setSocket(clienttc*);
 
 protected:
 private slots:
