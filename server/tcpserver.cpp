@@ -171,6 +171,20 @@ void TcpServer::sendChatImg(QTcpSocket *_skt, const QString &_from
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
 
+void TcpServer::sendUserInfo(QTcpSocket *_skt, const QString &_name, const QString &_email)
+{
+    QJsonObject _json = this->prepareSendJson("returnUserInfo");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("name", _name);
+    _value.insert("email", _email);
+
+    _json.insert("value", _value);
+
+    _doc.setObject(_json);
+    _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
+
 void TcpServer::_recvMsg()
 {
     // 通过socket接受客户端发来的信息
@@ -213,7 +227,10 @@ void TcpServer::_recvMsg()
                                      , _value.value("to").toString()
                                      , _value.value("time").toString()
                                      , _value.value("value").toString());
-            } else {
+            } else if(_quest == "searchUserByID") {
+                emit this->recvUserQuery(_value.value("query_id").toInt()
+                                         ,_value.value("sender_id").toInt());
+            }else {
                 qDebug() << "[unknow request]:" << _quest;
             }
 

@@ -23,6 +23,7 @@ public:
                      , const QString&, const QString&);
     void sendChatImg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
+    void sendUserInfo(QTcpSocket*, const QString&, const QString&);
 
     static TcpServer *getInstance();
     static void releaseInstance();
@@ -53,7 +54,7 @@ private:
     inline QJsonObject prepareSendJson(const QString&);
 
 signals:
-    // 这两个需要QTcoSocket*参数是因为未登录/注册的时候不能通过id查找socket
+    // 这两个需要QTcpSocket*参数是因为未登录/注册的时候不能通过id查找socket
     void recvLogin(QTcpSocket*, const QString&, const QString&);
     void recvRegister(QTcpSocket*, const QString&, const QString&);
     void recvMessage(const QString&, const QString&, const QString&, const QString&);
@@ -61,6 +62,7 @@ signals:
     void recvFriendDelQuest(const QString&, const QString&);
     void recvFriendListQuest(const QString&);
     void recvImage(const QString&, const QString&, const QString&, const QString&);
+    void recvUserQuery(const qint64,const qint64);
     // 客户端异常下线
     void usrDisconnectedEx(QTcpSocket*);
 

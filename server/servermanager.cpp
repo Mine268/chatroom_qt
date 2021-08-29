@@ -52,6 +52,7 @@ void ServerManager::start()
     connect(tcpserver, &TcpServer::recvFriendListQuest, this, &ServerManager::getFriendListQuest);
     connect(tcpserver, &TcpServer::usrDisconnectedEx, this, &ServerManager::getUserDropEx);
     connect(tcpserver, &TcpServer::recvImage, this, &ServerManager::getImage);
+    connect(tcpserver, &TcpServer::recvUserQuery, this, &ServerManager::getUserQueryQuest);
 }
 
 void ServerManager::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
@@ -118,6 +119,20 @@ QImage ServerManager::StringToQImage(const QString & rawData)
     QImage image;
     image.loadFromData(imageData);
     return image;
+}
+
+void ServerManager::getUserQueryQuest(const qint64 query_id,const qint64 sender_id)
+{
+
+    struct DataDB::userInfo user_info;
+    if(db->findUser(query_id,user_info)){
+        QString name = user_info.name;
+        QString email = user_info.email;
+        tcpserver->sendUserInfo(loginUsers[query_id],name,email);
+    } else {
+        tcpserver->sendUserInfo(loginUsers[query_id],"null","null");
+    }
+
 }
 
 void ServerManager::getFriendAddQuest(const QString &_me, const QString &_you)
