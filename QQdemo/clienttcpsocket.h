@@ -22,7 +22,14 @@ struct chat_msg {
     QString value; //消息内容
 };
 
-class ClientTcpSocket : QObject {
+struct pic_msg {
+    QString from_id;
+    QString to_id;
+    QString time;
+    QByteArray pic; //图片内容
+};
+
+class ClientTcpSocket : public QObject {
     Q_OBJECT
 public:
     ClientTcpSocket(QObject* parent = nullptr);
@@ -30,6 +37,8 @@ public:
     void sendRegMsg(const QString& username, const QString& pwd);
     void sendMsgTo(const QString& from_id, const QString& to_id, const QString& time,
         const QString& msg);
+//    void sendPicTo(const QString& from_id, const QString& to_id, const QString& time,
+//        QByteArray picture);
     void sendFriendAdd(const QString& id);
     void sendFriendDel(const QString& id);
     QJsonObject client_prepareSendJson(const QString& quest);
@@ -41,6 +50,7 @@ signals:
     void recvRegDeMeg(const QString& msg);
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
+//    void recvPicMsg(struct pic_msg picmsg);
 
 private slots:
     void _recvMsg();
