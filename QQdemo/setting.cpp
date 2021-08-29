@@ -15,7 +15,7 @@ Setting::~Setting()
     delete ui;
 }
 
-void Setting::setSocket(QTcpSocket* _clientSocket)
+void Setting::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
 }

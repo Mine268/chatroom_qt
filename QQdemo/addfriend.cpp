@@ -16,7 +16,7 @@ AddFriend::~AddFriend()
     delete ui;
 }
 
-void AddFriend::setSocket(QTcpSocket* _clientSocket)
+void AddFriend::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
     //ToDo

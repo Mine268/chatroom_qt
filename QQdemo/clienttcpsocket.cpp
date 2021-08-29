@@ -59,6 +59,13 @@ void ClientTcpSocket::sendMsgTo(const QString& from_id, const QString& to_id,
     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
 }
 
+//void sendPicTo(const QString& from_id, const QString& to_id, const QString& time,
+//    QByteArray picture)
+//{
+//   ;
+//}
+
+
 void ClientTcpSocket::sendFriendAdd(const QString& id)
 {
     QJsonObject _json = this->client_prepareSendJson("friendAddQuest");
@@ -123,5 +130,13 @@ void ClientTcpSocket::_recvMsg()
         chatmsg.time = msg_value.value("time").toString();
         chatmsg.value = msg_value.value("value").toString();
         emit this->recvChatMsg(chatmsg);
-    }
+    }/*else if (type == "imageTransmit"){
+        auto msg_value = jsonObject.value("value").toObject();
+        struct pic_msg picmsg;
+        picmsg.from_id = msg_value.value("from").toString();
+        picmsg.to_id = msg_value.value("to").toString();
+        picmsg.time = msg_value.value("time").toString();
+        picmsg.pic = ;//待补充
+        emit this->recvPicMsg(picmsg);
+    }*/
 }

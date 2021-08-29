@@ -2,10 +2,9 @@
 #define CHAT_H
 
 #include "fatherwidget.h"
-#include <QTcpServer>
-#include <QTcpSocket>
+#include "clienttcpsocket.h"
 #include <QWidget>
-#include <QPixmap>
+#include <QTime>
 
 namespace Ui {
 class Chat;
@@ -17,8 +16,8 @@ class Chat : public FatherWidget {
 public:
     explicit Chat(QWidget* parent = nullptr);
     ~Chat();
-    void setSocket(QTcpSocket*);
-    void setInfo(QString me_id, QString your_id, QString name);
+    void setSocket(ClientTcpSocket*);
+    void setInfo(QString my_id, QString your_id, QString name);
 
 public slots:
     void close_for_mainWidget();
@@ -34,12 +33,20 @@ private slots:
 
     void on_maximize_clicked();
 
+//    void on_send_2_clicked();
+
+    void on_send_2_clicked();
+
 protected:
 private:
     Ui::Chat* ui;
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
+    QString from_id;
+    QString to_id;
+    QString username;
+
 };
 
 #endif // CHAT_H

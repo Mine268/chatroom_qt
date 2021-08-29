@@ -5,7 +5,6 @@ clientAllWidget::clientAllWidget(QObject* parent)
 {
     init_socket();
 }
-
 void clientAllWidget::start()
 {
     logindialog = new loginDialog();
@@ -17,7 +16,6 @@ void clientAllWidget::start()
 void clientAllWidget::init_socket()
 {
     clientSocket = new ClientTcpSocket();
-    //    qDebug() << "Client: " << clientSocket->localAddress() << mp_clientSocket->localPort() << mp_clientSocket->socketDescriptor();
     //接收服务器发送的信息
 }
 
