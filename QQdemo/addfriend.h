@@ -23,6 +23,9 @@ public:
     ~AddFriend();
     void setSocket(ClientTcpSocket*);
 
+signals:
+    void add_friend(QString);
+
 protected:
 private slots:
     void on_close_clicked();
@@ -30,6 +33,8 @@ private slots:
     void on_minimize_clicked();
 
     void on_maximize_clicked();
+
+    void send_add_friend(int row, int col);
 
     void on_pushButton_clicked();
 
@@ -45,6 +50,7 @@ private:
     ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
+    QStandardItemModel* model;
 };
 
 #endif // ADDFRIEND_H
