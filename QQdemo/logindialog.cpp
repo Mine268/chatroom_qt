@@ -100,8 +100,8 @@ void loginDialog::on_login_clicked()
     //检测是否有此账号
     //发送消息 : socket.send*()
     //连接信号与槽:  connect( , , , receive_login_message(QString))
-    QString userId = usernumberinput->text();
-    QString userPwd = ui->userpassward->text();
+    userId = usernumberinput->text();
+    userPwd = ui->userpassward->text();
     clientSocket->sendloginMsg(userId, userPwd);
     connect(clientSocket, &ClientTcpSocket::recvLoginConMsg, this, &loginDialog::receive_loginOk_message); //登录成功消息
     connect(clientSocket, &ClientTcpSocket::recvLoginDeMsg, this, &loginDialog::receive_loginFail_message); //登录失败消息
@@ -128,14 +128,12 @@ void loginDialog::on_cancel_clicked()
 void loginDialog::receive_loginOk_message(QString)
 {
     //处理发送过来的登录信息，如果成功，发送信号给clientAllWidget :emit(okToLogin)
-    //ToDo
-    emit OkToLogin()
+    emit OkToLogin(userId, userPwd);
 }
 
 void loginDialog::receive_register_message(QString _userId)
 {
     //将注册成功得到的ID填充至输入框中
-    //ToDo
     ui->usernumber->setCurrentText(_userId);
     this->show();
 }
@@ -155,10 +153,8 @@ void loginDialog::showDialog()
 void loginDialog::on_checkBox_stateChanged(int arg1)
 {
     if (arg1 == 2) {
-        qDebug() << "被选中";
         ui->userpassward->setEchoMode(QLineEdit::Normal);
     } else if (arg1 == 0) {
-        qDebug() << "未被选中";
         ui->userpassward->setEchoMode(QLineEdit::Password);
     }
 }
