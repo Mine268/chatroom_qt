@@ -144,6 +144,24 @@ bool DataDB::messageSave(const qint64 _from, const qint64 _to
 bool DataDB::friendAdd(qint64 id1, qint64 id2)
 {
     QSqlQuery query;
+
+    query.prepare("select * from `friend-relation` where partner1 =:id1 and partner2 =:id2");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+    query.exec();
+    if(query.next()){
+        qDebug() << "已经是好友了";
+        return false;
+    }
+    query.prepare("select * from `friend-relation` where partner1 =:id2 and partner2 =:id1");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+    query.exec();
+    if(query.next()){
+        qDebug() << "已经是好友了";
+        return false;
+    }
+
     query.prepare("insert into `friend-relation`(partner1,partner2) values(:id1,:id2)");
     query.bindValue(":id1",QVariant(id1));
     query.bindValue(":id2",QVariant(id2));
