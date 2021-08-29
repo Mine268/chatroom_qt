@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QTimer>
 
 namespace Ui {
 class loginDialog;
@@ -50,6 +51,8 @@ private:
     QLineEdit* usernumberinput;
     ClientTcpSocket* clientSocket;
     signinDialog* signindialog;
+    QString userId;
+    QString userPwd;
 };
 
 #endif // LOGINDIALOG_H

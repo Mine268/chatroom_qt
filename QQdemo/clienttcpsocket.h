@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QList>
 #include <QObject>
+#include <QTcpServer>
 #include <QTcpSocket>
 
 struct user {
