@@ -1,9 +1,8 @@
 #ifndef SETTING_H
 #define SETTING_H
 
+#include "clienttcpsocket.h"
 #include "fatherwidget.h"
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QWidget>
 namespace Ui {
 class Setting;
@@ -15,7 +14,7 @@ class Setting : public FatherWidget {
 public:
     explicit Setting(QWidget* parent = nullptr);
     ~Setting();
-    void setSocket(QTcpSocket*);
+    void setSocket(ClientTcpSocket*);
 
 public slots:
     void close_for_mainWidget();
@@ -34,7 +33,7 @@ private slots:
 
 private:
     Ui::Setting* ui;
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
 };

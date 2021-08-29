@@ -6,11 +6,12 @@
 #include <QEvent>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QPropertyAnimation>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QTimer>
 #include <QtDebug>
 #include <qgraphicseffect.h>
-
 /*
  * 注册窗口的实现
  *
@@ -64,7 +65,8 @@ protected:
 private slots:
     void on_cancel_clicked();
     void on_sure_clicked();
-    void receiveRgMsg(QString);
+    void receiveRgOkMsg(QString);
+    void receiveReFailMsg(QString);
     void on_username_textEdited(const QString& arg1);
     void on_passward_r_textEdited(const QString& arg1);
     void on_checkBox_stateChanged(int arg1);
