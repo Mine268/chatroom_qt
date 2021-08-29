@@ -149,7 +149,7 @@ format 1.4.1
 
 ```json
 {
-    "usrname":"114514", // 注册用户名称
+    "username":"114514", // 注册用户名称
     "password":"dkasjfosiajfoipajfiorjgingjsihgfiuor" // 密码
 }
 ```
