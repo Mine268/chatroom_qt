@@ -16,25 +16,25 @@ class DataDB {
 public:
     // 存储用户信息的结构体
     struct userInfo {
-        qint64 id;
-        QString name;
-        QString email;
+        qint64      id;
+        QString		name;
+        QString		email;
     };
     // 存储消息信息的结构体
     struct msgInfo {
-        qint64 from;
-        qint64 to;
-        QString date;
-        QString msg;
+        qint64      from;
+        qint64      to;
+        QString		date;
+        QString		msg;
     };
 
     // 数据库配置
-    void configure(const QString &_driver	// 数据库驱动
-                 , const QString &_dbName	// 数据库名称
-                 , const QString &_host		// 设置数据库主机地址
-                 , const short 	 &_port		// 设置数据库主机端口
-                 , const QString &_name		// 设置数据库登录名称
-                 , const QString &_pwd		// 设置数据库登录密码
+    void configure(const QString &_driver = "QMYSQL"	  // 数据库驱动
+                 , const QString &_dbName = "userinfo"        // 数据库名称
+                 , const QString &_host = "localhost"		  // 设置数据库主机地址
+                 , const short 	 &_port = 3306                // 设置数据库主机端口
+                 , const QString &_name = "root"              // 设置数据库登录名称
+                 , const QString &_pwd = "4625130.wzx"		  // 设置数据库登录密码
                  );
 
     // 连接到数据库，返回值指示是否连接成功
@@ -42,33 +42,34 @@ public:
 
     // 查询是否存在此人，按照id查询，返回个人信息在info中
     // 返回值指示是否查询成功
-    bool findUser(qint64 _id, userInfo &_info);
+    bool findUser(qint64 id, userInfo &info);
     // 分别指代用户id和密码
-    bool loginVerify(qint64 _id, const QString &_pwd);
+    bool loginVerify(const qint64 _id, const QString &_pwd);
     // 分别指代注册的用户名和密码，返回id
-    QString registerQuest(const QString &_usr, const QString &_pwd);
+    QString registerQuest(const QString &_user, const QString &_pwd);
     // 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
-    bool messageSave(qint64 _from, qint64 _to
+    bool messageSave(const qint64 _from, const qint64 _to
                     , const QString &_time, const QString &_msg);
     // 添加好友，返回值指示是否添加成功
-    bool friendAdd(qint64 _id1, qint64 _id2);
+    bool friendAdd(qint64 id1, qint64 id2);
     // 删除好友，返回值指示是否删除成功
-    bool friendDel(qint64 _id1, qint64 _id2);
+    bool friendDel(qint64 id1, qint64 id2);
     // 返回某个人的所有好友
-    QList<userInfo> friendList(qint64 _id);
+    QList<userInfo> friendList(qint64 id);
 
     // 析构函数用于释放空间等等操作
-    ~DataDB();
-    static DataDB	*getInstance();
-    // 释放单例（断开连接等等）
-    static DataDB   *releaseInstance();
+    //~DataDB();
 
+    static DataDB	*getInstance();
+    static DataDB *releaseInstance();
 private:
+
+    // 释放单例（断开连接等等）
     static DataDB	*db;
 
     QSqlDatabase sqldb;
     explicit DataDB();
+    ~DataDB();
 };
 
 #endif // DATADB_H
-
