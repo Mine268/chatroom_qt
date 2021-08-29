@@ -21,7 +21,7 @@ class AddFriend : public FatherWidget {
 public:
     explicit AddFriend(QWidget* parent = nullptr);
     ~AddFriend();
-    void setSocket(clienttc*);
+    void setSocket(ClientTcpSocket*);
 
 protected:
 private slots:
@@ -42,7 +42,7 @@ public slots:
 
 private:
     Ui::AddFriend* ui;
-    QTcpSocket* clientSocket;
+    ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
 };
