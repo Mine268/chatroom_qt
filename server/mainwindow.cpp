@@ -23,7 +23,7 @@ void MainWindow::on_pushButton_start_server_clicked()
     if(port == 0 || ip.isNull()){
         QMessageBox::warning(NULL,"warning","ip and port cannot be empty!");
     }else{
-        server->initiate(ip, port);
+        server->configure(ip, port);
         server->start();
 
         // 连接信号函数和槽函数

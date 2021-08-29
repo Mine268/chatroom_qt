@@ -11,7 +11,7 @@ TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
 {
 }
 
-void TcpServer::initiate(QHostAddress _addr, quint16 _port)
+void TcpServer::configure(QHostAddress _addr, quint16 _port)
 {
     this->addr = _addr;
     this->port = _port;
@@ -38,6 +38,13 @@ TcpServer::~TcpServer()
 TcpServer *TcpServer::getInstance()
 {
     return (me == nullptr) ? (me = new TcpServer) : me;
+}
+
+void TcpServer::releaseInstance()
+{
+    if (me != nullptr)
+        delete me;
+    me = nullptr;
 }
 
 // 每次新增连接的时候，都会新增一个监听这个连接的socket
@@ -202,6 +209,6 @@ void TcpServer::_recvMsg()
 
 void TcpServer::_disconnected()
 {
-
+    emit usrDisconnectedEx(dynamic_cast<QTcpSocket*>(this->sender()));
 }
 

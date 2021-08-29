@@ -16,16 +16,16 @@ class DataDB {
 public:
     // 存储用户信息的结构体
     struct userInfo {
-        long long	id;
-        QString		name;
-        QString		email;
+        qint64 id;
+        QString name;
+        QString email;
     };
     // 存储消息信息的结构体
     struct msgInfo {
-        long long	from;
-        long long	to;
-        QString		date;
-        QString		msg;
+        qint64 from;
+        qint64 to;
+        QString date;
+        QString msg;
     };
 
     // 数据库配置
@@ -42,28 +42,28 @@ public:
 
     // 查询是否存在此人，按照id查询，返回个人信息在info中
     // 返回值指示是否查询成功
-    bool findUser(long long id, userInfo &info);
+    bool findUser(qint64 _id, userInfo &_info);
     // 分别指代用户id和密码
-    bool loginVerify(const QString &_id, const QString &_pwd);
+    bool loginVerify(qint64 _id, const QString &_pwd);
     // 分别指代注册的用户名和密码，返回id
     QString registerQuest(const QString &_usr, const QString &_pwd);
     // 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
-    bool messageSave(const QString &_from, const QString &_to
+    bool messageSave(qint64 _from, qint64 _to
                     , const QString &_time, const QString &_msg);
     // 添加好友，返回值指示是否添加成功
-    bool friendAdd(long long id1, long long id2);
+    bool friendAdd(qint64 _id1, qint64 _id2);
     // 删除好友，返回值指示是否删除成功
-    bool friendDel(long long id1, long long id2);
+    bool friendDel(qint64 _id1, qint64 _id2);
     // 返回某个人的所有好友
-    QList<userInfo> friendList(long long id);
+    QList<userInfo> friendList(qint64 _id);
 
     // 析构函数用于释放空间等等操作
     ~DataDB();
-
-private:
     static DataDB	*getInstance();
     // 释放单例（断开连接等等）
     static DataDB   *releaseInstance();
+
+private:
     static DataDB	*db;
 
     QSqlDatabase sqldb;
