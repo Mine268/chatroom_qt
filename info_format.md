@@ -44,7 +44,7 @@ format 1.4
     	- registerDeny 注册否认，如果用户注册失败则返回这个
     	- friendList 发送好友列表
     	- messageTransmit 转发的聊天信息
-    	- returnUserInfo
+    	- returnUserInfo 返回用户信息
     //  - friendAccept 同意添加好友
     如果发送方为client，那么quest分别由
     	- loginQuest 登录请求
@@ -60,13 +60,34 @@ format 1.4
 }
 ```
 
+如果发送方为server，那么quest分别有
+ - loginConfirm 登陆确认，如果用户登陆成功则返回这个
+- loginDeny 登录否认，用户无法登录
+- registerConfirm 注册确认，如果用户注册成功则返回这个
+- registerDeny 注册否认，如果用户注册失败则返回这个
+- friendList 发送好友列表
+- messageTransmit 转发的聊天信息
+- returnUserInfo 返回用户信息
+- friendAccept 同意添加好友
+
+如果发送方为client，那么quest分别由
+ - loginQuest 登录请求
+- registerQuest 注册请求
+- messageSend 发送消息请求
+- searchUserByID 发送搜索好友
+- friendAddQuest 添加好友请求
+- friendDelQuest 删除好友请求
+- friendList 好友列表请求
+- imageSend 发送图片请求
+- pullHangedMessage 请求未读信息
+
+### sender = server
+
 当 `quest` 为 `loginConfirm` 时，`value` 为字符串 `true`。
 
 当 `quest` 为 `loginDeny` 时，`value` 为字符串，包含登陆失败的原因。
 
 当 `quest` 为 `registerConfirm` 时，`value` 为 `json` 对象
-
-
 
 ```json
 {
@@ -83,7 +104,6 @@ format 1.4
     "name":"sdasd",
     "email":""
 }
-
 ```
 
 当 `quest` 为 `friendList` 时，`value` 为数组
@@ -105,6 +125,17 @@ format 1.4
     "value":"hello" // 消息内容
 }
 ```
+
+当 `quest` 为 `returnUserInfo` 时，`value` 为 `json` 对象
+
+```json
+{
+    "name":"", // 名称
+    "email":"" // 邮箱
+}
+```
+
+### sender = client
 
 当 `quest` 为 `loginQuest` 时，`value` 为 `json` 对象
 
@@ -161,7 +192,7 @@ format 1.4
 }
 ```
 
-当`quest`为``searchUserByID`，`value`为	`json`对象
+当`quest`为 `searchUserByID`，`value` 为`json`对象
 
 ```json
 {
@@ -170,3 +201,4 @@ format 1.4
 }
 ```
 
+当 `quest` 为 `pullHangedMessage` 时，`value` 为字符串，内容为要读取未读消息的人的id。
