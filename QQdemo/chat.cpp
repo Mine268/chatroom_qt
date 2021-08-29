@@ -17,9 +17,16 @@ Chat::~Chat()
     delete ui;
 }
 
-void Chat::setSocket(QTcpSocket* _clientSocket)
+void Chat::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
+}
+
+void Chat::setInfo(QString my_id, QString your_id, QString name)
+{
+    from_id = my_id;
+    to_id = your_id;
+    username = name;
 }
 
 void Chat::close_for_mainWidget()
@@ -42,6 +49,11 @@ void Chat::on_minimize_clicked()
 
 void Chat::on_send_clicked()
 {
+    QDateTime dateTime(QDateTime::currentDateTime());
+    QString qStr = dateTime.toString("yyy-MM-dd hh:mm::ss ddd");
+    QString chat_msg = ui->MyMsg->toPlainText();
+    clientSocket -> sendMsgTo(from_id, to_id, qStr,chat_msg);
+
     //发送内容到用户中
 }
 
@@ -69,3 +81,11 @@ void Chat::on_maximize_clicked()
         ui->maximize->setIconSize(QSize(20, 20));
     }
 }
+
+//void Chat::on_send_2_clicked()
+//{
+//    QDateTime dateTime(QDateTime::currentDateTime());
+//    QString qStr = dateTime.toString("yyy-MM-dd hh:mm::ss ddd");
+//    QByteArray send_pic = ;//图片解析
+//    clientSocket -> sendPicTo(from_id, to_id, qStr, send_pic);
+//}

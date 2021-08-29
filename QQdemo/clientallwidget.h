@@ -30,7 +30,6 @@ private:
     loginDialog* logindialog;
     signinDialog* signindialog;
     FriendList* mainWidget;
-
     QString userId;
     QString userName;
     QString userPwd;

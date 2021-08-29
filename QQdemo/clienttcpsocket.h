@@ -22,7 +22,7 @@ struct chat_msg {
     QString value; //消息内容
 };
 
-class ClientTcpSocket : QObject {
+class ClientTcpSocket : public QObject {
     Q_OBJECT
 public:
     ClientTcpSocket(QObject* parent = nullptr);
@@ -35,10 +35,10 @@ public:
     QJsonObject client_prepareSendJson(const QString& quest);
 
 signals:
-    void recvLoginConMsg(const QString& msg);
-    void recvLoginDeMsg(const QString& msg);
-    void recvRegConMsg(const QString& msg);
-    void recvRegDeMeg(const QString& msg);
+    void recvLoginConMsg(const QString msg);
+    void recvLoginDeMsg(const QString msg);
+    void recvRegConMsg(const QString msg);
+    void recvRegDeMeg(const QString msg);
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
 

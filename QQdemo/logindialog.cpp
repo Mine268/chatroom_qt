@@ -64,8 +64,8 @@ void loginDialog::init_ui()
 void loginDialog::setSocket(ClientTcpSocket* _socket)
 {
     clientSocket = _socket;
-    //ToDo
-    //connect()
+    connect(clientSocket, &ClientTcpSocket::recvLoginConMsg, this, &loginDialog::receive_loginOk_message); //登录成功消息
+    connect(clientSocket, &ClientTcpSocket::recvLoginDeMsg, this, &loginDialog::receive_loginFail_message); //登录失败消息
 }
 
 loginDialog::~loginDialog()
@@ -103,16 +103,17 @@ void loginDialog::on_login_clicked()
     userId = usernumberinput->text();
     userPwd = ui->userpassward->text();
     clientSocket->sendloginMsg(userId, userPwd);
-    connect(clientSocket, &ClientTcpSocket::recvLoginConMsg, this, &loginDialog::receive_loginOk_message); //登录成功消息
-    connect(clientSocket, &ClientTcpSocket::recvLoginDeMsg, this, &loginDialog::receive_loginFail_message); //登录失败消息
+
+    //TestCode
+    emit OkToLogin(userId, userPwd);
 }
 
 void loginDialog::on_regestor_clicked()
 {
     //注册账号
     //新建注册框
-    this->showMinimized();
-    signindialog = new signinDialog(this);
+    this->hide();
+    signindialog = new signinDialog();
     signindialog->setSocket(clientSocket);
     signindialog->show();
     connect(signindialog, &signinDialog::okToRegister, this, &loginDialog::receive_register_message);
@@ -128,21 +129,28 @@ void loginDialog::on_cancel_clicked()
 void loginDialog::receive_loginOk_message(QString)
 {
     //处理发送过来的登录信息，如果成功，发送信号给clientAllWidget :emit(okToLogin)
+    this->close();
     emit OkToLogin(userId, userPwd);
 }
 
 void loginDialog::receive_register_message(QString _userId)
 {
     //将注册成功得到的ID填充至输入框中
-    ui->usernumber->setCurrentText(_userId);
+    usernumberinput->setText(_userId);
     this->show();
 }
 
-void loginDialog::receive_loginFail_message(QString)
+void loginDialog::receive_loginFail_message(QString fialMessage)
 {
     //登录失败，给出提示消息
-    //ToDo
     //可能是密码错误/连接错误
+    //定时显示错误信息
+    QTimer showFailMessgae;
+    showFailMessgae.setInterval(1000);
+    showFailMessgae.start();
+    usernumberinput->setPlaceholderText(fialMessage);
+    showFailMessgae.stop();
+    usernumberinput->setPlaceholderText("ID");
 }
 
 void loginDialog::showDialog()
