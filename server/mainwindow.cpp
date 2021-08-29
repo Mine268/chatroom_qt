@@ -33,7 +33,8 @@ void MainWindow::on_pushButton_start_server_clicked()
         connect(server, &TcpServer::recvFriendAddQuest, this, &MainWindow::getFriendAddQuest);
         connect(server, &TcpServer::recvFriendDelQuest, this, &MainWindow::getFriendDelQuest);
     }
-
+    ui->pushButton_start_server->setEnabled(false);
+    ui->pushButton_shutdown_server->setEnabled(true);
 }
 
 void MainWindow::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
@@ -57,4 +58,11 @@ void MainWindow::getFriendAddQuest(const QString &_master, const QString &_guest
 void MainWindow::getFriendDelQuest(const QString &_master, const QString &_guest)
 {
     qDebug() << "[del friend]:" << _master << _guest;
+}
+
+void MainWindow::on_pushButton_shutdown_server_clicked()
+{
+    server->close();
+    ui->pushButton_start_server->setEnabled(true);
+    ui->pushButton_shutdown_server->setEnabled(false);
 }
