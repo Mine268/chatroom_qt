@@ -35,7 +35,7 @@ private slots:
 
 //    void on_send_2_clicked();
 
-    void on_send_2_clicked();
+    void chat_msg_display(struct chat_msg chatmsg);
 
 protected:
 private:

@@ -30,3 +30,5 @@ void clientAllWidget::okToLogin(QString _userID, QString _userPwd)
     mainWidget->show();
     mainWidget->setSocket(clientSocket);
 }
+
+

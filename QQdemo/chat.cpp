@@ -20,6 +20,9 @@ Chat::~Chat()
 void Chat::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
+    connect(clientSocket,SIGNAL(recvChatMsg(struct chat_msg chatmsg)),
+            this, SLOT(chat_msg_display(struct chat_msg chatmsg)));
+
 }
 
 void Chat::setInfo(QString my_id, QString your_id, QString name)
@@ -61,6 +64,12 @@ void Chat::on_empty_clicked()
 {
     //清空输入框中的内容
     ui->MyMsg->clear();
+}
+
+void Chat::chat_msg_display(struct chat_msg chatmsg)
+{
+    QString send_msg = chatmsg.from_id + chatmsg.time + "\n" + chatmsg.value + "\n";
+    ui-> contents ->addItem(send_msg);
 }
 
 void Chat::on_maximize_clicked()

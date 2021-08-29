@@ -13,6 +13,8 @@
 struct user {
     QString id;
     QString name;
+    QString email;
+    bool online;
 };
 
 struct chat_msg {
@@ -30,8 +32,9 @@ public:
     void sendRegMsg(const QString& username, const QString& pwd);
     void sendMsgTo(const QString& from_id, const QString& to_id, const QString& time,
         const QString& msg);
-    void sendFriendAdd(const QString& id);
-    void sendFriendDel(const QString& id);
+    void sendFriendAdd(const QString& me_id, const QString& you_id);
+    void sendFriendDel(const QString& me_id, const QString& you_id);
+    void searchUser(const QString &me_id, const QString& you_id);
     QJsonObject client_prepareSendJson(const QString& quest);
 
 signals:
@@ -41,6 +44,7 @@ signals:
     void recvRegDeMeg(const QString msg);
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
+    void recvUserInfo(struct user userinfo);
 
 private slots:
     void _recvMsg();

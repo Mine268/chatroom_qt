@@ -66,22 +66,40 @@ void ClientTcpSocket::sendMsgTo(const QString& from_id, const QString& to_id,
 //}
 
 
-void ClientTcpSocket::sendFriendAdd(const QString& id)
+void ClientTcpSocket::sendFriendAdd(const QString& me_id, const QString& you_id)
 {
     QJsonObject _json = this->client_prepareSendJson("friendAddQuest");
+    QJsonObject _value;
     QJsonDocument _doc;
-    _json.insert("value", id);
+    _value.insert("me", me_id);
+    _value.insert("you", you_id);
+    _json.insert("value", _value);
     _doc.setObject(_json);
     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
 }
-void ClientTcpSocket::sendFriendDel(const QString& id)
+void ClientTcpSocket::sendFriendDel(const QString& me_id, const QString& you_id)
 {
-    QJsonObject _json = this->client_prepareSendJson("friendAddQuest");
+    QJsonObject _json = this->client_prepareSendJson("friendDelQuest");
+    QJsonObject _value;
     QJsonDocument _doc;
-    _json.insert("value", id);
+    _value.insert("me", me_id);
+    _value.insert("you", you_id);
+    _json.insert("value", _value);
     _doc.setObject(_json);
     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
 }
+
+ void ClientTcpSocket::searchUser(const QString &me_id, const QString& you_id)
+ {
+     QJsonObject _json = this->client_prepareSendJson("searchUserByID");
+     QJsonObject _value;
+     QJsonDocument _doc;
+     _value.insert("query_id", me_id);
+     _value.insert("sender_id", you_id);
+     _json.insert("value", _value);
+     _doc.setObject(_json);
+     clientSocket->write(_doc.toJson(QJsonDocument::Compact));
+ }
 
 void ClientTcpSocket::_recvMsg()
 {
@@ -117,8 +135,14 @@ void ClientTcpSocket::_recvMsg()
                 QJsonObject idObject = idValue.toObject();
                 QString id = idObject["id"].toString();
                 QString name = idObject["name"].toString();
+                QString state = idObject["online"].toString();
                 list[i].id = id;
                 list[i].name = name;
+                list[i].email = "";
+                if (state == "true")
+                    list[i].online = true;
+                else
+                    list[i].online = false;
             }
         }
         emit recvFriendList(list);
@@ -130,7 +154,16 @@ void ClientTcpSocket::_recvMsg()
         chatmsg.time = msg_value.value("time").toString();
         chatmsg.value = msg_value.value("value").toString();
         emit this->recvChatMsg(chatmsg);
-    }/*else if (type == "imageTransmit"){
+    }else if(type == "returnUserInfo"){
+        auto msg_value = jsonObject.value("value").toObject();
+        struct user userinfo;
+        userinfo.id = "";
+        userinfo.online = true;
+        userinfo.email = msg_value.value("email").toString();
+        userinfo.name = msg_value.value("name").toString();
+        emit this->recvUserInfo(userinfo);
+    }
+    /*else if (type == "imageTransmit"){
         auto msg_value = jsonObject.value("value").toObject();
         struct pic_msg picmsg;
         picmsg.from_id = msg_value.value("from").toString();
