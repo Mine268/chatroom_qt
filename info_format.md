@@ -106,7 +106,7 @@ format 1.3
 
 ```json
 {
-    "id":"114514", // 注册用户id
+    "usrname":"114514", // 注册用户名称
     "password":"dkasjfosiajfoipajfiorjgingjsihgfiuor" // 密码
 }
 ```
