@@ -21,6 +21,8 @@ public:
     void sendFriendList(QTcpSocket*, const QList<std::tuple<QString, QString, bool>>&);
     void sendChatMsg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
+    void sendChatImg(QTcpSocket*, const QString&, const QString&
+                     , const QString&, const QString&);
 
     static TcpServer *getInstance();
     static void releaseInstance();
@@ -58,6 +60,7 @@ signals:
     void recvFriendAddQuest(const QString&, const QString&);
     void recvFriendDelQuest(const QString&, const QString&);
     void recvFriendListQuest(const QString&);
+    void recvImage(const QString&, const QString&, const QString&, const QString&);
     // 客户端异常下线
     void usrDisconnectedEx(QTcpSocket*);
 

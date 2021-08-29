@@ -153,6 +153,23 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
 
+void TcpServer::sendChatImg(QTcpSocket *_skt, const QString &_from
+                            , const QString &_to, const QString &_date
+                            , const QString &_msg)
+{
+    QJsonObject _json = this->prepareSendJson("imageTransmit");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("from", _from);
+    _value.insert("to", _to);
+    _value.insert("date", _date);
+    _value.insert("value", _msg);
+
+    _json.insert("value", _value);
+
+    _doc.setObject(_json);
+    _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
 
 void TcpServer::_recvMsg()
 {
@@ -191,6 +208,11 @@ void TcpServer::_recvMsg()
                                               _value.value("you").toString());
             } else if (_quest == "friendList") {
                 emit this->recvFriendListQuest(_value.value("id").toString());
+            } else if(_quest == "image") {
+                emit this->recvImage(_value.value("from").toString()
+                                     , _value.value("to").toString()
+                                     , _value.value("time").toString()
+                                     , _value.value("value").toString());
             } else {
                 qDebug() << "[unknow request]:" << _quest;
             }

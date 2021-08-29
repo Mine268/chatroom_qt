@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QImage>
 
 class ServerManager : public QObject
 {
@@ -44,6 +45,8 @@ private:
     // 反转表，用于反查，因为id和socket都是唯一的所以可以这么搞
     QMap<QTcpSocket*, qint64> r_loginUsers;
 
+    QImage StringToQImage(const QString&);
+
 signals:
 
 private slots:
@@ -51,6 +54,7 @@ private slots:
     void getLogin(QTcpSocket*, const QString&, const QString&);
     void getRegister(QTcpSocket*, const QString&, const QString&);
     void getMessage(const QString&, const QString&, const QString&, const QString&);
+    void getImage(const QString&, const QString&, const QString&, const QString&);
     void getFriendAddQuest(const QString&, const QString&);
     void getFriendDelQuest(const QString&, const QString&);
     // 收到好友列表的请求

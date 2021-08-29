@@ -1,4 +1,5 @@
 #include "servermanager.h"
+#include <QDataStream>
 
 ServerManager::ServerManager(QObject *parent) : QObject(parent)
 {
@@ -50,6 +51,7 @@ void ServerManager::start()
     connect(tcpserver, &TcpServer::recvFriendDelQuest, this, &ServerManager::getFriendDelQuest);
     connect(tcpserver, &TcpServer::recvFriendListQuest, this, &ServerManager::getFriendListQuest);
     connect(tcpserver, &TcpServer::usrDisconnectedEx, this, &ServerManager::getUserDropEx);
+    connect(tcpserver, &TcpServer::recvImage, this, &ServerManager::getImage);
 }
 
 void ServerManager::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
@@ -93,6 +95,29 @@ void ServerManager::getMessage(const QString &_from, const QString &_to
         tcpserver->sendChatMsg(loginUsers[_from.toLongLong()]
                 , _from, _to, _date, _msg);
     }
+}
+
+void ServerManager::getImage(const QString &_from, const QString &_to
+                             , const QString &_date, const QString& _image)
+{
+    if (loginUsers.find(_to.toLongLong()) == loginUsers.end()) {
+        // 此人不在线
+        //db->imageSave(_from.toLongLong(), _to.toLongLong(), _date, _msg);
+    } else {
+        // 此人在线
+        tcpserver->sendChatImg(loginUsers[_from.toLongLong()]
+                , _from, _to, _date, _image);
+    }
+
+
+}
+
+QImage ServerManager::StringToQImage(const QString & rawData)
+{
+    QByteArray imageData = QByteArray::fromBase64(rawData.toLatin1());
+    QImage image;
+    image.loadFromData(imageData);
+    return image;
 }
 
 void ServerManager::getFriendAddQuest(const QString &, const QString &)
