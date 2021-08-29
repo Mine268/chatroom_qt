@@ -6,77 +6,93 @@
 #include <QTime>
 
 //静态成员变量的类外初始化
-DataDB* DataDB::db = NULL;
+DataDB* DataDB::db = nullptr;
 
 DataDB::DataDB()
 {
-    //完成数据库的连接创建
+    configure();
+    bool flag = connectToDB();
+    if(flag){
+        qDebug() << "数据库连接成功";
+    }
+    else{
+        qDebug() << "数据库连接失败";
+    }
+}
+
+// 数据库配置
+void DataDB::configure(const QString &_driver	  // 数据库驱动
+             , const QString &_dbName             // 数据库名称
+             , const QString &_host		          // 设置数据库主机地址
+             , const short 	 &_port               // 设置数据库主机端口
+             , const QString &_name               // 设置数据库登录名称
+             , const QString &_pwd                // 设置数据库登录密码
+             )
+{
     //设置数据库的驱动
-    sqldb = QSqlDatabase::addDatabase("QMYSQL");
+    sqldb = QSqlDatabase::addDatabase(_driver);
     //配置数据库的基本信息
     //设置数据库的名称
-    sqldb.setDatabaseName("userinfo");
+    sqldb.setDatabaseName(_dbName);
     //设置数据库的主机名（IP）如果是本地的localhost
-    sqldb.setHostName("localhost");
+    sqldb.setHostName(_host);
     //设置用户名和密码
-    sqldb.setUserName("root");
-    sqldb.setPassword("4625130.wzx");
+    sqldb.setUserName(_name);
+    sqldb.setPassword(_pwd);
     //设置端口号 本地数据库可以不用设置
-    sqldb.setPort(3306);
-
-    if(!sqldb.open()){
-        //提示
-        QMessageBox::warning(NULL,"error",
-                             "open db error!",
-                             QMessageBox::Yes);
-    }
-
+    sqldb.setPort(_port);
 }
 
-//
-struct User DataDB::selectAllUserOnline(QString name)
+// 连接到数据库，返回值指示是否连接成功
+bool DataDB::connectToDB()
 {
-    //数据库操作类
-    //创建一个操作对象
-    QSqlQuery query;
-    //向数据库发送一个sql语句，让数据库执行
-    query.exec("select * from user where name = :name");
-    query.bindValue(":name",QVariant(name));
-    //查询结果存储query中，遍历该对象
-    struct User user;
-    while(query.next()){
-        //query.value("列名")
-        //query.value(索引值);
-        user.username = query.value("name").toString();
-        user.password = query.value("password").toString();
+    if(sqldb.open()){
+        return true;
     }
-
-    return user;
+    else{
+        return false;
+    }
 }
 
-//动态sql
-bool DataDB::selectUserByUnAndPwd(QString name,QString password)
+// 查询是否存在此人，按照id查询，返回个人信息在info中
+// 返回值指示是否查询成功
+bool DataDB::findUser(qint64 id, userInfo &info)
 {
     QSqlQuery query;
-    //向数据库发送一个预编译语句
-    query.prepare("select * from user where name =:name and password =:password");
-    //参数的绑定
-    query.bindValue(":name",QVariant(name));
-    query.bindValue(":password",QVariant(password));
-    //让数据库开始执行sql语句操作
+    query.prepare("select * from users where id =:id");
+    query.bindValue(":id",QVariant(id));
     query.exec();
 
-    bool flag;
-    if(query.next())
-        flag = true;
-    else
-        flag = false;
-
-    return flag;
+    QString name = "false";
+    if(query.next()){
+        info.id = query.value("id").toInt();
+        info.name = query.value("name").toString();
+        info.email = query.value("email").toString();
+        qDebug() << "查询用户成功";
+        return true;
+    }
+    else{
+        qDebug() << "不存在该用户";
+        return false;
+    }
 }
 
-//注册的插入操作
-QString DataDB:: insertUser(struct User user)
+// 分别指代用户id和密码
+bool DataDB::loginVerify(const qint64 _id, const QString &_pwd)
+{
+    QSqlQuery query;
+    query.prepare("select * from users where id =:id and password =:password");
+    query.bindValue(":id",QVariant(_id));
+    query.bindValue(":password",QVariant(_pwd));
+    query.exec();
+    if(query.next())
+        return true;
+    else
+        return false;
+}
+
+// 分别指代注册的用户名和密码，返回id
+QString DataDB::registerQuest(const QString &_user, const QString &_pwd)
 {
     QSqlQuery query;
 
@@ -84,121 +100,136 @@ QString DataDB:: insertUser(struct User user)
     int id = qrand() % (99999 - 10000) + 10000;
     QString id_1 = QString::number(id);
 
-    query.prepare("insert into user(name,password,id) values(:name,:password,:id)");
-    query.bindValue(":name",QVariant(user.username));
-    query.bindValue(":password",QVariant(user.password));
-    query.bindValue(":id",QVariant(id_1));
+    query.prepare("insert into users(name,password,id) values(:name,:password,:id)");
+    query.bindValue(":name",QVariant(_user));
+    query.bindValue(":password",QVariant(_pwd));
+    query.bindValue(":id",QVariant(id_1.toInt()));
 
     bool flag = query.exec();
     if(!flag)
     {
-        qDebug()<<QObject::tr ("插入失败\n");
+        qDebug()<<QObject::tr ("注册失败\n");
     }
     else
     {
-        qDebug()<<QObject::tr ("插入成功\n");
+        qDebug()<<QObject::tr ("注册成功\n");
     }
     return id_1;
 }
 
-//成为好友操作
-bool DataDB::insertFriend(QString id_1, QString id_2)
+// 存储消息（在接收方不在线的时候调用），返回值指示是否存储成功
+bool DataDB::messageSave(const qint64 _from, const qint64 _to
+                , const QString &_time, const QString &_msg)
 {
     QSqlQuery query;
-    QString name_1,name_2;
-
-    name_1 = selectNameByID(id_1);
-    name_2 = selectNameByID(id_2);
-    query.prepare("insert into friend(id_1,id_2,name_1,name_2)values(:id_1,:id_2,name_1,name_2)");
-    query.bindValue(":id_1",QVariant(id_1));
-    query.bindValue(":id_2",QVariant(id_2));
-    query.bindValue(":name_1",QVariant(name_1));
-    query.bindValue(":name_2",QVariant(name_2));
+    query.prepare("insert into `unread-message`(src,dest,time,msg) values(:from,:to,:time,:msg)");
+    query.bindValue(":from",QVariant(_from));
+    query.bindValue(":to",QVariant(_to));
+    query.bindValue(":time",QVariant(_time));
+    query.bindValue(":msg",QVariant(_msg));
 
     bool flag = query.exec();
     if(!flag)
     {
-        qDebug()<<QObject::tr ("添加失败\n");
+        qDebug()<<QObject::tr ("存储消息失败\n");
     }
     else
     {
-        qDebug()<<QObject::tr ("添加成功\n");
+        qDebug()<<QObject::tr ("存储消息成功\n");
     }
     return flag;
 }
 
-//好友查询操作
-QList <QString> DataDB:: selectFriend(QString id)
+// 添加好友，返回值指示是否添加成功
+bool DataDB::friendAdd(qint64 id1, qint64 id2)
 {
     QSqlQuery query;
-    query.prepare("select * from friend where id_1 =:id");
+    query.prepare("insert into `friend-relation`(partner1,partner2) values(:id1,:id2)");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+
+    bool flag = query.exec();
+    if(!flag)
+    {
+        qDebug()<<QObject::tr ("添加好友失败\n");
+    }
+    else
+    {
+        qDebug()<<QObject::tr ("添加好友成功\n");
+    }
+    return flag;
+}
+
+// 删除好友，返回值指示是否删除成功
+bool DataDB::friendDel(qint64 id1, qint64 id2)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM `friend-relation` WHERE partner1 = :id1 and partner2 = :id2");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+    bool flag = query.exec();
+
+    query.prepare("DELETE FROM `friend-relation` WHERE partner1 = :id2 and partner2 = :id1");
+    query.bindValue(":id1",QVariant(id1));
+    query.bindValue(":id2",QVariant(id2));
+    flag = query.exec();
+    if(!flag)
+    {
+        qDebug()<<QObject::tr ("删除好友失败\n");
+    }
+    else
+    {
+        qDebug()<<QObject::tr ("删除好友成功\n");
+    }
+    return flag;
+}
+
+// 返回某个人的所有好友
+QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
+{
+    QSqlQuery query;
+    query.prepare("select * from `friend-relation` where partner1 =:id");
     query.bindValue(":id",QVariant(id));
     query.exec();
 
-    QList <QString> id_namelist;
+    QList <qint64> idlist;
+    QList <userInfo> friendlist;
+    struct userInfo info;
+
     while(query.next())
     {
-        id_namelist << (query.value("id_2").toString() + "/" + query.value("name_2").toString());
+        qDebug() << "查到好友";
+        idlist << query.value("partner2").toInt();
     }
 
-    query.prepare("select * from friend where id_2 =:id");
+    query.prepare("select * from `friend-relation` where partner2 =:id");
     query.bindValue(":id",QVariant(id));
     query.exec();
 
     while(query.next())
     {
-        id_namelist << (query.value("id_1").toString() + "/" + query.value("name_1").toString());
+        qDebug() << "查到好友";
+        idlist << query.value("partner1").toInt();
     }
-    for(int i=0;i<id_namelist.size();i++){
-            qDebug()<<id_namelist.at(i);
-        }
-    return id_namelist;
+
+    for(int i=0;i<idlist.size();i++){
+        findUser(idlist.at(i), info);
+        friendlist << info;
+        qDebug()<<info.name;
+    }
+    return friendlist;
 }
-
-QString DataDB::selectNameByID(QString id)
-{
-    QSqlQuery query;
-    query.prepare("select * from user where id =:id");
-    query.bindValue(":id",QVariant(id));
-
-    QString name = "false";
-    if(query.next()){
-        name = query.value("name").toString();
-    }
-    else{
-        qDebug() << "不存在该用户";
-    }
-    return name;
-}
-
-
-////查询用户名是否重复
-//bool DataDB:: fingByName(QString name)
-//{
-//    QSqlQuery query;
-//    query.prepare("select * from userinfo where name =:name");
-//    query.bindValue(":name",QVariant(name));
-//    query.exec();
-//    bool flag;
-//    if(query.next()){
-//        flag = false;
-//    }
-//    else {
-//        flag = true;
-//    }
-//    return flag;
-//}
 
 DataDB* DataDB::getInstance()
 {
-    if(db == NULL){
+    if(db == nullptr){
         db = new DataDB;
     }
     return db;
 }
 
-
-
-
-
-
+//DataDB* DataDB::releaseInstance()
+//{
+//    if(db != nullptr)
+//        delete db;
+//}
