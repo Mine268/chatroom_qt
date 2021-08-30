@@ -114,15 +114,23 @@ format 1.4.1
 ]
 ```
 
-当 `quest` 为 `messageTransmit` 时，`value` 为 `json` 对象
+当 `quest` 为 `messageTransmit` 时，`value` 为 `json` 数组
 
 ```json
-{
-    "from":"114515", // 谁发的消息
-    "to":"7355608", // 谁接受消息
-    "time":"2021-10-1 14:44", // 消息的发送时间
-    "value":"hello" // 消息内容
-}
+[
+    {
+        "from":"114515", // 谁发的消息
+        "to":"7355608", // 谁接受消息
+        "time":"2021-10-1 14:44", // 消息的发送时间
+        "value":"hello" // 消息内容
+    },
+    {
+        "from":"334324", // 谁发的消息
+        "to":"7355608", // 谁接受消息
+        "time":"2021-10-1 14:24", // 消息的发送时间
+        "value":"hi" // 消息内容
+    }
+]
 ```
 
 当 `quest` 为 `returnUserInfo` 时，`value` 为 `json` 对象
