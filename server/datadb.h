@@ -24,7 +24,7 @@ public:
     struct msgInfo {
         qint64      from;
         qint64      to;
-        QString		date;
+        QString		time;
         QString		msg;
     };
 
@@ -68,6 +68,8 @@ private:
 
     // 释放单例（断开连接等等）
     static DataDB	*db;
+    // 对数据库时间格式进行修正的函数
+    static inline QString timeTrim(const QString&);
 
     QSqlDatabase sqldb;
     explicit DataDB();

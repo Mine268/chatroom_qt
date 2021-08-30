@@ -56,6 +56,12 @@ void ServerManager::start()
     connect(tcpserver, &TcpServer::recvPullHangedMsg, this, &ServerManager::getPullHangedMsg);
 }
 
+void ServerManager::sendHangedMsg(const qint64 _id)
+{
+    auto msgList = db->readMessage(_id);
+    tcpserver->sendChatMsg(loginUsers[_id], msgList);
+}
+
 void ServerManager::getLogin(QTcpSocket *_skt, const QString &_usr, const QString &_pwd)
 {
     auto id = _usr.toLongLong();
@@ -91,13 +97,14 @@ void ServerManager::getRegister(QTcpSocket *_skt
 void ServerManager::getMessage(const QString &_from, const QString &_to
                                , const QString &_date, const QString &_msg)
 {
+    qDebug() << "[srm getMsg]:" << _from << _to << _date << _msg;
     if (loginUsers.find(_to.toLongLong()) == loginUsers.end()) {
         // 此人不在线
         db->saveMessage(_from.toLongLong(), _to.toLongLong(), _date, _msg);
     } else {
         // 此人在线
         tcpserver->sendChatMsg(loginUsers[_to.toLongLong()]
-                , _from, _to, _date, _msg);
+                , {{_from.toLongLong(), _to.toLongLong(), _date, _msg}});
     }
 }
 
@@ -168,29 +175,12 @@ void ServerManager::getFriendListQuest(const QString &_id)
     tcpserver->sendFriendList(loginUsers[id], res);
 
     // 登录后发送未读消息
-    auto list2 = db->readMessage(id);
-    qDebug() << "[srm getFriendList getHangedMessage count]:" << list2.size();
-    for (auto iter = list2.begin(); iter != list2.end(); ++iter){
-
-        tcpserver->sendChatMsg(loginUsers[id]
-                               , QString::number(iter->from)
-                               , QString::number(iter->to)
-                               , iter->date
-                               , iter->msg);
-    }
+    sendHangedMsg(id);
 }
 
 void ServerManager::getPullHangedMsg(const qint64 _id)
 {
-    auto list = db->readMessage(_id);
-    for (auto iter = list.begin(); iter != list.end(); ++iter){
-        _sleep(1000);
-        tcpserver->sendChatMsg(loginUsers[_id]
-                               , QString::number(iter->from)
-                               , QString::number(iter->to)
-                               , iter->date
-                               , iter->msg);
-    }
+    sendHangedMsg(_id);
 }
 
 void ServerManager::getUserDropEx(QTcpSocket *_skt)

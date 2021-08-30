@@ -45,6 +45,8 @@ private:
     // 反转表，用于反查，因为id和socket都是唯一的所以可以这么搞
     QMap<QTcpSocket*, qint64> r_loginUsers;
 
+    // 发送未读消息
+    void sendHangedMsg(const qint64 _id);
     QImage StringToQImage(const QString&);
 
 signals:

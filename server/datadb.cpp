@@ -144,12 +144,12 @@ QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
     while (query.next()) {
         list.append({query.value(1).toLongLong()
                     , query.value(2).toLongLong()
-                    , query.value(3).toString()
+                    , DataDB::timeTrim(query.value(3).toString())
                     , query.value(4).toString()});
     }
 
     // 发送了已读消息则把已读消息删除掉
-//    query.exec(QString("delete from `unread-message` where dest=") + _to + QString(';'));
+    query.exec(QString("delete from `unread-message` where dest=") + _to + QString(';'));
     qDebug() << "[db readMessage count]:" << list.size();
 
     return list;
@@ -266,4 +266,9 @@ DataDB *DataDB::releaseInstance()
     delete db;
     db = nullptr;
     return db;
+}
+
+QString DataDB::timeTrim(const QString &str)
+{
+    return str.mid(0, 10) + ' ' + str.mid(11, 5);
 }

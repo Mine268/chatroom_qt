@@ -62,6 +62,7 @@ void TcpServer::incomingConnection(qintptr _handle)
 
 void TcpServer::_sendMsg(QTcpSocket *_skt, const QString &msg)
 {
+    _skt->waitForBytesWritten(300);
     _skt->write(msg.toUtf8());
 }
 
@@ -137,20 +138,23 @@ void TcpServer::sendFriendList(QTcpSocket *_skt
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
 
-void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
-                            , const QString &_to, const QString &_date
-                            , const QString &_msg)
+void TcpServer::sendChatMsg(QTcpSocket *_skt, const QList<DataDB::msgInfo> &_msgList)
 {
     QJsonObject _json = this->prepareSendJson("messageTransmit");
-    QJsonObject _value;
+    QJsonArray _valueArray;
     QJsonDocument _doc;
-    _value.insert("from", _from);
-    _value.insert("to", _to);
-    _value.insert("time", _date);
-    _value.insert("value", _msg);
 
-    _json.insert("value", _value);
+    for (auto it = _msgList.begin(); it != _msgList.end(); ++it) {
+        QJsonObject _value;
+        _value.insert("from", it->from);
+        _value.insert("to", it->to);
+        _value.insert("time", it->time);
+        _value.insert("value", it->msg);
 
+        _valueArray.append(_value);
+    }
+
+    _json.insert("value", _valueArray);
     _doc.setObject(_json);
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }

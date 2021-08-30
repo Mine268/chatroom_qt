@@ -5,6 +5,8 @@
 #include <QTcpSocket>
 #include <iostream>
 
+#include "datadb.h"
+
 class TcpServer : public QTcpServer
 {
     Q_OBJECT
@@ -19,8 +21,7 @@ public:
     void sendRegConfirm(QTcpSocket*, const QString&);
     void sendRegDeny(QTcpSocket*, const QString&);
     void sendFriendList(QTcpSocket*, const QList<std::tuple<QString, QString, bool>>&);
-    void sendChatMsg(QTcpSocket*, const QString&, const QString&
-                     , const QString&, const QString&);
+    void sendChatMsg(QTcpSocket*, const QList<DataDB::msgInfo>&);
     void sendChatImg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
     void sendUserInfo(QTcpSocket*, const QString&, const QString&);
