@@ -189,14 +189,16 @@ void ClientTcpSocket::_recvMsg()
         }
         emit recvFriendList(list);
     } else if (type == "messageTransmit") {
-        auto msg_value = jsonObject.value("value").toObject();
-        struct chat_msg chatmsg;
-        chatmsg.from_id = msg_value.value("from").toString();
-        chatmsg.to_id = msg_value.value("to").toString();
-        chatmsg.time = msg_value.value("time").toString();
-        chatmsg.value = msg_value.value("value").toString();
-        emit this->recvChatMsg(chatmsg);
-
+        QJsonArray jsonArr = jsonObject["value"].toArray();
+        for(int i=0;i<jsonArr.size();++i){
+            QJsonObject msg_value = jsonArr.at(i).toObject().value("value").toObject();
+            struct chat_msg chatmsg;
+            chatmsg.from_id = msg_value.value("from").toString();
+            chatmsg.to_id = msg_value.value("to").toString();
+            chatmsg.time = msg_value.value("time").toString();
+            chatmsg.value = msg_value.value("value").toString();
+            emit this->recvChatMsg(chatmsg);
+        }
     } else if (type == "returnUserInfo") {
         auto msg_value = jsonObject.value("value").toObject();
         struct user userinfo;
