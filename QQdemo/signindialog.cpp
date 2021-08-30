@@ -38,9 +38,8 @@ signinDialog::~signinDialog()
 void signinDialog::setSocket(ClientTcpSocket* _socket)
 {
     ClientSocket = _socket;
-    //ToDo
     //connect() 注册是否成功的消息
-    connect(ClientSocket, &ClientTcpSocket::recvLoginConMsg, this, &signinDialog::receiveRgOkMsg);
+    connect(ClientSocket, &ClientTcpSocket::recvRegConMsg, this, &signinDialog::receiveRgOkMsg);
     connect(ClientSocket, &ClientTcpSocket::recvRegDeMeg, this, &signinDialog::receiveReFailMsg);
 }
 
@@ -106,14 +105,15 @@ void signinDialog::receiveRgOkMsg(QString _id)
     //        //        txt += userid;
     //        QMessageBox::information(NULL, "Title", txt, QMessageBox::Ok, QMessageBox::Ok);
     //    }
-
     emit okToRegister(_id);
+    this->close();
 }
 
 void signinDialog::receiveReFailMsg(QString failMessage)
 {
     //注册失败
     //如果注册失败，提示错误消息： QMessage::information / 直接在框中提示
+    qDebug() << failMessage;
     QTimer showFailMessgae;
     showFailMessgae.setInterval(1000);
     showFailMessgae.start();

@@ -10,11 +10,7 @@
 namespace Ui {
 class AddFriend;
 }
-struct People {
-    QString id;
-    QString name;
-    int state;
-};
+
 class AddFriend : public FatherWidget {
     Q_OBJECT
 
@@ -22,7 +18,7 @@ public:
     explicit AddFriend(QWidget* parent = nullptr);
     ~AddFriend();
     void setSocket(ClientTcpSocket*);
-
+    void setinfo(QString userName, QString userId);
 signals:
     void add_friend(QString);
 
@@ -40,7 +36,7 @@ private slots:
 
     void on_lineEdit_returnPressed();
 
-    void receive_friendlist(QList<People>);
+    void receive_friendlist(struct user);
 
 public slots:
     void close_for_mainWidget();
@@ -48,9 +44,11 @@ public slots:
 private:
     Ui::AddFriend* ui;
     ClientTcpSocket* clientSocket;
+    QStandardItemModel* model;
     QSize oldSize;
     QRect oldGeometry;
-    QStandardItemModel* model;
+    QString userName;
+    QString userId;
 };
 
 #endif // ADDFRIEND_H

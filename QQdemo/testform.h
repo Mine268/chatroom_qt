@@ -2,6 +2,9 @@
 #define TESTFORM_H
 
 #include "fatherwidget.h"
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QWidget>
 namespace Ui {
 class TestForm;

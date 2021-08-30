@@ -104,9 +104,9 @@ void loginDialog::on_login_clicked()
     userPwd = ui->userpassward->text();
     clientSocket->sendloginMsg(userId, userPwd);
 
-    //TestCode
-    qDebug() << "登录";
-    emit OkToLogin(userId, userPwd);
+    //    //TestCode
+    //    qDebug() << "登录";
+    //    emit OkToLogin(userId, userPwd);
 }
 
 void loginDialog::on_regestor_clicked()
@@ -141,15 +141,16 @@ void loginDialog::receive_register_message(QString _userId)
     this->show();
 }
 
-void loginDialog::receive_loginFail_message(QString fialMessage)
+void loginDialog::receive_loginFail_message(QString failMessage)
 {
     //登录失败，给出提示消息
     //可能是密码错误/连接错误
     //定时显示错误信息
+    qDebug() << failMessage;
     QTimer showFailMessgae;
     showFailMessgae.setInterval(1000);
     showFailMessgae.start();
-    usernumberinput->setPlaceholderText(fialMessage);
+    usernumberinput->setPlaceholderText(failMessage);
     showFailMessgae.stop();
     usernumberinput->setPlaceholderText("ID");
 }

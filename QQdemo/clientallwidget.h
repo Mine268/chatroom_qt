@@ -18,6 +18,7 @@ class clientAllWidget : public QObject {
 public:
     explicit clientAllWidget(QObject* parent = nullptr);
     void start();
+    ~clientAllWidget();
 
 private:
     void init_socket();

@@ -13,6 +13,11 @@ void clientAllWidget::start()
     connect(logindialog, &loginDialog::OkToLogin, this, &clientAllWidget::okToLogin);
 }
 
+clientAllWidget::~clientAllWidget()
+{
+    delete clientSocket;
+}
+
 void clientAllWidget::init_socket()
 {
     clientSocket = new ClientTcpSocket();
@@ -27,8 +32,6 @@ void clientAllWidget::okToLogin(QString _userID, QString _userPwd)
     userPwd = _userPwd;
     mainWidget = new FriendList(nullptr);
     mainWidget->getinfo(userId, userPwd);
-    //    mainWidget->setSocket(clientSocket);
+    mainWidget->setSocket(clientSocket);
     mainWidget->show();
 }
-
-

@@ -6,10 +6,10 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
+#include <QMessageBox>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-
 struct user {
     QString id;
     QString name;
@@ -31,18 +31,22 @@ class ClientTcpSocket : public QObject {
     Q_OBJECT
 
 public:
+    QString getlocal();
+
     ClientTcpSocket(QObject* parent = nullptr);
+    ~ClientTcpSocket();
     void sendloginMsg(const QString& username, const QString& pwd);
     void sendRegMsg(const QString& username, const QString& pwd);
-    void sendMsgTo(const QString& from_id, const QString& to_id, const QString& time,
-        const QString& msg);
+    void sendMsgTo(QString from_id, QString to_id, QString time, QString msg);
     void sendFriendAdd(const QString& me_id, const QString& you_id);
     void sendFriendDel(const QString& me_id, const QString& you_id);
     void searchUser(const QString& me_id, const QString& you_id);
     void sendFriendList(const QString& id);
-//    void sendImage();
+    //    void sendImage();
     void pullMessage(const QString& id);
     QJsonObject client_prepareSendJson(const QString& quest);
+
+    void write_wait(QByteArray);
 
 signals:
     void recvLoginConMsg(const QString msg);
@@ -52,7 +56,7 @@ signals:
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
     void recvUserInfo(struct user userinfo);
-//    void recvFriendAccept();
+    //    void recvFriendAccept();
 
 private slots:
     void _recvMsg();

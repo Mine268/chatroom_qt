@@ -3,9 +3,10 @@
 
 #include "clienttcpsocket.h"
 #include "fatherwidget.h"
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QTime>
 #include <QWidget>
-
 namespace Ui {
 class Chat;
 }
@@ -18,6 +19,8 @@ public:
     ~Chat();
     void setSocket(ClientTcpSocket*);
     void setInfo(QString my_id, QString your_id, QString name);
+
+    void chat_msg_display(chat_msg chatmsg);
 
 public slots:
     void close_for_mainWidget();
@@ -35,7 +38,8 @@ private slots:
 
     //    void on_send_2_clicked();
 
-    //    void on_send_2_clicked();
+signals:
+    void closeChat(QString);
 
 protected:
 private:
@@ -43,6 +47,7 @@ private:
     ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
+
     QString from_id;
     QString to_id;
     QString username;

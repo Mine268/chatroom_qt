@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     clientallwidget.cpp \
     fatherwidget.cpp \
+    friendshow.cpp \
     logindialog.cpp \
     main.cpp \
     mydelegate.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     clientallwidget.h \
     fatherwidget.h \
+    friendshow.h \
     logindialog.h \
     mydelegate.h \
 	signindialog.h\
@@ -38,6 +40,7 @@ HEADERS += \
 	clienttcpsocket.h
 
 FORMS += \
+    friendshow.ui \
     logindialog.ui \
 	signindialog.ui\
 	addfriend.ui\

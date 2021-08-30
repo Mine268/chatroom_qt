@@ -11,6 +11,8 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QWidget>
+#include <chat.h>
+
 /*
  *  FriendList主界面
  *  需要管理添加好友页面，搜索页面，聊天页面等
@@ -59,11 +61,26 @@ private slots:
 
     void showlist(QList<struct user> list);
 
+    void on_searchline_editingFinished();
+
+    void on_searchline_returnPressed();
+
+    void removeChat(QString to_id);
+    /*
+     * 好友发来消息，如果此时打开了对话框，则显示对话框并添加消息
+     * 若未打开对话框，则打开对话框
+     * 需要加入检测对话框是否打开的标识
+     *
+     * */
+    void showMessage(struct chat_msg chatmsg);
+    /*
+     * 检查windowsShow是否已经打开了窗口
+     *
+     * */
 protected:
 private:
     Ui::FriendList* ui;
     ClientTcpSocket* clientSocket;
-
     QBrush m_itemBrush;
     void searchChild(QTreeWidgetItem* cItem, const QString& txt);
     void parentExpand(QTreeWidgetItem* item);
@@ -74,6 +91,8 @@ private:
     QString userName;
     QString userId;
     QString userPwd;
+
+    QMap<QString, Chat*> windowsShow;
 };
 
 #endif // FRIENDLIST_H

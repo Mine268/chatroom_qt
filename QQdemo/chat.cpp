@@ -20,9 +20,6 @@ Chat::~Chat()
 void Chat::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
-    connect(clientSocket,SIGNAL(recvChatMsg(struct chat_msg chatmsg)),
-            this, SLOT(chat_msg_display(struct chat_msg chatmsg)));
-
 }
 
 void Chat::setInfo(QString my_id, QString your_id, QString name)
@@ -30,6 +27,8 @@ void Chat::setInfo(QString my_id, QString your_id, QString name)
     from_id = my_id;
     to_id = your_id;
     username = name;
+    ui->id->setText(to_id);
+    ui->name->setText(name);
 }
 
 void Chat::close_for_mainWidget()
@@ -41,6 +40,7 @@ void Chat::close_for_mainWidget()
 void Chat::on_close_clicked()
 {
     //关闭窗口
+    emit closeChat(to_id);
     this->close();
 }
 
@@ -53,9 +53,17 @@ void Chat::on_minimize_clicked()
 void Chat::on_send_clicked()
 {
     QDateTime dateTime(QDateTime::currentDateTime());
-    QString qStr = dateTime.toString("yyy-MM-dd hh:mm::ss ddd");
+    QString qStr = dateTime.toString("yyyy-MM-dd hh:mm");
     QString chat_msg = ui->MyMsg->toPlainText();
-    clientSocket -> sendMsgTo(from_id, to_id, qStr,chat_msg);
+
+    clientSocket->sendMsgTo(from_id, to_id, qStr, chat_msg);
+
+    QListWidgetItem* Item = new QListWidgetItem;
+    Item->setText("发送方: " + from_id + " " + qStr + "\n" + chat_msg);
+    ui->contents->addItem(Item);
+    ui->contents->setCurrentItem(Item);
+
+    ui->MyMsg->clear();
 
     //发送内容到用户中
 }
@@ -68,11 +76,12 @@ void Chat::on_empty_clicked()
 
 void Chat::chat_msg_display(struct chat_msg chatmsg)
 {
-    QListWidgetItem *aItem;
-    QString send_msg = chatmsg.from_id + chatmsg.time + "\n" + chatmsg.value + "\n";
-    aItem = new QListWidgetItem();
+
+    QListWidgetItem* aItem = new QListWidgetItem();
+    QString send_msg = "发送方: " + chatmsg.from_id + " " + chatmsg.time + "\n" + chatmsg.value + "\n";
     aItem->setText(send_msg);
-    ui-> contents ->addItem(aItem);
+    ui->contents->addItem(aItem);
+    ui->contents->setCurrentItem(aItem);
 }
 
 void Chat::on_maximize_clicked()
