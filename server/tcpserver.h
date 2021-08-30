@@ -37,11 +37,6 @@ private:
     // 监听端口
     quint16 port;
 
-    // 连接但是没有登陆的socket
-    QList<QTcpSocket*> unconnList;
-    // 登录的用户的socket
-    QMap<int, QTcpSocket*> connList;
-
     TcpServer(QObject *parent = nullptr);
     ~TcpServer();
     virtual void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;

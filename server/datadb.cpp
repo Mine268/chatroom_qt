@@ -222,6 +222,7 @@ bool DataDB::friendDel(qint64 id1, qint64 id2)
 // 返回某个人的所有好友
 QList <DataDB:: userInfo> DataDB::friendList(qint64 id)
 {
+
     QSqlQuery query;
     query.prepare("select * from `friend-relation` where partner1=:id;");
     query.bindValue(":id",QVariant(id));
@@ -230,6 +231,11 @@ QList <DataDB:: userInfo> DataDB::friendList(qint64 id)
     QList <qint64> idlist;
     QList <userInfo> friendlist;
     struct userInfo info;
+
+    // 加入个人信息
+    findUser(id, info);
+    friendlist.append(info);
+    qDebug() << "[db friendList]:" << id << info.id << info.name << info.email;
 
     qDebug() << "[db friendList]:" << id;
 
@@ -254,6 +260,7 @@ QList <DataDB:: userInfo> DataDB::friendList(qint64 id)
         friendlist << info;
         qDebug()<<info.name;
     }
+
     return friendlist;
 }
 

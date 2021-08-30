@@ -24,14 +24,6 @@ void TcpServer::start()
 
 TcpServer::~TcpServer()
 {
-    for (auto _iter = unconnList.rbegin(); _iter != unconnList.rend(); ++_iter) {
-        (*_iter)->close();
-        delete *_iter;
-    }
-    for (auto _iter = connList.begin(); _iter != connList.end(); ++_iter) {
-        (*_iter)->close();
-        delete *_iter;
-    }
     close();
 }
 
@@ -52,7 +44,6 @@ void TcpServer::incomingConnection(qintptr _handle)
 {
     QTcpSocket *_socket = new QTcpSocket;
     _socket->setSocketDescriptor(_handle);
-    unconnList.append(_socket);
 
     qDebug() << "[info]:" << _handle << " connected in.";
 
@@ -259,6 +250,7 @@ void TcpServer::_recvMsg()
 
 void TcpServer::_disconnected()
 {
+    qDebug() << "[tcpserver _disconnect]" << dynamic_cast<QTcpSocket*>(this->sender());
     emit usrDisconnectedEx(dynamic_cast<QTcpSocket*>(this->sender()));
 }
 

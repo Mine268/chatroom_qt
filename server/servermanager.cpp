@@ -195,6 +195,8 @@ void ServerManager::getUserDropEx(QTcpSocket *_skt)
     loginUsers.erase(iter1);
     r_loginUsers.erase(iter2);
 
+    _skt->close();
+
     qDebug() << "[info]" << id << "dropped.";
 }
 
