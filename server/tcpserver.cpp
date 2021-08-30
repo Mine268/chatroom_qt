@@ -54,6 +54,8 @@ void TcpServer::incomingConnection(qintptr _handle)
     _socket->setSocketDescriptor(_handle);
     unconnList.append(_socket);
 
+    qDebug() << "[info]:" << _handle << " connected in.";
+
     connect(_socket, &QTcpSocket::readyRead, this, &TcpServer::_recvMsg);
     connect(_socket, &QTcpSocket::disconnected, this, &TcpServer::_disconnected);
 }
@@ -144,7 +146,7 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QString &_from
     QJsonDocument _doc;
     _value.insert("from", _from);
     _value.insert("to", _to);
-    _value.insert("date", _date);
+    _value.insert("time", _date);
     _value.insert("value", _msg);
 
     _json.insert("value", _value);
@@ -162,7 +164,7 @@ void TcpServer::sendChatImg(QTcpSocket *_skt, const QString &_from
     QJsonDocument _doc;
     _value.insert("from", _from);
     _value.insert("to", _to);
-    _value.insert("date", _date);
+    _value.insert("time", _date);
     _value.insert("value", _msg);
 
     _json.insert("value", _value);
@@ -191,6 +193,8 @@ void TcpServer::_recvMsg()
     auto _socket = (dynamic_cast<QTcpSocket*>(this->sender()));
     auto _msg = _socket->readAll();
 
+    qDebug() << "[recv json]:" << QString::fromUtf8(_msg);
+
     // 进行json解析
     QJsonParseError _jerror;
     QJsonDocument _jdoc = QJsonDocument::fromJson(_msg, &_jerror);
@@ -204,10 +208,10 @@ void TcpServer::_recvMsg()
             auto _value = _jobj.value("value").toObject();
 
             if (_quest == "loginQuest") {
-                emit this->recvLogin(_socket, _value.value("usrname").toString()
+                emit this->recvLogin(_socket, _value.value("id").toString()
                                      , _value.value("password").toString());
             } else if (_quest == "registerQuest") {
-                emit this->recvRegister(_socket, _value.value("usrname").toString()
+                emit this->recvRegister(_socket, _value.value("username").toString()
                                         , _value.value("password").toString());
             } else if (_quest == "messageSend") {
                 emit this->recvMessage(_value.value("from").toString()

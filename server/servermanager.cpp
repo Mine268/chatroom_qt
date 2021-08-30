@@ -79,10 +79,12 @@ void ServerManager::getLogin(QTcpSocket *_skt, const QString &_usr, const QStrin
 void ServerManager::getRegister(QTcpSocket *_skt
                                 , const QString &_name, const QString &_pwd)
 {
+    qDebug() << "[srm registerQuest]:" << _name << _pwd;
     auto regResult = db->registerQuest(_name, _pwd);
-    if (regResult != "")
+    if (regResult != "") {
         tcpserver->sendRegConfirm(_skt, regResult);
-    else
+        ;
+    } else
         tcpserver->sendRegDeny(_skt, "注册失败。");
 }
 
@@ -94,7 +96,7 @@ void ServerManager::getMessage(const QString &_from, const QString &_to
         db->saveMessage(_from.toLongLong(), _to.toLongLong(), _date, _msg);
     } else {
         // 此人在线
-        tcpserver->sendChatMsg(loginUsers[_from.toLongLong()]
+        tcpserver->sendChatMsg(loginUsers[_to.toLongLong()]
                 , _from, _to, _date, _msg);
     }
 }
@@ -107,7 +109,7 @@ void ServerManager::getImage(const QString &_from, const QString &_to
         //db->imageSave(_from.toLongLong(), _to.toLongLong(), _date, _msg);
     } else {
         // 此人在线
-        tcpserver->sendChatImg(loginUsers[_from.toLongLong()]
+        tcpserver->sendChatImg(loginUsers[_to.toLongLong()]
                 , _from, _to, _date, _image);
     }
 
@@ -124,14 +126,13 @@ QImage ServerManager::StringToQImage(const QString & rawData)
 
 void ServerManager::getUserQueryQuest(const qint64 query_id,const qint64 sender_id)
 {
-
     struct DataDB::userInfo user_info;
     if(db->findUser(query_id,user_info)){
         QString name = user_info.name;
         QString email = user_info.email;
-        tcpserver->sendUserInfo(loginUsers[query_id],name,email);
+        tcpserver->sendUserInfo(loginUsers[sender_id],name,email);
     } else {
-        tcpserver->sendUserInfo(loginUsers[query_id],"null","null");
+        tcpserver->sendUserInfo(loginUsers[sender_id],"null","null");
     }
 
 }
@@ -163,20 +164,33 @@ void ServerManager::getFriendListQuest(const QString &_id)
                    (QString::number(iter->id), iter->name
                     , loginUsers.find(iter->id) != loginUsers.end()));
     }
-
     // id, name, online
     tcpserver->sendFriendList(loginUsers[id], res);
+
+    // 登录后发送未读消息
+    auto list2 = db->readMessage(id);
+    qDebug() << "[srm getFriendList getHangedMessage count]:" << list2.size();
+    for (auto iter = list2.begin(); iter != list2.end(); ++iter){
+
+        tcpserver->sendChatMsg(loginUsers[id]
+                               , QString::number(iter->from)
+                               , QString::number(iter->to)
+                               , iter->date
+                               , iter->msg);
+    }
 }
 
 void ServerManager::getPullHangedMsg(const qint64 _id)
 {
     auto list = db->readMessage(_id);
-    for (auto iter = list.begin(); iter != list.end(); ++iter)
+    for (auto iter = list.begin(); iter != list.end(); ++iter){
+        _sleep(1000);
         tcpserver->sendChatMsg(loginUsers[_id]
                                , QString::number(iter->from)
                                , QString::number(iter->to)
                                , iter->date
                                , iter->msg);
+    }
 }
 
 void ServerManager::getUserDropEx(QTcpSocket *_skt)

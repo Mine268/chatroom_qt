@@ -74,6 +74,8 @@ bool DataDB::findUser(qint64 id, userInfo &info)
 // 分别指代用户id和密码
 bool DataDB::loginVerify(const qint64 _id, const QString &_pwd)
 {
+    qDebug() << "[db loginQuest]:" << _id << _pwd;
+
     QSqlQuery query;
     query.prepare("select * from users where id =:id and password =:password");
     query.bindValue(":id",QVariant(_id));
@@ -90,9 +92,9 @@ QString DataDB::registerQuest(const QString &_user, const QString &_pwd)
 {
     QSqlQuery query;
 
-    qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+    qDebug() << "[db regQuest]:" << _user << _pwd;
 
-    query.prepare("insert into users(`name`,`password`) values(:name,:password)");
+    query.prepare("insert into users(name,password) values (:name,:password);");
     query.bindValue(":name",QVariant(_user));
     query.bindValue(":password",QVariant(_pwd));
 
@@ -109,6 +111,8 @@ QString DataDB::registerQuest(const QString &_user, const QString &_pwd)
 bool DataDB::saveMessage(const qint64 _from, const qint64 _to
                 , const QString &_time, const QString &_msg)
 {
+    qDebug() << "[db saveMsg]:" << _from << _to << _time << _msg;
+
     QSqlQuery query;
     query.prepare("insert into `unread-message`(src,dest,time,msg) values(:from,:to,:time,:msg)");
     query.bindValue(":from",QVariant(_from));
@@ -132,7 +136,7 @@ QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
 {
     QSqlQuery query;
 
-    query.prepare("select * from `unread-message` where dest =:_to");
+    query.prepare("select * from `unread-message` where dest=:to;");
     query.bindValue(":to", _to);
     query.exec();
 
@@ -143,6 +147,10 @@ QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
                     , query.value(3).toString()
                     , query.value(4).toString()});
     }
+
+    // 发送了已读消息则把已读消息删除掉
+//    query.exec(QString("delete from `unread-message` where dest=") + _to + QString(';'));
+    qDebug() << "[db readMessage count]:" << list.size();
 
     return list;
 }
