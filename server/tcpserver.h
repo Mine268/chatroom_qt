@@ -24,7 +24,7 @@ public:
     void sendChatMsg(QTcpSocket*, const QList<DataDB::msgInfo>&);
     void sendChatImg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
-    void sendUserInfo(QTcpSocket*, const QString&, const QString&);
+    void sendUserInfo(QTcpSocket*, const qint64, const QString&, const QString&);
 
     static TcpServer *getInstance();
     static void releaseInstance();

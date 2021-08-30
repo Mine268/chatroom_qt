@@ -53,13 +53,14 @@ bool DataDB::connectToDB()
 bool DataDB::findUser(qint64 id, userInfo &info)
 {
     QSqlQuery query;
-    query.prepare("select * from users where id =:id");
+    query.prepare("select * from users where id =:id;");
     query.bindValue(":id",QVariant(id));
     query.exec();
 
-    QString name = "false";
+    qDebug() << "[db findUser]:" << id;
+
     if(query.next()){
-        info.id = query.value("id").toInt();
+        info.id = query.value("id").toLongLong();
         info.name = query.value("name").toString();
         info.email = query.value("email").toString();
         qDebug() << "查询用户成功";
@@ -158,6 +159,7 @@ QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
 // 添加好友，返回值指示是否添加成功
 bool DataDB::friendAdd(qint64 id1, qint64 id2)
 {
+    qDebug() << "[db friendAdd]:" << id1 << id2;
     QSqlQuery query;
 
     query.prepare("select * from `friend-relation` where partner1 =:id1 and partner2 =:id2");
@@ -218,10 +220,10 @@ bool DataDB::friendDel(qint64 id1, qint64 id2)
 }
 
 // 返回某个人的所有好友
-QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
+QList <DataDB:: userInfo> DataDB::friendList(qint64 id)
 {
     QSqlQuery query;
-    query.prepare("select * from `friend-relation` where partner1 =:id");
+    query.prepare("select * from `friend-relation` where partner1=:id;");
     query.bindValue(":id",QVariant(id));
     query.exec();
 
@@ -229,13 +231,15 @@ QList <DataDB:: userInfo> DataDB:: friendList(qint64 id)
     QList <userInfo> friendlist;
     struct userInfo info;
 
+    qDebug() << "[db friendList]:" << id;
+
     while(query.next())
     {
         qDebug() << "查到好友";
         idlist << query.value("partner2").toString().toLongLong();
     }
 
-    query.prepare("select * from `friend-relation` where partner2 =:id");
+    query.prepare("select * from `friend-relation` where partner2=:id;");
     query.bindValue(":id",QVariant(id));
     query.exec();
 

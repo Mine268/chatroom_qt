@@ -134,12 +134,14 @@ QImage ServerManager::StringToQImage(const QString & rawData)
 void ServerManager::getUserQueryQuest(const qint64 query_id,const qint64 sender_id)
 {
     struct DataDB::userInfo user_info;
-    if(db->findUser(query_id,user_info)){
+    if(db->findUser(query_id, user_info)){
         QString name = user_info.name;
         QString email = user_info.email;
-        tcpserver->sendUserInfo(loginUsers[sender_id],name,email);
+        qDebug() << "[srm getUserQueryQuest]:" << name << email;
+        qDebug() << "[srm getUserQueryQuest][sender_id]:" << sender_id;
+        tcpserver->sendUserInfo(loginUsers[sender_id], query_id, name, email);
     } else {
-        tcpserver->sendUserInfo(loginUsers[sender_id],"null","null");
+        tcpserver->sendUserInfo(loginUsers[sender_id], -1, "", "");
     }
 
 }

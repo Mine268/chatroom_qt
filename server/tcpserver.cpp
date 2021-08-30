@@ -146,8 +146,8 @@ void TcpServer::sendChatMsg(QTcpSocket *_skt, const QList<DataDB::msgInfo> &_msg
 
     for (auto it = _msgList.begin(); it != _msgList.end(); ++it) {
         QJsonObject _value;
-        _value.insert("from", it->from);
-        _value.insert("to", it->to);
+        _value.insert("from", QString::number(it->from));
+        _value.insert("to", QString::number(it->to));
         _value.insert("time", it->time);
         _value.insert("value", it->msg);
 
@@ -177,11 +177,12 @@ void TcpServer::sendChatImg(QTcpSocket *_skt, const QString &_from
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
 
-void TcpServer::sendUserInfo(QTcpSocket *_skt, const QString &_name, const QString &_email)
+void TcpServer::sendUserInfo(QTcpSocket *_skt, const qint64 _id, const QString &_name, const QString &_email)
 {
     QJsonObject _json = this->prepareSendJson("returnUserInfo");
     QJsonObject _value;
     QJsonDocument _doc;
+    _value.insert("id", QString::number(_id));
     _value.insert("name", _name);
     _value.insert("email", _email);
 
