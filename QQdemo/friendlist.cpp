@@ -70,11 +70,11 @@ void FriendList::on_search_clicked()
     //搜索好友
     //在好友列表中查找是否有此好友并高亮显示
     //完成
+    emit sign_re();
     QString txt = ui->searchline->text();
     bool isEmptyTxt = txt.isEmpty();
     //复原
     if (isEmptyTxt) {
-        emit sign_re();
         return;
     }
 
@@ -100,7 +100,7 @@ void FriendList::on_search_clicked()
             } else {
                 //不满足满足条件的子结点隐藏
                 if ((*it)->parent()) {
-                    (*it)->setHidden(true);
+                    ui->treeWidget->collapseItem(*it);
                 }
             }
         }
@@ -145,16 +145,18 @@ void FriendList::on_maximize_clicked()
 //清空搜索
 void FriendList::restore()
 {
+    //ToDo
     QTreeWidgetItemIterator it(ui->treeWidget);
+
     while (*it) {
         (*it)->setBackground(0, m_itemBrush);
         if (!(*it)->isSelected()) {
-            (*it)->setExpanded(true);
+            //            (*it)->setExpanded(true);
+            ui->treeWidget->collapseItem(*it);
         }
         (*it)->setSelected(false);
         it++;
     }
-    ui->treeWidget->expandAll();
     return;
 }
 
@@ -175,16 +177,19 @@ void FriendList::showlist(QList<struct user> list)
     ui->treeWidget->addTopLevelItem(root);
     root->setText(0, "friend");
 
-    qDebug() << list.size();
-
     for (int i = 0; i < list.size(); ++i) {
         QTreeWidgetItem* it = new QTreeWidgetItem;
+        FriendShow* itshow = new FriendShow();
+
         struct user myfriend = list[i];
         it->setData(0, Qt::UserRole + 1, QVariant::fromValue(myfriend));
-        it->setText(0, myfriend.name);
-        if (myfriend.online != true)
-            it->setForeground(0, QBrush(QColor(0, 0, 0))); //不在线
+        //        it->setText(0, myfriend.name);
+
+        itshow->setData(myfriend.name, ":/picture/girlpic.png", myfriend.online);
+
         root->addChild(it);
+        //        ui->treeWidget->addTopLevelItem(it);
+        ui->treeWidget->setItemWidget(it, 0, itshow);
     }
 }
 

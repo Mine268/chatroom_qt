@@ -196,6 +196,7 @@ void ClientTcpSocket::_recvMsg()
         chatmsg.time = msg_value.value("time").toString();
         chatmsg.value = msg_value.value("value").toString();
         emit this->recvChatMsg(chatmsg);
+
     } else if (type == "returnUserInfo") {
         auto msg_value = jsonObject.value("value").toObject();
         struct user userinfo;

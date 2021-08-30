@@ -10,13 +10,28 @@ Chat::Chat(QWidget* parent)
 
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    label = new QLabel();
+    timer = new QTimer();
+    label->setStyleSheet("background-color: rgb(255, 255, 255); border-width: 1px;border-style: solid;border-color: rgb(0, 0, 0); padding: 10px 5px");
+    label->setText("发送内容不能为空");
+    label->setScaledContents(true);
+    label->resize(160, 40);
+    label->setAlignment(Qt::AlignVCenter);
+    label->setWindowFlags(Qt::FramelessWindowHint);
+    label->hide();
+    connect(timer, SIGNAL(timeout()), this, SLOT(hidelabel()));
 }
 
 Chat::~Chat()
 {
     delete ui;
 }
-
+void Chat::hidelabel()
+{
+    label->hide();
+    timer->stop();
+}
 void Chat::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
@@ -41,6 +56,7 @@ void Chat::on_close_clicked()
 {
     //关闭窗口
     emit closeChat(to_id);
+    label->close();
     this->close();
 }
 
@@ -56,6 +72,17 @@ void Chat::on_send_clicked()
     QString qStr = dateTime.toString("yyyy-MM-dd hh:mm");
     QString chat_msg = ui->MyMsg->toPlainText();
 
+    if (ui->MyMsg->toPlainText() == "") {
+
+        qDebug() << "send empty";
+        QPoint send_point = ui->send->pos();
+        send_point = this->mapToGlobal(send_point);
+        label->move(send_point.x() + ui->send->width() / 2 - label->width() / 2,
+            send_point.y() + this->height() - 70);
+        label->show();
+        label->raise();
+        timer->start(3000); //停留3秒
+    }
     clientSocket->sendMsgTo(from_id, to_id, qStr, chat_msg);
 
     QListWidgetItem* Item = new QListWidgetItem;

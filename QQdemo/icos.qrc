@@ -10,5 +10,7 @@
         <file>eye/closeeye.png</file>
         <file>eye/openeye.png</file>
         <file>tool/maxmin.png</file>
+        <file>picture/boypic.png</file>
+        <file>picture/girlpic.png</file>
     </qresource>
 </RCC>

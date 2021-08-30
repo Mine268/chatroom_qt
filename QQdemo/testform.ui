@@ -24,11 +24,6 @@
        <string>1</string>
       </property>
      </column>
-     <item>
-      <property name="text">
-       <string>God</string>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>

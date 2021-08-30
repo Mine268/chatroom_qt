@@ -5,6 +5,7 @@
 #include "chat.h"
 #include "clienttcpsocket.h"
 #include "fatherwidget.h"
+#include "friendshow.h"
 #include "setting.h"
 #include <QLineEdit>
 #include <QPixmap>

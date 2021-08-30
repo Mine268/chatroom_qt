@@ -20,10 +20,10 @@ int main(int argc, char* argv[])
     //    s.show();
     //    TestDialog T;
     //    T.show();
-    //    clientAllWidget A, B;
-    //    A.start();
+    clientAllWidget A, B;
+    A.start();
     //    B.start();
-    TestForm tt;
-    tt.show();
+    //    TestForm tt;
+    //    tt.show();
     return a.exec();
 }

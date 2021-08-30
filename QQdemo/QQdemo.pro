@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addfriendshow.cpp \
     clientallwidget.cpp \
     fatherwidget.cpp \
     friendshow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 	clienttcpsocket.cpp
 
 HEADERS += \
+    addfriendshow.h \
     clientallwidget.h \
     fatherwidget.h \
     friendshow.h \
@@ -40,6 +42,7 @@ HEADERS += \
 	clienttcpsocket.h
 
 FORMS += \
+    addfriendshow.ui \
     friendshow.ui \
     logindialog.ui \
 	signindialog.ui\

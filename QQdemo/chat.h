@@ -3,9 +3,11 @@
 
 #include "clienttcpsocket.h"
 #include "fatherwidget.h"
+#include <QLabel>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QTime>
+#include <QTimer>
 #include <QWidget>
 namespace Ui {
 class Chat;
@@ -24,6 +26,7 @@ public:
 
 public slots:
     void close_for_mainWidget();
+    void hidelabel();
 private slots:
 
     void on_close_clicked();
@@ -47,7 +50,8 @@ private:
     ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
-
+    QLabel* label;
+    QTimer* timer;
     QString from_id;
     QString to_id;
     QString username;
