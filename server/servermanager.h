@@ -24,7 +24,10 @@ public:
                    , const QString &_dbUsr		// 设置数据库登录名称
                    , const QString &_dbPwd		// 设置数据库登录密码
                    );
-    void start();
+    bool start();
+    void close();
+
+    const QMap<qint64, QTcpSocket*> &getUserList() const;
 
 private:
     TcpServer *tcpserver;

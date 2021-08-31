@@ -17,9 +17,9 @@ void TcpServer::configure(QHostAddress _addr, quint16 _port)
     this->port = _port;
 }
 
-void TcpServer::start()
+bool TcpServer::start()
 {
-    this->listen(this->addr, this->port);
+    return this->listen(this->addr, this->port);
 }
 
 TcpServer::~TcpServer()
@@ -45,7 +45,7 @@ void TcpServer::incomingConnection(qintptr _handle)
     QTcpSocket *_socket = new QTcpSocket;
     _socket->setSocketDescriptor(_handle);
 
-    qDebug() << "[info]:" << _handle << " connected in.";
+    qDebug() << "[info]:" << _handle << "connected in TcpServer.";
 
     connect(_socket, &QTcpSocket::readyRead, this, &TcpServer::_recvMsg);
     connect(_socket, &QTcpSocket::disconnected, this, &TcpServer::_disconnected);
@@ -250,7 +250,8 @@ void TcpServer::_recvMsg()
 
 void TcpServer::_disconnected()
 {
-    qDebug() << "[tcpserver _disconnect]" << dynamic_cast<QTcpSocket*>(this->sender());
-    emit usrDisconnectedEx(dynamic_cast<QTcpSocket*>(this->sender()));
+    auto _socket = dynamic_cast<QTcpSocket*>(sender());
+    qDebug() << "[tcpserver _disconnect]" << _socket;
+    emit usrDisconnectedEx(_socket);
 }
 

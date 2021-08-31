@@ -148,9 +148,8 @@ QList<DataDB::msgInfo> DataDB::readMessage(const qint64 _to)
                     , DataDB::timeTrim(query.value(3).toString())
                     , query.value(4).toString()});
     }
-
     // 发送了已读消息则把已读消息删除掉
-    query.exec(QString("delete from `unread-message` where dest=") + _to + QString(';'));
+    query.exec("delete from `unread-message` WHERE dest = " + QString::number(_to) + " ;");
     qDebug() << "[db readMessage count]:" << list.size();
 
     return list;

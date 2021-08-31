@@ -14,7 +14,7 @@ public:
     // 设置服务器监听
     void configure(QHostAddress, quint16);
     // 服务器开始监听
-    void start();
+    bool start();
 
     void sendLoginConfirm(QTcpSocket*);
     void sendLoginDeny(QTcpSocket*, const QString&);

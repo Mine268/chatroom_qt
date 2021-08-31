@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    fileserver.cpp \
     main.cpp \
     mainwindow.cpp \
     servermanager.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     datadb.cpp
 
 HEADERS += \
+    fileserver.h \
     mainwindow.h \
     servermanager.h \
     tcpserver.h \

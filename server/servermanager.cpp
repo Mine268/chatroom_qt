@@ -33,16 +33,16 @@ void ServerManager::configure(QHostAddress _serverHost
     dbPwd       =   _dbPwd;
 }
 
-void ServerManager::start()
+bool ServerManager::start()
 {
     // TODO: 等db写好就可以用了
     db = DataDB::getInstance();
     db->configure(dbDriver, dbName, dbHost, dbPort, dbUsr, dbPwd);
-    db->connectToDB();
+    auto flag = db->connectToDB();
 
     tcpserver = TcpServer::getInstance();
     tcpserver->configure(serverHost, serverPort);
-    tcpserver->start();
+    flag &= tcpserver->start();
 
     connect(tcpserver, &TcpServer::recvLogin, this, &ServerManager::getLogin);
     connect(tcpserver, &TcpServer::recvRegister, this, &ServerManager::getRegister);
@@ -54,6 +54,19 @@ void ServerManager::start()
     connect(tcpserver, &TcpServer::recvImage, this, &ServerManager::getImage);
     connect(tcpserver, &TcpServer::recvUserQuery, this, &ServerManager::getUserQueryQuest);
     connect(tcpserver, &TcpServer::recvPullHangedMsg, this, &ServerManager::getPullHangedMsg);
+
+    return flag;
+}
+
+void ServerManager::close()
+{
+    DataDB::releaseInstance();
+    TcpServer::releaseInstance();
+}
+
+const QMap<qint64, QTcpSocket *> &ServerManager::getUserList() const
+{
+    return this->loginUsers;
 }
 
 void ServerManager::sendHangedMsg(const qint64 _id)
