@@ -14,23 +14,17 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">QFrame
+{
+	background-color:rgb(255,255,255);
+ 
+	border:none;
+	border-radius:15px;
+}</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -38,21 +32,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>3</number>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -74,17 +53,17 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="QPushButton" name="minimize">
+           <widget class="QToolButton" name="minimize">
             <property name="minimumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="text">
@@ -100,29 +79,20 @@
               <height>25</height>
              </size>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="maximize">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QToolButton" name="maxmize">
             <property name="minimumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="text">
@@ -138,23 +108,20 @@
               <height>25</height>
              </size>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="close">
+           <widget class="QToolButton" name="close">
             <property name="minimumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="text">
@@ -170,9 +137,6 @@
               <height>25</height>
              </size>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
          </layout>
@@ -182,97 +146,92 @@
       <item>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0" rowspan="2">
-         <widget class="QPushButton" name="picture">
+         <widget class="QToolButton" name="picture">
           <property name="minimumSize">
            <size>
-            <width>91</width>
-            <height>81</height>
+            <width>72</width>
+            <height>72</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>72</width>
+            <height>72</height>
            </size>
           </property>
           <property name="text">
-           <string>头像</string>
+           <string>...</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>72</width>
+            <height>72</height>
+           </size>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="name">
-          <property name="font">
-           <font>
-            <family>Adobe Devanagari</family>
-            <pointsize>24</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background:transparent;
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="name">
+            <property name="font">
+             <font>
+              <family>Adobe Devanagari</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background:transparent;
 border-width:0;
 border-style:outset</string>
-          </property>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </widget>
+            </property>
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="id">
-          <property name="styleSheet">
-           <string notr="true">background:transparent;
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>ID</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="id">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background:transparent;
 border-width:0;
 border-style:outset</string>
-          </property>
-          <property name="text">
-           <string>Id</string>
-          </property>
-         </widget>
+            </property>
+            <property name="text">
+             <string>Id</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
       <item>
        <widget class="QTreeWidget" name="treeWidget">
-        <column>
-         <property name="text">
-          <string>1</string>
-         </property>
-        </column>
-        <item>
-         <property name="text">
-          <string>God</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>1</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>45</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>758</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text">
-          <string>3</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>111</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>567</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text">
-          <string>123</string>
-         </property>
-        </item>
+        <property name="indentation">
+         <number>0</number>
+        </property>
        </widget>
       </item>
       <item>

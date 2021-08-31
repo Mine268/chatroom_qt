@@ -6,8 +6,13 @@ Setting::Setting(QWidget* parent)
     , ui(new Ui::Setting)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_DeleteOnClose);
+
+    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
+    effect->setOffset(0, 0); //设置阴影距离
+    effect->setColor(QColor(38, 78, 119, 127)); //设置阴影颜色
+    effect->setBlurRadius(22); //设置阴影圆角
+    ui->frame->setGraphicsEffect(effect);
+    //设置关于窗体为圆角
 }
 
 Setting::~Setting()
@@ -18,6 +23,16 @@ Setting::~Setting()
 void Setting::setSocket(ClientTcpSocket* _clientSocket)
 {
     clientSocket = _clientSocket;
+    //修改数据
+    //ToDo
+}
+
+void Setting::setData(QPixmap picture, QString& id, QString& name)
+{
+    ui->label->setPixmap(picture.scaled(100, 100));
+    ui->userid->setText(id);
+    ui->userid->setEnabled(false);
+    ui->username->setText(name);
 }
 
 void Setting::close_for_mainWidget()

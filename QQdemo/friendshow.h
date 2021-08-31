@@ -13,7 +13,7 @@ class FriendShow : public QWidget {
 public:
     explicit FriendShow(QWidget* parent = nullptr);
     ~FriendShow();
-    void setData(QString name, QString picturePath, bool state);
+    void setData(QString name, QPixmap picture, bool state);
 
 private:
     Ui::FriendShow* ui;

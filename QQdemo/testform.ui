@@ -6,27 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>433</height>
+    <width>853</width>
+    <height>521</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>137</width>
+    <height>137</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QTreeWidget" name="treeWidget">
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>1</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QToolButton" name="toolButton">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>161</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>asdasd </string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

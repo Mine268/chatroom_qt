@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QSettings>
 #include <QTimer>
 
 namespace Ui {
@@ -24,6 +25,13 @@ public:
     void init_ui();
     void setSocket(ClientTcpSocket*);
 
+    void ani_func();
+
+    //public里面添加
+    void WriteInit(QString key, QStringList value);
+    void ReadInit(QString key, QStringList& value);
+
+    void close_ani();
 signals:
     void OkToLogin(QString _userId, QString _userPwd);
 
@@ -45,6 +53,13 @@ private slots:
     void showDialog();
     void on_checkBox_stateChanged(int arg1);
 
+    //private slots里面添加
+
+    void loadpwd(QString);
+    void loadpwd(int);
+
+    void on_remember_clicked(bool checked);
+
 private:
     Ui::loginDialog* ui;
     QLineEdit* usernumberinput;
@@ -52,6 +67,16 @@ private:
     signinDialog* signindialog;
     QString userId;
     QString userPwd;
+
+    QPropertyAnimation* disappear_ani;
+    /*
+     * 记住密码功能
+     *
+     * */
+    bool need_remember;
+    bool is_remember = false;
+    QStringList idList;
+    QStringList pwdList;
 };
 
 #endif // LOGINDIALOG_H

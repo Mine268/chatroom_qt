@@ -2,6 +2,7 @@
 #define CHAT_H
 
 #include "clienttcpsocket.h"
+#include "emotionwidget.h"
 #include "fatherwidget.h"
 #include <QLabel>
 #include <QListWidget>
@@ -9,6 +10,7 @@
 #include <QTime>
 #include <QTimer>
 #include <QWidget>
+#include <showmessage.h>
 namespace Ui {
 class Chat;
 }
@@ -20,7 +22,7 @@ public:
     explicit Chat(QWidget* parent = nullptr);
     ~Chat();
     void setSocket(ClientTcpSocket*);
-    void setInfo(QString my_id, QString your_id, QString name);
+    void setInfo(QString my_id, QString your_id, QString friendname, QString myname);
 
     void chat_msg_display(chat_msg chatmsg);
 
@@ -39,7 +41,9 @@ private slots:
 
     void on_maximize_clicked();
 
-    //    void on_send_2_clicked();
+    void on_toolButton_clicked();
+
+    void add_gif(QString gifpath);
 
 signals:
     void closeChat(QString);
@@ -52,9 +56,11 @@ private:
     QRect oldGeometry;
     QLabel* label;
     QTimer* timer;
-    QString from_id;
-    QString to_id;
-    QString username;
+    QString from_id; //本人id
+    QString to_id; //对方id
+    QString username; //对方名字
+    QString username_me; //本人名称
+    EmotionWidget* emo;
 };
 
 #endif // CHAT_H

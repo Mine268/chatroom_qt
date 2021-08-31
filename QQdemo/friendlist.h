@@ -31,7 +31,7 @@ public:
     explicit FriendList(QWidget* parent = nullptr);
     ~FriendList();
 
-    void getinfo(QString id, QString pwd);
+    void setdata(QString& id, QString& pwd);
 
     void setSocket(ClientTcpSocket*);
 
@@ -78,6 +78,10 @@ private slots:
      * 检查windowsShow是否已经打开了窗口
      *
      * */
+    void on_picture_clicked();
+
+    void on_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
+
 protected:
 private:
     Ui::FriendList* ui;
@@ -92,7 +96,7 @@ private:
     QString userName;
     QString userId;
     QString userPwd;
-
+    QPixmap userpic;
     QMap<QString, Chat*> windowsShow;
 };
 

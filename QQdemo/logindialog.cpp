@@ -11,6 +11,25 @@ loginDialog::loginDialog(QWidget* parent)
     , ui(new Ui::loginDialog)
 {
     init_ui();
+
+    //构造函数void loginDialog::init_ui()末尾加入即可
+    ReadInit("usernumber", idList);
+    ReadInit("userpassward", pwdList);
+
+    /*
+     *
+     *
+     * Debug
+     *
+     * */
+    qDebug() << idList;
+
+    ui->usernumber->addItems(idList);
+    connect(ui->usernumber, SIGNAL(currentTextChanged(QString)), this, SLOT(loadpwd(QString)));
+    connect(ui->usernumber, SIGNAL(currentIndexChanged(int)), this, SLOT(loadpwd(int)));
+
+    if (ui->usernumber->count() != 0)
+        loadpwd(0);
 }
 void loginDialog::init_ui()
 {
@@ -18,17 +37,12 @@ void loginDialog::init_ui()
     setWindowTitle("登录");
     setWindowIcon(QIcon("C:\\Users\\God\\Desktop\\新建文件夹\\聊天.png"));
 
-    //    this->setWindowFlags(Qt::SplashScreen);
     setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
 
     QString style = "border-radius: 65px;border:0px white;background: green";
     ui->picture->setStyleSheet(style);
-    //    ui->picture->setPixmap(QPixmap::fromImage(
-    //        QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"))
-    //                               .scaled(130, 130));
-
     QPixmap src = QPixmap::fromImage(
         QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"));
     QSize size(130, 130);
@@ -49,11 +63,19 @@ void loginDialog::init_ui()
     effect->setBlurRadius(22); //设置阴影圆角
     ui->frame->setGraphicsEffect(effect);
 
+    /*
+     * 设置提示文字
+     * */
+
     usernumberinput = new QLineEdit(this);
     ui->usernumber->setLineEdit(usernumberinput);
     usernumberinput->setPlaceholderText("ID");
     ui->userpassward->setPlaceholderText("密码");
 
+    /*
+     *
+     * 淡入淡出
+     * */
     QPropertyAnimation* animation = new QPropertyAnimation(this, "windowOpacity");
     animation->setDuration(100);
     animation->setStartValue(0);
@@ -68,6 +90,32 @@ void loginDialog::setSocket(ClientTcpSocket* _socket)
     connect(clientSocket, &ClientTcpSocket::recvLoginDeMsg, this, &loginDialog::receive_loginFail_message); //登录失败消息
 }
 
+void loginDialog::WriteInit(QString key, QStringList value)
+{
+    qDebug() << "write";
+    QString path = "./login.ini";
+    //创建配置文件操作对象
+    QSettings* config = new QSettings(path, QSettings::IniFormat);
+    QVariant variant;
+    variant.setValue(value);
+    //将信息写入配置文件
+    config->beginGroup("config");
+    config->setValue(key, variant);
+    config->endGroup();
+    delete config;
+}
+
+void loginDialog::ReadInit(QString key, QStringList& value)
+{
+    //    value.clear();
+    QString path = "./login.ini";
+    //创建配置文件操作对象
+    QSettings* config = new QSettings(path, QSettings::IniFormat);
+    //读取配置信息
+    QVariant variant = config->value(QString("config/") + key);
+    value = variant.value<QStringList>();
+}
+
 loginDialog::~loginDialog()
 {
     delete ui;
@@ -76,6 +124,8 @@ void loginDialog::mouseMoveEvent(QMouseEvent* event)
 {
     //未开启鼠标奥追踪的情况下，当鼠标按下时才能触发
     if (mouse_is_press) {
+        if (event->x() >= 25 && event->x() <= 196 && event->y() >= 7 && event->y() <= 28)
+            return;
         this->move(event->pos() + pos() - old_pos);
     }
 }
@@ -100,13 +150,66 @@ void loginDialog::on_login_clicked()
     //检测是否有此账号
     //发送消息 : socket.send*()
     //连接信号与槽:  connect( , , , receive_login_message(QString))
+    //记住密码功能
+
+    //检测是否已存在该用户
     userId = usernumberinput->text();
     userPwd = ui->userpassward->text();
-    clientSocket->sendloginMsg(userId, userPwd);
 
-    //    //TestCode
-    //    qDebug() << "登录";
-    //    emit OkToLogin(userId, userPwd);
+    bool is_exist = false;
+    int idx = -1;
+    for (int i = 0; i < idList.size(); i++) {
+        if (idList[i] == userId) {
+            qDebug() << idList[i] << userId;
+
+            is_exist = true;
+            idx = i;
+            break;
+        }
+    }
+    qDebug() << is_exist;
+    if (ui->remember->isChecked()) //记住密码
+    {
+        if (!is_remember) //之前未记住密码，加入密码
+        {
+            qDebug() << "未记住密码->记住密码";
+            if (is_exist) //用户已存在
+            {
+                pwdList[idx] = userPwd;
+            } else //用户不存在
+            {
+                qDebug() << "新用户，记住";
+                idList.push_front(userId);
+                pwdList.push_front(userPwd);
+            }
+            qDebug() << idList;
+            WriteInit("usernumber", idList);
+            WriteInit("userpassward", pwdList);
+        }
+        //else 已记住密码，不需要更新本地用户密码
+    } else //不记住密码
+    {
+        if (is_remember) //之前记住了(肯定是存在的用户)，密码设为空
+        {
+            qDebug() << "记住密码->不记住密码";
+            pwdList[idx] = "";
+            WriteInit("usernumber", idList);
+            WriteInit("userpassward", pwdList);
+        } else //之前没记住
+        {
+            if (!is_exist) //用户不存在
+            {
+                qDebug() << "新用户，不记住";
+                idList.push_front(userId);
+                pwdList.push_front("");
+                WriteInit("usernumber", idList);
+                WriteInit("userpassward", pwdList);
+            }
+            // 已存在但不记住密码，不需要更新本地用户密码
+        }
+    }
+
+    clientSocket->sendloginMsg(userId, userPwd);
 }
 
 void loginDialog::on_regestor_clicked()
@@ -148,11 +251,11 @@ void loginDialog::receive_loginFail_message(QString failMessage)
     //定时显示错误信息
     qDebug() << failMessage;
     QTimer showFailMessgae;
-    showFailMessgae.setInterval(1000);
-    showFailMessgae.start();
+    //    showFailMessgae.setInterval(10000);
+    //    showFailMessgae.start();
     usernumberinput->setPlaceholderText(failMessage);
-    showFailMessgae.stop();
-    usernumberinput->setPlaceholderText("ID");
+    //    showFailMessgae.stop();
+    //    usernumberinput->setPlaceholderText("ID");
 }
 
 void loginDialog::showDialog()
@@ -167,4 +270,56 @@ void loginDialog::on_checkBox_stateChanged(int arg1)
     } else if (arg1 == 0) {
         ui->userpassward->setEchoMode(QLineEdit::Password);
     }
+}
+
+void loginDialog::on_remember_clicked(bool checked)
+{
+    if (checked) {
+        need_remember = true;
+    } else {
+        need_remember = false;
+    }
+}
+
+void loginDialog::loadpwd(QString str)
+{
+    qDebug() << str;
+    is_remember = false;
+    for (int i = 0; i < idList.size(); i++) {
+        if (idList[i] == str) {
+            ui->userpassward->setText(pwdList[i]);
+            if (pwdList[i] != "") {
+                is_remember = true;
+                ui->remember->setCheckState(Qt::Checked);
+            }
+            return;
+        }
+    }
+    ui->userpassward->setText("");
+}
+
+void loginDialog::loadpwd(int i)
+{
+    qDebug() << i;
+    ui->userpassward->setText(pwdList[i]);
+    if (pwdList[i] != "") {
+        is_remember = true;
+        ui->remember->setCheckState(Qt::Checked);
+    }
+}
+
+void loginDialog::close_ani()
+{
+    qDebug() << "close_ani";
+    disappear_ani = new QPropertyAnimation(this, "geometry");
+    disappear_ani->setTargetObject(ui->frame);
+    disappear_ani->setDuration(2000);
+    disappear_ani->setStartValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), ui->frame->width(), ui->frame->height()));
+    disappear_ani->setEndValue(QRect(ui->frame->pos().x() + this->width() + 50,
+        ui->frame->pos().y(), ui->frame->width(), ui->frame->height())); //移动
+    //    disappear_ani->setEndValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), 0, ui->frame->height()));//缩小width
+    disappear_ani->start();
+
+    connect(disappear_ani, SIGNAL(finished()), this, SLOT(close_widget()));
+    qDebug() << "end";
 }

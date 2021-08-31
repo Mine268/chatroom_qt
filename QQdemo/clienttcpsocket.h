@@ -1,6 +1,7 @@
 #ifndef CLIENTTCPSOCKET_H
 #define CLIENTTCPSOCKET_H
 
+#include <QCryptographicHash>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -62,6 +63,7 @@ private slots:
     void _recvMsg();
 
 private:
+    QString data_md5(QString);
     QTcpSocket* clientSocket;
     void initialLize();
 };

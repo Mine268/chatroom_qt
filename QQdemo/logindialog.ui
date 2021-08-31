@@ -178,6 +178,9 @@ QLabel{
               <height>15</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>显示密码</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">QCheckBox::indicator::unchecked{
     image: url(:/eye/openeye.png);width:15px;height:15px;
@@ -185,6 +188,16 @@ QLabel{
 QCheckBox::indicator::checked{
     image: url(:/eye/closeeye.png);width:15px;height:15px;
 }</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="remember">
+            <property name="toolTip">
+             <string>记住密码</string>
             </property>
             <property name="text">
              <string/>

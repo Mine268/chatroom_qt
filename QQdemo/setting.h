@@ -3,7 +3,9 @@
 
 #include "clienttcpsocket.h"
 #include "fatherwidget.h"
+#include <QLabel>
 #include <QWidget>
+
 namespace Ui {
 class Setting;
 }
@@ -15,11 +17,11 @@ public:
     explicit Setting(QWidget* parent = nullptr);
     ~Setting();
     void setSocket(ClientTcpSocket*);
+    void setData(QPixmap picture, QString& id, QString& name);
 
 public slots:
     void close_for_mainWidget();
 
-protected:
 private slots:
     void on_minimize_clicked();
 

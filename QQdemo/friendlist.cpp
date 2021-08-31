@@ -9,11 +9,15 @@ FriendList::FriendList(QWidget* parent)
     , ui(new Ui::FriendList)
 {
     ui->setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
+    QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect(this);
+    effect->setOffset(0, 0); //设置阴影距离
+    effect->setColor(QColor(38, 78, 119, 127)); //设置阴影颜色
+    effect->setBlurRadius(22); //设置阴影圆角
+    ui->frame->setGraphicsEffect(effect);
 
+    ui->treeWidget->setHeaderHidden(true);
     //新添加
-    m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
+    //    m_itemBrush = ui->treeWidget->topLevelItem(0)->background(0);
     //好友搜索栏
     ui->searchline->setPlaceholderText("输入好友id，点击下方搜索按钮");
     connect(this, SIGNAL(sign_re()), this, SLOT(restore())); //清空好友搜索
@@ -39,6 +43,7 @@ void FriendList::on_add_clicked()
     //添加好友窗口显示
     AddFriend* addfriend = new AddFriend();
     addfriend->setSocket(clientSocket);
+    addfriend->setinfo(userName, userId);
     addfriend->show();
     connect(this, &FriendList::closeMainWidget, addfriend, &AddFriend::close_for_mainWidget);
 }
@@ -48,6 +53,7 @@ void FriendList::on_setting_clicked()
     //设置界面显示
     Setting* setting = new Setting();
     setting->setSocket(clientSocket);
+    setting->setData(data(userName), userId, userName);
     setting->show();
     connect(this, &FriendList::closeMainWidget, setting, &Setting::close_for_mainWidget);
 }
@@ -77,13 +83,6 @@ void FriendList::on_search_clicked()
     if (isEmptyTxt) {
         return;
     }
-
-    //    bool isEmptyTree = ui->treeWidget->topLevelItemCount();
-    //    if (!isEmptyTree) {
-    //        qDebug() << "tree empty";
-    //        return;
-    //    }
-
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         for (int i = 0; i < (*it)->columnCount(); i++) {
@@ -126,7 +125,7 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
         } else {
             Chat* chat = new Chat();
             windowsShow[to_id] = chat;
-            chat->setInfo(userId, to_id, name);
+            chat->setInfo(userId, to_id, name, userName);
             chat->setSocket(clientSocket);
             chat->show();
             connect(this, &FriendList::closeMainWidget, chat, &Chat::close_for_mainWidget);
@@ -147,7 +146,6 @@ void FriendList::restore()
 {
     //ToDo
     QTreeWidgetItemIterator it(ui->treeWidget);
-
     while (*it) {
         (*it)->setBackground(0, m_itemBrush);
         if (!(*it)->isSelected()) {
@@ -161,7 +159,7 @@ void FriendList::restore()
 }
 
 //获取、显示个人信息
-void FriendList::getinfo(QString id, QString pwd)
+void FriendList::setdata(QString& id, QString& pwd)
 {
     userId = id;
     userPwd = pwd;
@@ -173,22 +171,33 @@ void FriendList::getinfo(QString id, QString pwd)
 //显示好友列表
 void FriendList::showlist(QList<struct user> list)
 {
-    QTreeWidgetItem* root = new QTreeWidgetItem;
+    ui->treeWidget->clear();
+
+    /*
+     * 返回的列表中第一个是本人的信息
+     * 用来显示在界面上
+     *
+     * */
+
+    userName = list[0].name;
+    ui->name->setText(list[0].name);
+    ui->id->setText(list[0].id);
+    ui->picture->setIcon(data(list[0].name).scaled(72, 72)); //设置头像
+
+    /**********/
+    QTreeWidgetItem* root
+        = new QTreeWidgetItem;
     ui->treeWidget->addTopLevelItem(root);
     root->setText(0, "friend");
-
-    for (int i = 0; i < list.size(); ++i) {
+    root->setSizeHint(0, QSize(10, 30));
+    root->setIcon(0, QIcon(":/tool/pulldown.png"));
+    for (int i = 1; i < list.size(); ++i) {
         QTreeWidgetItem* it = new QTreeWidgetItem;
         FriendShow* itshow = new FriendShow();
-
         struct user myfriend = list[i];
         it->setData(0, Qt::UserRole + 1, QVariant::fromValue(myfriend));
-        //        it->setText(0, myfriend.name);
-
-        itshow->setData(myfriend.name, ":/picture/girlpic.png", myfriend.online);
-
+        itshow->setData(myfriend.name, data(myfriend.name), myfriend.online);
         root->addChild(it);
-        //        ui->treeWidget->addTopLevelItem(it);
         ui->treeWidget->setItemWidget(it, 0, itshow);
     }
 }
@@ -229,33 +238,58 @@ void FriendList::showMessage(struct chat_msg chatmsg)
          *
          **/
         QString name;
-
-        int size = ui->treeWidget->topLevelItemCount();
-        QTreeWidgetItem* father;
-        for (int i = 0; i < size; i++) {
-            father = ui->treeWidget->topLevelItem(i);
-            int childCount = father->childCount();
-            int flag = 0;
-
-            for (int j = 0; j < childCount; ++j) {
-                QTreeWidgetItem* child = father->child(j);
-                struct user people = child->data(0, Qt::UserRole + 1).value<struct user>();
-                if (people.id == chatmsg.from_id) {
-                    name = people.name;
-                    flag = 1;
-                    break;
+        //开辟一个作用域
+        {
+            int size = ui->treeWidget->topLevelItemCount();
+            QTreeWidgetItem* father;
+            for (int i = 0; i < size; i++) {
+                father = ui->treeWidget->topLevelItem(i);
+                int childCount = father->childCount();
+                int flag = 0;
+                for (int j = 0; j < childCount; ++j) {
+                    QTreeWidgetItem* child = father->child(j);
+                    struct user people = child->data(0, Qt::UserRole + 1).value<struct user>();
+                    if (people.id == chatmsg.from_id) {
+                        name = people.name;
+                        flag = 1;
+                        break;
+                    }
                 }
+                if (flag)
+                    break;
             }
-            if (flag)
-                break;
         }
         qDebug() << userId << chatmsg.from_id << name << "!!!!!";
 
-        chat->setInfo(userId, chatmsg.from_id, name);
+        chat->setInfo(userId, chatmsg.from_id, name, userName);
         chat->setSocket(clientSocket);
         chat->chat_msg_display(chatmsg);
         chat->show();
         connect(chat, &Chat::closeChat, this, &FriendList::removeChat);
         connect(this, &FriendList::closeMainWidget, chat, &Chat::close_for_mainWidget);
+    }
+}
+
+void FriendList::on_picture_clicked()
+{
+    //查看个人信息
+    on_setting_clicked();
+}
+
+void FriendList::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
+{
+    /*
+     *  如果点击父节点，则会打开分组
+     *
+     * */
+    Q_UNUSED(column);
+    if (item->childCount() > 0) {
+        if (item->isExpanded()) {
+            item->setExpanded(false);
+            item->setIcon(0, QIcon(":/tool/pullleft.png"));
+        } else {
+            item->setExpanded(true);
+            item->setIcon(0, QIcon(":/tool/pulldown.png"));
+        }
     }
 }

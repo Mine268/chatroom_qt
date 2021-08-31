@@ -4,11 +4,13 @@
 #include "windows.h"
 #include "windowsx.h"
 #include <QApplication>
+#include <QBitmap>
 #include <QDesktopWidget>
 #include <QEvent>
+#include <QGraphicsDropShadowEffect>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QWidget>
-
 class FatherWidget : public QWidget {
     Q_OBJECT
 public:
@@ -27,6 +29,9 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     bool nativeEvent(const QByteArray& eventType, void* message, long* result) override;
+
+    QPixmap data(QString name);
+    QPixmap picture(QList<int>&, int r, int g, int b);
 };
 
 #endif // FATHERWIDGET_H

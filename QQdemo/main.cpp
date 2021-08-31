@@ -1,10 +1,12 @@
 
 #include "clientallwidget.h"
 #include "clienttcpsocket.h"
+#include "emotionwidget.h"
 #include "logindialog.h"
 #include "signindialog.h"
 #include "testform.h"
 #include <QApplication>
+#include <showmessage.h>
 
 int main(int argc, char* argv[])
 {
@@ -25,5 +27,11 @@ int main(int argc, char* argv[])
     //    B.start();
     //    TestForm tt;
     //    tt.show();
+
+    //    EmotionWidget e;
+    //    e.show();
+
+    //    showMessage message;
+    //    message.show();
     return a.exec();
 }

@@ -1,9 +1,82 @@
 #include "fatherwidget.h"
 
+#include <QCryptographicHash>
+#include <QPainter>
+#include <QPixmap>
+
 FatherWidget::FatherWidget(QWidget* parent)
     : QWidget(parent)
 {
-    boundaryWidth = 4;
+    boundaryWidth = 2;
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+}
+
+QPixmap FatherWidget::data(QString name)
+{
+    QByteArray byteArray(name.toLatin1());
+    QCryptographicHash hash(QCryptographicHash::Sha512);
+    hash.addData(byteArray); // 添加数据到加密哈希值
+    QByteArray result = hash.result(); // 返回最终的哈希值
+    QString strMD5 = result.toHex();
+
+    //    qDebug() << (unsigned char)result[0] << result.size();
+
+    QList<int> L;
+    int temp;
+    temp = (unsigned char)result[0];
+    while (temp != 0) {
+        L.push_front(temp % 2);
+        temp = temp >> 1;
+    }
+    while (L.size() < 8) {
+        L.push_front(0);
+    }
+    temp = (unsigned char)result[1];
+    while (temp != 0) {
+        L.push_front(temp % 2);
+        temp = temp >> 1;
+    }
+    while (L.size() < 16) {
+        L.push_front(0);
+    }
+    int r = (unsigned char)result[2];
+    int g = (unsigned char)result[3];
+    int b = (unsigned char)result[4];
+
+    return picture(L, r, g, b);
+}
+
+QPixmap FatherWidget::picture(QList<int>& dot, int r, int g, int b)
+{
+    //创建一个绘图设备，Qimage：：Fomat_ARGB32背景是透明
+    QImage image(5, 5, QImage::Format_RGB32);
+    QPainter p;
+    p.begin(&image);
+    //绘图
+    p.drawImage(0, 0, QImage("../image/5.jpg"));
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            image.setPixel(QPoint(j, i), qRgb(255, 255, 255));
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 3; j++) {
+            //对50x50的像素点 挨个着色
+            if (dot[i * 3 + j] == 1)
+                image.setPixel(QPoint(j, i), qRgb(r, g, b));
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 3; j < 5; j++) {
+            //对50x50的像素点 挨个着色
+            if (dot[i * 3 + 4 - j] == 1)
+                image.setPixel(QPoint(j, i), qRgb(r, g, b));
+        }
+    }
+    p.end();
+    return QPixmap::fromImage(image);
 }
 void FatherWidget::mouseMoveEvent(QMouseEvent* event)
 {

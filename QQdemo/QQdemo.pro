@@ -11,11 +11,14 @@ CONFIG += c++11
 SOURCES += \
     addfriendshow.cpp \
     clientallwidget.cpp \
+    emotionlabel.cpp \
+    emotionwidget.cpp \
     fatherwidget.cpp \
     friendshow.cpp \
     logindialog.cpp \
     main.cpp \
     mydelegate.cpp \
+    showmessage.cpp \
 	signindialog.cpp\
 	addfriend.cpp\
 	chat.cpp\
@@ -28,10 +31,13 @@ SOURCES += \
 HEADERS += \
     addfriendshow.h \
     clientallwidget.h \
+    emotionlabel.h \
+    emotionwidget.h \
     fatherwidget.h \
     friendshow.h \
     logindialog.h \
     mydelegate.h \
+    showmessage.h \
 	signindialog.h\
 	addfriend.h\
 	chat.h\
@@ -43,8 +49,10 @@ HEADERS += \
 
 FORMS += \
     addfriendshow.ui \
+    emotionwidget.ui \
     friendshow.ui \
     logindialog.ui \
+    showmessage.ui \
 	signindialog.ui\
 	addfriend.ui\
 	chat.ui\

@@ -105,6 +105,8 @@ void signinDialog::receiveRgOkMsg(QString _id)
     //        //        txt += userid;
     //        QMessageBox::information(NULL, "Title", txt, QMessageBox::Ok, QMessageBox::Ok);
     //    }
+
+    qDebug() << _id;
     emit okToRegister(_id);
     this->close();
 }

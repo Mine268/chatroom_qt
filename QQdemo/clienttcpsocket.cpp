@@ -20,7 +20,7 @@ ClientTcpSocket::~ClientTcpSocket()
 void ClientTcpSocket::initialLize()
 {
     clientSocket = new QTcpSocket(this);
-    clientSocket->connectToHost("10.194.52.237", 11451);
+    clientSocket->connectToHost("10.195.22.79", 11451);
     if (!clientSocket->waitForConnected(3000)) {
         QMessageBox::information(nullptr, "QT网络通信", "连接服务端失败！");
         return;
@@ -42,13 +42,28 @@ void ClientTcpSocket::write_wait(QByteArray data)
     clientSocket->write(data);
 }
 
+QString ClientTcpSocket::data_md5(QString pwd)
+{
+    //md5加密：将密码通过MD5加密后,将32位md5值,前后16位对调
+    QString md5;
+    QString str = pwd;
+    QByteArray bb;
+    bb = QCryptographicHash::hash(str.toLatin1(), QCryptographicHash::Md5);
+    md5.append(bb.toHex());
+    QString a = md5.mid(0, 16);
+    QString b = md5.mid(16);
+    QString str2 = b.append(a);
+
+    return str2;
+}
+
 void ClientTcpSocket::sendloginMsg(const QString& id, const QString& pwd)
 {
     QJsonObject _json = this->client_prepareSendJson("loginQuest");
     QJsonObject _value;
     QJsonDocument _doc;
     _value.insert("id", id);
-    _value.insert("password", pwd);
+    _value.insert("password", data_md5(pwd));
     _json.insert("value", _value);
     _doc.setObject(_json);
     write_wait(_doc.toJson(QJsonDocument::Compact));
@@ -60,7 +75,7 @@ void ClientTcpSocket::sendRegMsg(const QString& username, const QString& pwd)
     QJsonObject _value;
     QJsonDocument _doc;
     _value.insert("username", username);
-    _value.insert("password", pwd);
+    _value.insert("password", data_md5(pwd));
     _json.insert("value", _value);
     _doc.setObject(_json);
     write_wait(_doc.toJson(QJsonDocument::Compact));
@@ -116,8 +131,8 @@ void ClientTcpSocket::searchUser(const QString& me_id, const QString& you_id)
     QJsonObject _json = this->client_prepareSendJson("searchUserByID");
     QJsonObject _value;
     QJsonDocument _doc;
-    _value.insert("query_id", me_id);
-    _value.insert("sender_id", you_id);
+    _value.insert("sender_id", me_id);
+    _value.insert("query_id", you_id);
     _json.insert("value", _value);
     _doc.setObject(_json);
     write_wait(_doc.toJson(QJsonDocument::Compact));
@@ -150,7 +165,7 @@ void ClientTcpSocket::_recvMsg()
     QByteArray buf = clientSocket->readAll();
     QString value = buf;
 
-    qDebug() << "DDD: " << buf;
+    qDebug() << "DDD: " << value;
 
     QJsonParseError parseJsonErr;
     QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(), &parseJsonErr);
@@ -189,20 +204,28 @@ void ClientTcpSocket::_recvMsg()
         }
         emit recvFriendList(list);
     } else if (type == "messageTransmit") {
+
         QJsonArray jsonArr = jsonObject["value"].toArray();
-        for(int i=0;i<jsonArr.size();++i){
-            QJsonObject msg_value = jsonArr.at(i).toObject().value("value").toObject();
+
+        //        qDebug() << "[Clienttcpsocket messageTransmit]"
+        //                 << "size: " << jsonArr.size();
+
+        for (int i = 0; i < jsonArr.size(); ++i) {
+            QJsonObject msg_value = jsonArr.at(i).toObject();
+
             struct chat_msg chatmsg;
             chatmsg.from_id = msg_value.value("from").toString();
             chatmsg.to_id = msg_value.value("to").toString();
             chatmsg.time = msg_value.value("time").toString();
             chatmsg.value = msg_value.value("value").toString();
+
+            qDebug() << "[Clienttcpsocket messageTransmit]" << chatmsg.from_id << chatmsg.to_id;
             emit this->recvChatMsg(chatmsg);
         }
     } else if (type == "returnUserInfo") {
         auto msg_value = jsonObject.value("value").toObject();
         struct user userinfo;
-        userinfo.id = "";
+        userinfo.id = msg_value.value("id").toString();
         userinfo.online = true;
         userinfo.email = msg_value.value("email").toString();
         userinfo.name = msg_value.value("name").toString();
