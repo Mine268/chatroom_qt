@@ -61,6 +61,9 @@ private slots:
     void getMessage(const QString&, const QString&, const QString&, const QString&);
     void getImage(const QString&, const QString&, const QString&, const QString&);
     void getFriendAddQuest(const QString&, const QString&);
+    void getFriendAddAgree(const qint64 host, const qint64 query,
+                           const QString& name, const QString &email);
+    void getFriendAddDisgree(const qint64);
     void getUserQueryQuest(const qint64,const qint64);
     void getFriendDelQuest(const QString&, const QString&);
     // 收到好友列表的请求

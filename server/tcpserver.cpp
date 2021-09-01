@@ -53,8 +53,13 @@ void TcpServer::incomingConnection(qintptr _handle)
 
 void TcpServer::_sendMsg(QTcpSocket *_skt, const QString &msg)
 {
-    _skt->waitForBytesWritten(300);
-    _skt->write(msg.toUtf8());
+    if (_skt) {
+        _skt->waitForBytesWritten(300);
+        _skt->write(msg.toUtf8());
+    } else {
+        qDebug() << "[TcpServer _sendMsg]" << "Null socket!";
+    }
+    qDebug() << "[TcpServer _sendMsg]" << msg;
 }
 
 QJsonObject TcpServer::prepareSendJson(const QString &_quest)
@@ -125,6 +130,49 @@ void TcpServer::sendFriendList(QTcpSocket *_skt
     }
 
     _json.insert("value", _array);
+    _doc.setObject(_json);
+    _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
+
+void TcpServer::sendFrdAddQuest(QTcpSocket *_skt, const qint64 sender, const qint64 query)
+{
+    QJsonObject _json = this->prepareSendJson("addFriendQuest");
+    QJsonObject _value;
+    QJsonDocument _doc;
+
+    qDebug() << "[tcpserver sendFrdAddQuest]:" << _skt << sender << query;
+
+    _value.insert("sender_id", QString::number(sender));
+    _value.insert("query_id", QString::number(query));
+    _json.insert("value", _value);
+
+    _doc.setObject(_json);
+    _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
+
+void TcpServer::sendFriendAddAc(QTcpSocket *_skt, const qint64 id
+                                , const QString &name, const QString &email)
+{
+    QJsonObject _json = this->prepareSendJson("friendAccpet");
+    QJsonObject _value;
+    QJsonDocument _doc;
+
+    _value.insert("id", QString::number(id));
+    _value.insert("name", name);
+    _value.insert("email", email);
+    _json.insert("value", _value);
+
+    _doc.setObject(_json);
+    _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
+}
+
+void TcpServer::sendFriendAddDeny(QTcpSocket *_skt)
+{
+    QJsonObject _json = this->prepareSendJson("friendDeny");
+    QJsonDocument _doc;
+
+    _json.insert("value", "false");
+
     _doc.setObject(_json);
     _sendMsg(_skt, _doc.toJson(QJsonDocument::Compact));
 }
@@ -200,7 +248,6 @@ void TcpServer::_recvMsg()
         auto _sender = _jobj.value("sender").toString();
         if (_sender == "client") {
             auto _quest = _jobj.value("quest").toString();
-            // 因为在当前的设计中，所有的value必然是object，所以这里先一步转换
             auto _value = _jobj.value("value").toObject();
 
             if (_quest == "loginQuest") {
@@ -217,6 +264,16 @@ void TcpServer::_recvMsg()
             } else if (_quest == "friendAddQuest") {
                 emit this->recvFriendAddQuest(_value.value("me").toString(),
                                               _value.value("you").toString());
+            } else if (_quest == "friendAddQuest") {
+                emit this->recvFriendAddQuest(_value.value("sender_id").toString()
+                                              , _value.value("query_id").toString());
+            } else if (_quest == "friendAgree") {
+                emit this->recvFriendAddAgree(_value.value("host_id").toString().toLongLong()
+                                              , _value.value("friend_id").toString().toLongLong()
+                                              , _value.value("name").toString()
+                                              , _value.value("email").toString());
+            } else if (_quest == "friendDisagree") {
+                emit this->recvFriendAddDisgree(_value.value("id").toString().toLongLong());
             } else if (_quest == "friendDelQuest") {
                 emit this->recvFriendDelQuest(_value.value("me").toString(),
                                               _value.value("you").toString());
@@ -229,7 +286,7 @@ void TcpServer::_recvMsg()
                                      , _value.value("value").toString());
             } else if (_quest == "searchUserByID") {
                 emit this->recvUserQuery(_value.value("query_id").toString().toLongLong()
-                                         ,_value.value("sender_id").toString().toLongLong());
+                                         , _value.value("sender_id").toString().toLongLong());
             } else if (_quest == "pullHangedMessage" ) {
                 emit this->recvPullHangedMsg(_jobj.value("value").toString().toLongLong());
             } else {

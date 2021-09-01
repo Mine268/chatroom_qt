@@ -47,7 +47,11 @@ bool ServerManager::start()
     connect(tcpserver, &TcpServer::recvLogin, this, &ServerManager::getLogin);
     connect(tcpserver, &TcpServer::recvRegister, this, &ServerManager::getRegister);
     connect(tcpserver, &TcpServer::recvMessage, this, &ServerManager::getMessage);
+
     connect(tcpserver, &TcpServer::recvFriendAddQuest, this, &ServerManager::getFriendAddQuest);
+    connect(tcpserver, &TcpServer::recvFriendAddAgree, this, &ServerManager::getFriendAddAgree);
+    connect(tcpserver, &TcpServer::recvFriendAddDisgree, this, &ServerManager::getFriendAddDisgree);
+
     connect(tcpserver, &TcpServer::recvFriendDelQuest, this, &ServerManager::getFriendDelQuest);
     connect(tcpserver, &TcpServer::recvFriendListQuest, this, &ServerManager::getFriendListQuest);
     connect(tcpserver, &TcpServer::usrDisconnectedEx, this, &ServerManager::getUserDropEx);
@@ -164,7 +168,25 @@ void ServerManager::getFriendAddQuest(const QString &_me, const QString &_you)
     auto _id1 = _me.toLongLong();
     auto _id2 = _you.toLongLong();
 
-    db->friendAdd(_id1, _id2);
+    if (loginUsers[_id2] == nullptr) {
+        // 如果这个人不在线
+        db->friendAddHang(_id1, _id2);
+    } else {
+        // 如果这个人在线，则发送询问
+        tcpserver->sendFrdAddQuest(loginUsers[_id2], _id1, _id2);
+    }
+}
+
+void ServerManager::getFriendAddAgree(const qint64 host, const qint64 query,
+                                      const QString& name, const QString &email)
+{
+    db->friendAdd(host, query);
+    tcpserver->sendFriendAddAc(loginUsers[host], query, name, email);
+}
+
+void ServerManager::getFriendAddDisgree(const qint64 sender)
+{
+    tcpserver->sendFriendAddDeny(loginUsers[sender]);
 }
 
 void ServerManager::getFriendDelQuest(const QString &_me, const QString &_you)

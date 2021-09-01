@@ -52,8 +52,10 @@ public:
                     , const QString &_time, const QString &_msg);
     // 读取某人的未读消息
     QList<msgInfo> readMessage(const qint64 _to);
-    // 添加好友，返回值指示是否添加成功
+    // 添加好友
     bool friendAdd(qint64 id1, qint64 id2);
+    // 如果添加的好友不在线
+    void friendAddHang(qint64 id1, qint64 id2);
     // 删除好友，返回值指示是否删除成功
     bool friendDel(qint64 id1, qint64 id2);
     // 返回某个人的所有好友

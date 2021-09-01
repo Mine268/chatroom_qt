@@ -21,6 +21,14 @@ public:
     void sendRegConfirm(QTcpSocket*, const QString&);
     void sendRegDeny(QTcpSocket*, const QString&);
     void sendFriendList(QTcpSocket*, const QList<std::tuple<QString, QString, bool>>&);
+
+    // 向被添加好友的人发送好友确认
+    void sendFrdAddQuest(QTcpSocket*, const qint64 sender, const qint64 query);
+    // 向要添加好友的人发送是否被允许添加为好友
+    void sendFriendAddAc(QTcpSocket*
+                          , const qint64 id, const QString &name, const QString &email);
+    void sendFriendAddDeny(QTcpSocket*);
+
     void sendChatMsg(QTcpSocket*, const QList<DataDB::msgInfo>&);
     void sendChatImg(QTcpSocket*, const QString&, const QString&
                      , const QString&, const QString&);
@@ -54,9 +62,14 @@ signals:
     void recvLogin(QTcpSocket*, const QString&, const QString&);
     void recvRegister(QTcpSocket*, const QString&, const QString&);
     void recvMessage(const QString&, const QString&, const QString&, const QString&);
-    void recvFriendAddQuest(const QString&, const QString&);
     void recvFriendDelQuest(const QString&, const QString&);
     void recvFriendListQuest(const QString&);
+    // 如果收到了好友申请
+    void recvFriendAddQuest(const QString&, const QString&);
+    // 如果某人拒绝了好友申请
+    void recvFriendAddDisgree(const qint64);
+    // 如果某人接受了好友申请
+    void recvFriendAddAgree(const qint64, const qint64, const QString&, const QString&);
     void recvImage(const QString&, const QString&, const QString&, const QString&);
     void recvUserQuery(const qint64,const qint64);
     void recvPullHangedMsg(const qint64);

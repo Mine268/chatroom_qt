@@ -166,7 +166,7 @@ bool DataDB::friendAdd(qint64 id1, qint64 id2)
     query.bindValue(":id2",QVariant(id2));
     query.exec();
     if(query.next()){
-        qDebug() << "已经是好友了";
+        qDebug() << id1 << id2 << "已经是好友了";
         return false;
     }
     query.prepare("select * from `friend-relation` where partner1 =:id2 and partner2 =:id1");
@@ -174,7 +174,7 @@ bool DataDB::friendAdd(qint64 id1, qint64 id2)
     query.bindValue(":id2",QVariant(id2));
     query.exec();
     if(query.next()){
-        qDebug() << "已经是好友了";
+        qDebug() << id1 << id2 << "已经是好友了";
         return false;
     }
 
@@ -194,6 +194,15 @@ bool DataDB::friendAdd(qint64 id1, qint64 id2)
     return flag;
 }
 
+void DataDB::friendAddHang(qint64 id1, qint64 id2)
+{
+    QSqlQuery query;
+    QString sqlStr =
+            QString("INSERT INTO `friend-quest VALUES (%1,%2);`")
+            .arg(QString::number(id1), QString::number(id2));
+    query.exec(sqlStr);
+}
+
 // 删除好友，返回值指示是否删除成功
 bool DataDB::friendDel(qint64 id1, qint64 id2)
 {
@@ -206,7 +215,7 @@ bool DataDB::friendDel(qint64 id1, qint64 id2)
     query.prepare("DELETE FROM `friend-relation` WHERE partner1 = :id2 and partner2 = :id1");
     query.bindValue(":id1",QVariant(id1));
     query.bindValue(":id2",QVariant(id2));
-    flag = query.exec();
+    flag &= query.exec();
     if(!flag)
     {
         qDebug()<<QObject::tr ("删除好友失败\n");
@@ -265,7 +274,7 @@ QList <DataDB:: userInfo> DataDB::friendList(qint64 id)
 
 DataDB* DataDB::getInstance()
 {
-    if(db == nullptr){
+    if(db == nullptr) {
         db = new DataDB;
     }
     return db;
