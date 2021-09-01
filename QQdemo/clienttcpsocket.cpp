@@ -20,7 +20,7 @@ ClientTcpSocket::~ClientTcpSocket()
 void ClientTcpSocket::initialLize()
 {
     clientSocket = new QTcpSocket(this);
-    clientSocket->connectToHost("10.195.22.79", 11451);
+    clientSocket->connectToHost("10.194.46.35", 11451);
     if (!clientSocket->waitForConnected(3000)) {
         QMessageBox::information(nullptr, "QT网络通信", "连接服务端失败！");
         return;
@@ -160,6 +160,47 @@ void ClientTcpSocket::pullMessage(const QString& id)
     write_wait(_doc.toJson(QJsonDocument::Compact));
 }
 
+void ClientTcpSocket::friendAddQuset(QString& queryid, QString& senderid)
+{
+    //添加好友请求
+    QJsonObject _json = this->client_prepareSendJson("friendAddQuest");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("query_id", queryid);
+    _value.insert("sender_id", senderid);
+    _json.insert("value", _value);
+    _doc.setObject(_json);
+    write_wait(_doc.toJson(QJsonDocument::Compact));
+}
+
+void ClientTcpSocket::friendAgree(QString& friendid, QString& hostid, QString& name, QString& email)
+{
+    //同意添加好友请求
+    QJsonObject _json = this->client_prepareSendJson("friendAgree");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("friend_id", friendid);
+    _value.insert("host_id", hostid);
+    _value.insert("name", name);
+    _value.insert("email", email);
+
+    _json.insert("value", _value);
+    _doc.setObject(_json);
+    write_wait(_doc.toJson(QJsonDocument::Compact));
+}
+
+void ClientTcpSocket::friendDisagree(QString& id)
+{
+    //
+    QJsonObject _json = this->client_prepareSendJson("friendDisagree");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("id", id);
+    _json.insert("value", _value);
+    _doc.setObject(_json);
+    write_wait(_doc.toJson(QJsonDocument::Compact));
+}
+
 void ClientTcpSocket::_recvMsg()
 {
     QByteArray buf = clientSocket->readAll();
@@ -230,6 +271,25 @@ void ClientTcpSocket::_recvMsg()
         userinfo.email = msg_value.value("email").toString();
         userinfo.name = msg_value.value("name").toString();
         emit this->recvUserInfo(userinfo);
+    } else if (type == "addFriendQuest") {
+        //添加好友请求
+        auto msg_value = jsonObject.value("value").toObject();
+        qDebug() << "[ClientTcpScoket _recvMsg]" << msg_value.value("sender_id").toString();
+
+        emit this->recvAddFriendQuset(msg_value.value("sender_id").toString());
+
+    } else if (type == "friendAccept") {
+        //同意添加好友
+        auto msg_value = jsonObject.value("value").toObject();
+        struct user userinfo;
+        userinfo.id = msg_value.value("id").toString();
+        userinfo.online = true;
+        userinfo.email = msg_value.value("email").toString();
+        userinfo.name = msg_value.value("name").toString();
+        userinfo.isfriend = true;
+        emit this->recvAddAccept(userinfo);
+    } else if (type == "friendDeny") {
+        emit recvAddDeny();
     }
     /*else if (type == "imageTransmit"){
         auto msg_value = jsonObject.value("value").toObject();

@@ -39,7 +39,7 @@ void EmotionWidget::setTableInfo()
 void EmotionWidget::addemotionitem(QString filename)
 {
     // 获取当前添加到第几行第几列
-    qDebug() << ui->tableWidget->rowCount() << ui->tableWidget->columnCount();
+    //    qDebug() << ui->tableWidget->rowCount() << ui->tableWidget->columnCount();
 
     int row_ = m_emotionList.size() / ui->tableWidget->columnCount();
     int column_ = m_emotionList.size() % ui->tableWidget->columnCount();
@@ -67,7 +67,6 @@ void EmotionWidget::initEmotion()
         if (QFile::exists(path.arg(i + 1)))
             addemotionitem(path.arg(i + 1)), count++;
     }
-    qDebug() << count;
 }
 
 void EmotionWidget::on_tableWidget_cellClicked(int row, int column)

@@ -433,5 +433,6 @@
         <file>emoijgit/274fix@2x.png</file>
         <file>tool/emotion.png</file>
         <file>tool/emotion1.png</file>
+        <file>tool/flush.png</file>
     </qresource>
 </RCC>

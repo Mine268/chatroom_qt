@@ -35,7 +35,51 @@ void FriendList::setSocket(ClientTcpSocket* _clientSocket)
     //发送好友列表请求
     connect(clientSocket, &ClientTcpSocket::recvFriendList, this, &FriendList::showlist);
     connect(clientSocket, &ClientTcpSocket::recvChatMsg, this, &FriendList::showMessage);
+    connect(clientSocket, &ClientTcpSocket::recvAddFriendQuset, this, &FriendList::showAddmessage);
+    connect(clientSocket, &ClientTcpSocket::recvAddAccept, this, &FriendList::addfriendtolist);
+    connect(clientSocket, &ClientTcpSocket::recvAddDeny, this, &FriendList::showAddDenyMessage);
     clientSocket->sendFriendList(userId); //发送请求好友列表
+}
+
+void FriendList::addfriendtolist(struct user user)
+{
+    //将好友添加到好友列表中
+
+    qDebug() << user.id << user.name << "~~~~~~~~~~~~~~~~~~~~~~~";
+
+    QTreeWidgetItem* friends = ui->treeWidget->topLevelItem(0);
+
+    QTreeWidgetItem* it = new QTreeWidgetItem;
+    FriendShow* itshow = new FriendShow();
+    struct user myfriend = user;
+    it->setText(0, myfriend.name);
+    it->setData(0, Qt::UserRole + 1, QVariant::fromValue(myfriend));
+    itshow->setData(myfriend.name, data(myfriend.name), myfriend.online);
+    friends->addChild(it);
+    ui->treeWidget->setItemWidget(it, 0, itshow);
+    clientSocket->sendFriendList(userId);
+}
+
+void FriendList::showAddmessage(QString qusetid)
+{
+    //添加好友弹出框显示
+    qDebug() << qusetid << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+    QMessageBox::StandardButton result;
+    result = QMessageBox::question(nullptr, "好友请求", "ID:" + qusetid + "请求添加好友",
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::NoButton);
+
+    if (result == QMessageBox::Yes) {
+        //同意添加好友
+        qDebug() << "[FriendAccept]" << qusetid << userId << userName << email;
+        clientSocket->friendAgree(qusetid, userId, userName, email);
+    } else if (result == QMessageBox::No) {
+        clientSocket->friendDisagree(qusetid);
+    }
+}
+
+void FriendList::showAddDenyMessage()
+{
+    QMessageBox::information(nullptr, "提示", "对面拒绝添加好友");
 }
 
 void FriendList::on_add_clicked()
@@ -183,7 +227,8 @@ void FriendList::showlist(QList<struct user> list)
     ui->name->setText(list[0].name);
     ui->id->setText(list[0].id);
     ui->picture->setIcon(data(list[0].name).scaled(72, 72)); //设置头像
-
+    email = list[0].email;
+    userId = list[0].id;
     /**********/
     QTreeWidgetItem* root
         = new QTreeWidgetItem;
@@ -195,6 +240,8 @@ void FriendList::showlist(QList<struct user> list)
         QTreeWidgetItem* it = new QTreeWidgetItem;
         FriendShow* itshow = new FriendShow();
         struct user myfriend = list[i];
+        //                it->setText(0, myfriend.name);
+
         it->setData(0, Qt::UserRole + 1, QVariant::fromValue(myfriend));
         itshow->setData(myfriend.name, data(myfriend.name), myfriend.online);
         root->addChild(it);
@@ -292,4 +339,9 @@ void FriendList::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
             item->setIcon(0, QIcon(":/tool/pulldown.png"));
         }
     }
+}
+
+void FriendList::on_flushfriend_clicked()
+{
+    clientSocket->sendFriendList(userId);
 }

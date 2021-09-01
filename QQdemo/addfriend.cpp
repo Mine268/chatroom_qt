@@ -84,6 +84,7 @@ void AddFriend::receive_friendlist(struct user userinfo)
     //根据返回的列表构建QListWidget
     //ToDo
     //处理QList
+    ui->listWidget->clear();
 
     qDebug() << userinfo.name << "~~~~~~";
     if (userinfo.name.isEmpty())
@@ -102,7 +103,7 @@ void AddFriend::addfriend(QString id)
     //添加好友
     qDebug() << userId << id << "!!!!";
     clientSocket->sendFriendAdd(userId, id);
-    clientSocket->sendFriendList(userId);
+    //    clientSocket->sendFriendList(userId);
 }
 
 void AddFriend::close_for_mainWidget()

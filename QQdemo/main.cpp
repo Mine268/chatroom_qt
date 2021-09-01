@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     //    T.show();
     clientAllWidget A, B;
     A.start();
-    //    B.start();
+    B.start();
     //    TestForm tt;
     //    tt.show();
 

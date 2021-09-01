@@ -107,7 +107,6 @@ void Chat::on_send_clicked()
     showMessage* show = new showMessage(this);
     show->setinfo(from_id, qStr, chat_msg);
     //    Item->setText();
-
     show->show();
     ui->contents->addItem(Item);
     Item->setSizeHint(show->size());
@@ -124,12 +123,22 @@ void Chat::on_empty_clicked()
 
 void Chat::chat_msg_display(struct chat_msg chatmsg)
 {
+    QListWidgetItem* Item = new QListWidgetItem;
 
-    QListWidgetItem* aItem = new QListWidgetItem();
-    QString send_msg = "发送方: " + username + " " + chatmsg.time + "\n" + chatmsg.value;
-    aItem->setText(send_msg);
-    ui->contents->addItem(aItem);
-    ui->contents->setCurrentItem(aItem);
+    showMessage* show = new showMessage(this);
+    show->setinfo(from_id, chatmsg.time, chatmsg.value);
+    //    Item->setText();
+    show->show();
+    ui->contents->addItem(Item);
+    Item->setSizeHint(show->size());
+    ui->contents->setItemWidget(Item, show);
+    ui->contents->setCurrentItem(Item);
+
+    //    QListWidgetItem* aItem = new QListWidgetItem();
+    //    QString send_msg = "发送方: " + username + " " + chatmsg.time + "\n" + chatmsg.value;
+    //    aItem->setText(send_msg);
+    //    ui->contents->addItem(aItem);
+    //    ui->contents->setCurrentItem(aItem);
 }
 
 void Chat::on_maximize_clicked()

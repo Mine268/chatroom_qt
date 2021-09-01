@@ -232,6 +232,11 @@ border-style:outset</string>
         <property name="indentation">
          <number>0</number>
         </property>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item>
@@ -320,6 +325,17 @@ border-style:outset</string>
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QToolButton" name="flushfriend">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="icos.qrc">
+            <normaloff>:/tool/flush.png</normaloff>:/tool/flush.png</iconset>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

@@ -8,7 +8,9 @@
 #include "friendshow.h"
 #include "setting.h"
 #include <QLineEdit>
+#include <QMessageBox>
 #include <QPixmap>
+#include <QTimer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QWidget>
@@ -44,6 +46,16 @@ signals:
     void sign_re();
 
 private slots:
+
+    /*
+     *
+     * 添加好友相关操作
+     * */
+
+    void addfriendtolist(struct user);
+    void showAddmessage(QString qusetid);
+    void showAddDenyMessage();
+
     void on_add_clicked();
 
     void on_setting_clicked();
@@ -82,6 +94,8 @@ private slots:
 
     void on_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
 
+    void on_flushfriend_clicked();
+
 protected:
 private:
     Ui::FriendList* ui;
@@ -96,6 +110,7 @@ private:
     QString userName;
     QString userId;
     QString userPwd;
+    QString email;
     QPixmap userpic;
     QMap<QString, Chat*> windowsShow;
 };

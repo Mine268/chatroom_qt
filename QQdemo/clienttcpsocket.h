@@ -16,6 +16,7 @@ struct user {
     QString name;
     QString email;
     bool online;
+    bool isfriend;
 };
 Q_DECLARE_METATYPE(user);
 Q_DECLARE_METATYPE(user*);
@@ -45,11 +46,27 @@ public:
     void sendFriendList(const QString& id);
     //    void sendImage();
     void pullMessage(const QString& id);
+
+    /*
+     * 添加好友请求
+     * */
+    void friendAddQuset(QString& queryid, QString& senderid);
+    void friendAgree(QString& friendid, QString& hostid, QString& name, QString& email);
+    void friendDisagree(QString& id);
+
     QJsonObject client_prepareSendJson(const QString& quest);
 
     void write_wait(QByteArray);
 
 signals:
+
+    /*
+     * 添加好友请求
+     * */
+    void recvAddAccept(struct user);
+    void recvAddFriendQuset(QString);
+    void recvAddDeny();
+
     void recvLoginConMsg(const QString msg);
     void recvLoginDeMsg(const QString msg);
     void recvRegConMsg(const QString msg);
