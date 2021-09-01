@@ -82,7 +82,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="maxmize">
+           <widget class="QToolButton" name="maximize">
             <property name="minimumSize">
              <size>
               <width>25</width>

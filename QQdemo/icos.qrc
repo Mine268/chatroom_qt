@@ -434,5 +434,6 @@
         <file>tool/emotion.png</file>
         <file>tool/emotion1.png</file>
         <file>tool/flush.png</file>
+        <file>picture/cat.png</file>
     </qresource>
 </RCC>

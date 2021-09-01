@@ -15,6 +15,7 @@ public:
     ~showMessage();
 
     void setinfo(QString username_me, QString qStr, QString html);
+
 private slots:
 
 private:

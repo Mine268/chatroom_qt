@@ -17,10 +17,7 @@ loginDialog::loginDialog(QWidget* parent)
     ReadInit("userpassward", pwdList);
 
     /*
-     *
-     *
      * Debug
-     *
      * */
     qDebug() << idList;
 
@@ -35,7 +32,7 @@ void loginDialog::init_ui()
 {
     ui->setupUi(this);
     setWindowTitle("登录");
-    setWindowIcon(QIcon("C:\\Users\\God\\Desktop\\新建文件夹\\聊天.png"));
+    //    setWindowIcon(QIcon("C:\\Users\\God\\Desktop\\新建文件夹\\聊天.png"));
 
     setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -44,7 +41,7 @@ void loginDialog::init_ui()
     QString style = "border-radius: 65px;border:0px white;background: green";
     ui->picture->setStyleSheet(style);
     QPixmap src = QPixmap::fromImage(
-        QImage("C:\\Users\\God\\Desktop\\新建文件夹\\cat-5120x2880-black-yellow-eyes-4k-19934.jpg"));
+        QImage(":/picture/cat.png"));
     QSize size(130, 130);
     QBitmap mask(size);
     QPainter painter(&mask);
@@ -256,6 +253,7 @@ void loginDialog::receive_loginFail_message(QString failMessage)
     usernumberinput->setPlaceholderText(failMessage);
     //    showFailMessgae.stop();
     //    usernumberinput->setPlaceholderText("ID");
+    QMessageBox::warning(this, "提示", failMessage);
 }
 
 void loginDialog::showDialog()
@@ -308,18 +306,22 @@ void loginDialog::loadpwd(int i)
     }
 }
 
+void loginDialog::close_widget()
+{
+}
+
 void loginDialog::close_ani()
 {
-    qDebug() << "close_ani";
-    disappear_ani = new QPropertyAnimation(this, "geometry");
-    disappear_ani->setTargetObject(ui->frame);
-    disappear_ani->setDuration(2000);
-    disappear_ani->setStartValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), ui->frame->width(), ui->frame->height()));
-    disappear_ani->setEndValue(QRect(ui->frame->pos().x() + this->width() + 50,
-        ui->frame->pos().y(), ui->frame->width(), ui->frame->height())); //移动
-    //    disappear_ani->setEndValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), 0, ui->frame->height()));//缩小width
-    disappear_ani->start();
+    //    qDebug() << "close_ani";
+    //    disappear_ani = new QPropertyAnimation(this);
+    //    disappear_ani->setTargetObject(ui->frame);
+    //    disappear_ani->setDuration(2000);
+    //    disappear_ani->setStartValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), ui->frame->width(), ui->frame->height()));
+    //    disappear_ani->setEndValue(QRect(ui->frame->pos().x() + this->width() + 50,
+    //        ui->frame->pos().y(), ui->frame->width(), ui->frame->height())); //移动
+    //    //    disappear_ani->setEndValue(QRect(ui->frame->pos().x(), ui->frame->pos().y(), 0, ui->frame->height()));//缩小width
+    //    disappear_ani->start();
 
-    connect(disappear_ani, SIGNAL(finished()), this, SLOT(close_widget()));
-    qDebug() << "end";
+    //    connect(disappear_ani, SIGNAL(finished()), this, SLOT(close_widget()));
+    //    qDebug() << "end";
 }

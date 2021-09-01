@@ -22,6 +22,9 @@ public:
 public slots:
     void close_for_mainWidget();
 
+signals:
+    void modifyusername(QString newname);
+
 private slots:
     void on_minimize_clicked();
 
@@ -38,6 +41,8 @@ private:
     ClientTcpSocket* clientSocket;
     QSize oldSize;
     QRect oldGeometry;
+    QString username;
+    QString userid;
 };
 
 #endif // SETTING_H

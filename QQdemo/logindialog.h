@@ -24,14 +24,10 @@ public:
 
     void init_ui();
     void setSocket(ClientTcpSocket*);
-
-    void ani_func();
-
-    //public里面添加
     void WriteInit(QString key, QStringList value);
     void ReadInit(QString key, QStringList& value);
-
     void close_ani();
+
 signals:
     void OkToLogin(QString _userId, QString _userPwd);
 
@@ -46,18 +42,15 @@ private slots:
     void on_login_clicked();
     void on_regestor_clicked();
     void on_cancel_clicked();
-
     void receive_loginOk_message(QString);
     void receive_register_message(QString);
     void receive_loginFail_message(QString);
     void showDialog();
     void on_checkBox_stateChanged(int arg1);
-
     //private slots里面添加
-
     void loadpwd(QString);
     void loadpwd(int);
-
+    void close_widget();
     void on_remember_clicked(bool checked);
 
 private:

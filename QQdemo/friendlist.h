@@ -34,17 +34,11 @@ public:
     ~FriendList();
 
     void setdata(QString& id, QString& pwd);
-
     void setSocket(ClientTcpSocket*);
-
-    //设置界面相关控件
-    void setUserpicture(QPixmap);
-    void setUsernameAndId(QString);
 
 signals:
     void closeMainWidget();
     void sign_re();
-
 private slots:
 
     /*
@@ -55,30 +49,19 @@ private slots:
     void addfriendtolist(struct user);
     void showAddmessage(QString qusetid);
     void showAddDenyMessage();
-
     void on_add_clicked();
-
     void on_setting_clicked();
-
     void on_close_clicked();
-
     void on_minimize_clicked();
-
     void on_search_clicked();
-
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
-
     void on_maximize_clicked();
-
     void restore();
-
     void showlist(QList<struct user> list);
-
     void on_searchline_editingFinished();
-
     void on_searchline_returnPressed();
-
     void removeChat(QString to_id);
+    void modifyinfo(QString newname);
     /*
      * 好友发来消息，如果此时打开了对话框，则显示对话框并添加消息
      * 若未打开对话框，则打开对话框
@@ -101,6 +84,7 @@ private:
     Ui::FriendList* ui;
     ClientTcpSocket* clientSocket;
     QBrush m_itemBrush;
+
     void searchChild(QTreeWidgetItem* cItem, const QString& txt);
     void parentExpand(QTreeWidgetItem* item);
 

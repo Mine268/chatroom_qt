@@ -58,6 +58,7 @@ public:
 
     void write_wait(QByteArray);
 
+    void modifyinfo(QString& id, QString& newname);
 signals:
 
     /*
@@ -74,6 +75,7 @@ signals:
     void recvFriendList(QList<struct user> list);
     void recvChatMsg(struct chat_msg chatmsg);
     void recvUserInfo(struct user userinfo);
+
     //    void recvFriendAccept();
 
 private slots:

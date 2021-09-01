@@ -33,6 +33,8 @@ void Setting::setData(QPixmap picture, QString& id, QString& name)
     ui->userid->setText(id);
     ui->userid->setEnabled(false);
     ui->username->setText(name);
+    username = name;
+    userid = id;
 }
 
 void Setting::close_for_mainWidget()
@@ -50,7 +52,7 @@ void Setting::on_minimize_clicked()
 void Setting::on_maximize_clicked()
 {
     //最大化
-    this->showMaximized();
+    //    this->showMaximized();
 }
 
 void Setting::on_cancel_clicked()
@@ -64,6 +66,12 @@ void Setting::on_sure_clicked()
     //修改信息，需要发送消息
     //ToDo
     //connect()
+    QString newname = ui->username->text();
+    if (newname != username && !newname.isEmpty()) {
+        clientSocket->modifyinfo(userid, newname);
+        emit modifyusername(newname);
+    }
+    this->close();
 }
 
 void Setting::on_close_clicked()

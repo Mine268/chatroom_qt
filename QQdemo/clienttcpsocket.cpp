@@ -20,7 +20,7 @@ ClientTcpSocket::~ClientTcpSocket()
 void ClientTcpSocket::initialLize()
 {
     clientSocket = new QTcpSocket(this);
-    clientSocket->connectToHost("10.194.46.35", 11451);
+    clientSocket->connectToHost("10.195.93.58", 11451);
     if (!clientSocket->waitForConnected(3000)) {
         QMessageBox::information(nullptr, "QT网络通信", "连接服务端失败！");
         return;
@@ -168,6 +168,18 @@ void ClientTcpSocket::friendAddQuset(QString& queryid, QString& senderid)
     QJsonDocument _doc;
     _value.insert("query_id", queryid);
     _value.insert("sender_id", senderid);
+    _json.insert("value", _value);
+    _doc.setObject(_json);
+    write_wait(_doc.toJson(QJsonDocument::Compact));
+}
+void ClientTcpSocket::modifyinfo(QString& id, QString& newname)
+{
+    //修改用户名
+    QJsonObject _json = this->client_prepareSendJson("modifyProfile");
+    QJsonObject _value;
+    QJsonDocument _doc;
+    _value.insert("id", id);
+    _value.insert("name", newname);
     _json.insert("value", _value);
     _doc.setObject(_json);
     write_wait(_doc.toJson(QJsonDocument::Compact));

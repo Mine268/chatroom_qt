@@ -23,7 +23,6 @@ public:
     ~Chat();
     void setSocket(ClientTcpSocket*);
     void setInfo(QString my_id, QString your_id, QString friendname, QString myname);
-
     void chat_msg_display(chat_msg chatmsg);
 
 public slots:

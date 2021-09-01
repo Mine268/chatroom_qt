@@ -34,4 +34,5 @@ void clientAllWidget::okToLogin(QString _userID, QString _userPwd)
     mainWidget->setdata(userId, userPwd);
     mainWidget->setSocket(clientSocket);
     mainWidget->show();
+    connect(mainWidget, &FriendList::closeMainWidget, this, [=]() { clientSocket->disconnect(); });
 }

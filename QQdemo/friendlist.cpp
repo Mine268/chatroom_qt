@@ -100,6 +100,7 @@ void FriendList::on_setting_clicked()
     setting->setData(data(userName), userId, userName);
     setting->show();
     connect(this, &FriendList::closeMainWidget, setting, &Setting::close_for_mainWidget);
+    connect(setting, &Setting::modifyusername, this, &FriendList::modifyinfo);
 }
 
 void FriendList::on_close_clicked()
@@ -130,7 +131,7 @@ void FriendList::on_search_clicked()
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         for (int i = 0; i < (*it)->columnCount(); i++) {
-            if ((*it)->text(i).contains(txt)) {
+            if ((*it)->data(0, Qt::UserRole + 1).value<struct user>().name.contains(txt)) {
                 (*it)->setBackground(i, QBrush(QColor(0, 0, 255, 60)));
                 (*it)->setHidden(false);
                 QTreeWidgetItem* item = *it;
@@ -169,7 +170,7 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
         } else {
             Chat* chat = new Chat();
             windowsShow[to_id] = chat;
-            chat->setInfo(userId, to_id, name, userName);
+            chat->setInfo(userId, to_id, userName, name);
             chat->setSocket(clientSocket);
             chat->show();
             connect(this, &FriendList::closeMainWidget, chat, &Chat::close_for_mainWidget);
@@ -181,6 +182,21 @@ void FriendList::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int colu
 void FriendList::on_maximize_clicked()
 {
     //最大化
+    QSize maxwindowsize = QApplication::desktop()->size();
+    QPixmap maxminpic(":/tool/maxmin.png");
+    QPixmap maxminpicscaled = maxminpic.scaled(20, 20);
+    qDebug() << "[Chat: on_maxmin_clicked()]" << maxminpicscaled.size();
+    if (this->size() != maxwindowsize) {
+        oldSize = this->size(); //原来的窗口大小
+        oldGeometry = this->geometry(); //原来的窗口位置
+        ui->maximize->setIcon(QIcon(maxminpicscaled));
+        ui->maximize->setIconSize(QSize(25, 25));
+        this->setGeometry(0, 0, maxwindowsize.width(), maxwindowsize.height());
+    } else {
+        this->setGeometry(oldGeometry);
+        ui->maximize->setIcon(QIcon(":/tool/maximize.png"));
+        ui->maximize->setIconSize(QSize(25, 25));
+    }
     this->showMaximized();
 }
 
@@ -241,7 +257,6 @@ void FriendList::showlist(QList<struct user> list)
         FriendShow* itshow = new FriendShow();
         struct user myfriend = list[i];
         //                it->setText(0, myfriend.name);
-
         it->setData(0, Qt::UserRole + 1, QVariant::fromValue(myfriend));
         itshow->setData(myfriend.name, data(myfriend.name), myfriend.online);
         root->addChild(it);
@@ -265,6 +280,11 @@ void FriendList::on_searchline_returnPressed()
 void FriendList::removeChat(QString to_id)
 {
     windowsShow.remove(to_id);
+}
+
+void FriendList::modifyinfo(QString newname)
+{
+    ui->picture->setIcon(data(newname).scaled(72, 72));
 }
 
 void FriendList::showMessage(struct chat_msg chatmsg)
@@ -308,7 +328,7 @@ void FriendList::showMessage(struct chat_msg chatmsg)
         }
         qDebug() << userId << chatmsg.from_id << name << "!!!!!";
 
-        chat->setInfo(userId, chatmsg.from_id, name, userName);
+        chat->setInfo(userId, chatmsg.from_id, userName, name);
         chat->setSocket(clientSocket);
         chat->chat_msg_display(chatmsg);
         chat->show();

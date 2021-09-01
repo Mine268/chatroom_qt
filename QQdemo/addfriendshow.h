@@ -19,11 +19,8 @@ public:
     explicit addFriendshow(QWidget* parent = nullptr);
     ~addFriendshow();
     void setData(QString, QString, QPixmap picture, bool = true);
-
 private slots:
-
     void on_addfriendbutton_clicked();
-
 signals:
     void addfriend(QString);
 

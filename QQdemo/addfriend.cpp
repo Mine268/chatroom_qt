@@ -48,18 +48,20 @@ void AddFriend::on_maximize_clicked()
 {
     //最大化窗口，然后改变图标
     QSize maxwindowsize = QApplication::desktop()->size();
+    qDebug() << "~~~~!!!" << maxwindowsize;
+
     QPixmap maxminpic(":/tool/maxmin.png");
     QPixmap maxminpicscaled = maxminpic.scaled(20, 20);
     if (this->size() != maxwindowsize) {
         oldSize = this->size(); //原来的窗口大小
         oldGeometry = this->geometry(); //原来的窗口位置
         ui->maximize->setIcon(QIcon(maxminpicscaled));
-        ui->maximize->setIconSize(QSize(20, 20));
+        ui->maximize->setIconSize(QSize(25, 25));
         this->setGeometry(0, 0, maxwindowsize.width(), maxwindowsize.height());
     } else {
         this->setGeometry(oldGeometry);
         ui->maximize->setIcon(QIcon(":/tool/maximize.png"));
-        ui->maximize->setIconSize(QSize(20, 20));
+        ui->maximize->setIconSize(QSize(25, 25));
     }
 }
 
